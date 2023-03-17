@@ -205,6 +205,14 @@ export function Layout() {
                 <ActionIcon
                   component="a"
                   href="https://feedback.chatpad.ai"
+                  onClick={(event) => {
+                    if (window.todesktop) {
+                      event.preventDefault();
+                      window.todesktop.contents.openUrlInBrowser(
+                        "https://feedback.chatpad.ai"
+                      );
+                    }
+                  }}
                   target="_blank"
                   sx={{ flex: 1 }}
                   size="xl"
