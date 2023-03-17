@@ -30,6 +30,6 @@ This is a React.js application. Clone the project, run `npm i` and `npm start` a
 
 ## Credits
 
-- Mantine - A fully featured React component library
-- DexieJS - A Minimalistic Wrapper for IndexedDB
-- ToDesktop - A simple way to make your web app into a beautiful desktop app
+- [ToDesktop](https://todesktop.com) - A simple way to make your web app into a beautiful desktop app
+- [DexieJS](https://dexie.org) - A Minimalistic Wrapper for IndexedDB
+- [Mantine](https://mantine.dev) - A fully featured React component library
