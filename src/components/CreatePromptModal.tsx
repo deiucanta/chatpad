@@ -51,11 +51,13 @@ export function CreatePromptModal({ content }: { content?: string }) {
                   color: "red",
                   message: "No internet connection.",
                 });
-              } else {
+              }
+              const message = error.response?.data?.error?.message;
+              if (message) {
                 notifications.show({
                   title: "Error",
                   color: "red",
-                  message: "Your OpenAI Key is invalid.",
+                  message,
                 });
               }
             } finally {
