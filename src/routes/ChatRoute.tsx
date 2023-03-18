@@ -207,7 +207,7 @@ export function ChatRoute() {
           bottom: 0,
           left: 0,
           right: 0,
-          [`@media (min-width: ${theme.breakpoints.lg})`]: {
+          [`@media (min-width: ${theme.breakpoints.md})`]: {
             left: 300,
           },
           backgroundColor:

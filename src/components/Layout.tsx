@@ -70,7 +70,7 @@ export function Layout() {
     <AppShell
       navbarOffsetBreakpoint="sm"
       navbar={
-        <Navbar width={{ lg: 300 }} hiddenBreakpoint="lg" hidden={!opened}>
+        <Navbar width={{ md: 300 }} hiddenBreakpoint="md" hidden={!opened}>
           <Navbar.Section className="app-region-drag">
             <Box
               style={{
@@ -94,7 +94,7 @@ export function Layout() {
                   }}
                 />
               </Link>
-              <MediaQuery largerThan="lg" styles={{ display: "none" }}>
+              <MediaQuery largerThan="md" styles={{ display: "none" }}>
                 <Burger
                   opened={opened}
                   onClick={() => setOpened((o) => !o)}
@@ -246,7 +246,7 @@ export function Layout() {
       layout="alt"
       padding={0}
     >
-      <MediaQuery largerThan="lg" styles={{ display: "none" }}>
+      <MediaQuery largerThan="md" styles={{ display: "none" }}>
         <Burger
           opened={opened}
           onClick={() => setOpened((o) => !o)}
