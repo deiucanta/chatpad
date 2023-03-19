@@ -11,7 +11,6 @@ import {
   Router,
 } from "@tanstack/react-location";
 import { ChatRoute } from "../routes/ChatRoute";
-import { DataRoute } from "../routes/DataRoute";
 import { IndexRoute } from "../routes/IndexRoute";
 import { Layout } from "./Layout";
 
@@ -38,7 +37,6 @@ export function App() {
       routes={[
         { path: "/", element: <IndexRoute /> },
         { path: "/chats/:chatId", element: <ChatRoute /> },
-        { path: "/data", element: <DataRoute /> },
       ]}
     >
       <ColorSchemeProvider
