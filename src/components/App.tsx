@@ -59,6 +59,9 @@ export function App() {
             }),
             components: {
               Modal: {
+                defaultProps: {
+                  padding: "xl",
+                },
                 styles: {
                   title: {
                     fontSize: "1.2rem",
@@ -68,14 +71,25 @@ export function App() {
               },
               ModalRoot: {
                 defaultProps: {
-                  padding: "xl",
                   centered: true,
                 },
               },
               Overlay: {
                 defaultProps: {
-                  opacity: 0.7,
-                  blur: 3,
+                  opacity: 0.6,
+                  blur: 6,
+                },
+              },
+              // Input: {
+              //   defaultProps: {
+              //     variant: "filled",
+              //   },
+              // },
+              InputWrapper: {
+                styles: {
+                  label: {
+                    marginBottom: 4,
+                  },
                 },
               },
             },
