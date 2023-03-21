@@ -22,7 +22,7 @@ export function MessageItem({ message }: { message: Message }) {
             </ThemeIcon>
           )}
           {message.role === "assistant" && <LogoIcon style={{ height: 32 }} />}
-          <Box sx={{ flex: 1 }} className="markdown">
+          <Box sx={{ flex: 1, width: 0 }} className="markdown">
             <ReactMarkdown children={message.content} />
           </Box>
           <Box>
