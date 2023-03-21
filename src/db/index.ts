@@ -26,6 +26,7 @@ export interface Prompt {
 export interface Settings {
   id: "general";
   openAiApiKey?: string;
+  openAiModel?: string;
 }
 
 export class Database extends Dexie {

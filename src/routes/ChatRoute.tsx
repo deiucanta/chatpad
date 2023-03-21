@@ -168,12 +168,13 @@ export function ChatRoute() {
           color: "red",
           message: "No internet connection.",
         });
-      } else {
+      }
+      const message = error.response?.data?.error?.message;
+      if (message) {
         notifications.show({
           title: "Error",
           color: "red",
-          message:
-            "You OpenAI API Key is not active or has expired. Please set a new API Key",
+          message,
         });
       }
     } finally {

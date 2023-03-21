@@ -1,9 +1,11 @@
 import {
+  Alert,
   Anchor,
   Button,
-  Group,
+  Flex,
   List,
   Modal,
+  Select,
   Stack,
   Text,
   TextInput,
@@ -13,6 +15,7 @@ import { notifications } from "@mantine/notifications";
 import { useLiveQuery } from "dexie-react-hooks";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
+import { availableModels, defaultModel } from "../utils/constants";
 import { checkOpenAIKey } from "../utils/openai";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
@@ -20,14 +23,20 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [submitting, setSubmitting] = useState(false);
 
   const [value, setValue] = useState("");
+  const [model, setModel] = useState(defaultModel);
 
-  const apiKey = useLiveQuery(async () => {
-    return (await db.settings.where({ id: "general" }).toArray())[0];
+  const settings = useLiveQuery(async () => {
+    return db.settings.where({ id: "general" }).first();
   });
+
   useEffect(() => {
-    if (!apiKey?.openAiApiKey) return;
-    setValue(apiKey.openAiApiKey);
-  }, [apiKey]);
+    if (settings?.openAiApiKey) {
+      setValue(settings.openAiApiKey);
+    }
+    if (settings?.openAiModel) {
+      setModel(settings.openAiModel);
+    }
+  }, [settings]);
 
   return (
     <>
@@ -69,7 +78,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               }
             }}
           >
-            <Group align="end">
+            <Flex gap="xs" align="end">
               <TextInput
                 label="OpenAI API Key"
                 placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -81,7 +90,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               <Button type="submit" loading={submitting}>
                 Save
               </Button>
-            </Group>
+            </Flex>
           </form>
           <List withPadding>
             <List.Item>
@@ -101,6 +110,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               </Text>
             </List.Item>
           </List>
+          <Select
+            label="OpenAI Model"
+            value={model}
+            onChange={(value) => {
+              db.settings.update("general", {
+                openAiModel: value ?? undefined,
+              });
+            }}
+            withinPortal
+            data={availableModels}
+          />
+          <Alert color="orange" title="Warning">
+            The displayed cost was not updated yet to reflect the costs for each
+            model. Right now it will always show the cost for GPT-3.5.
+          </Alert>
         </Stack>
       </Modal>
     </>
