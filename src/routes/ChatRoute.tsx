@@ -277,6 +277,7 @@ export function ChatRoute() {
               autoFocus
               disabled={submitting}
               minRows={1}
+              maxRows={5}
               value={content}
               onChange={(event) => setContent(event.currentTarget.value)}
               onKeyDown={async (event) => {
