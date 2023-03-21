@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useLiveQuery } from "dexie-react-hooks";
+import { findLast } from "lodash";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
@@ -284,6 +285,24 @@ export function ChatRoute() {
                 if (event.code === "Enter" && !event.shiftKey) {
                   event.preventDefault();
                   submit();
+                }
+                if (event.code === "ArrowUp") {
+                  event.preventDefault();
+                  const nextUserMessage = findLast(
+                    messages,
+                    (message) => message.role === "user"
+                  );
+                  setContent(nextUserMessage?.content ?? "");
+                }
+                if (event.code === "ArrowDown") {
+                  event.preventDefault();
+                  const lastUserMessage = findLast(
+                    messages,
+                    (message) => message.role === "user"
+                  );
+                  if (lastUserMessage?.content === content) {
+                    setContent("");
+                  }
                 }
               }}
             />
