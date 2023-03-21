@@ -46,6 +46,7 @@ export function App() {
         <MantineProvider
           withGlobalStyles
           withNormalizeCSS
+          withCSSVariables
           theme={{
             colorScheme,
             primaryColor: "teal",

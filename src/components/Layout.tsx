@@ -68,6 +68,7 @@ export function Layout() {
 
   return (
     <AppShell
+      className={`${colorScheme}-theme`}
       navbarOffsetBreakpoint="sm"
       navbar={
         <Navbar width={{ md: 300 }} hiddenBreakpoint="md" hidden={!opened}>
@@ -101,7 +102,7 @@ export function Layout() {
                   size="sm"
                   color={theme.colors.gray[6]}
                   className="app-region-no-drag"
-                  sx={{ position: "absolute", right: 16 }}
+                  sx={{ position: "fixed", right: 16 }}
                 />
               </MediaQuery>
             </Box>
@@ -253,7 +254,7 @@ export function Layout() {
           size="sm"
           color={theme.colors.gray[6]}
           className="app-region-no-drag"
-          sx={{ position: "absolute", top: 16, right: 16, zIndex: 100 }}
+          sx={{ position: "fixed", top: 16, right: 16, zIndex: 100 }}
         />
       </MediaQuery>
       <Outlet />

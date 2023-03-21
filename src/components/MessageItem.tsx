@@ -1,15 +1,9 @@
-import {
-  ActionIcon,
-  Box,
-  Card,
-  Flex,
-  Text,
-  ThemeIcon,
-  Tooltip,
-} from "@mantine/core";
+import { ActionIcon, Box, Card, Flex, ThemeIcon, Tooltip } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { IconCopy, IconUser } from "@tabler/icons-react";
+import ReactMarkdown from "react-markdown";
 import { Message } from "../db";
+import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 
@@ -28,9 +22,9 @@ export function MessageItem({ message }: { message: Message }) {
             </ThemeIcon>
           )}
           {message.role === "assistant" && <LogoIcon style={{ height: 32 }} />}
-          <Text size="md" sx={{ flex: 1, whiteSpace: "pre-wrap" }}>
-            {message.content}
-          </Text>
+          <Box sx={{ flex: 1 }} className="markdown">
+            <ReactMarkdown children={message.content} />
+          </Box>
           <Box>
             <CreatePromptModal content={message.content} />
             <Tooltip
