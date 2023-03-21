@@ -5,10 +5,10 @@ import {
   Flex,
   List,
   Modal,
+  PasswordInput,
   Select,
   Stack,
   Text,
-  TextInput,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -79,7 +79,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
             }}
           >
             <Flex gap="xs" align="end">
-              <TextInput
+              <PasswordInput
                 label="OpenAI API Key"
                 placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                 sx={{ flex: 1 }}
