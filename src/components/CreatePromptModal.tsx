@@ -1,10 +1,10 @@
 import {
+  ActionIcon,
   Button,
   Modal,
   Stack,
   Textarea,
   TextInput,
-  ThemeIcon,
   Tooltip,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -26,6 +26,17 @@ export function CreatePromptModal({ content }: { content?: string }) {
 
   return (
     <>
+      {content ? (
+        <Tooltip label="Save Prompt" position="left">
+          <ActionIcon onClick={open}>
+            <IconPlaylistAdd opacity={0.5} size={20} />
+          </ActionIcon>
+        </Tooltip>
+      ) : (
+        <Button fullWidth onClick={open} leftIcon={<IconPlus size={20} />}>
+          New Prompt
+        </Button>
+      )}
       <Modal opened={opened} onClose={close} title="Create Prompt" size="lg">
         <form
           onSubmit={async (event) => {
@@ -87,17 +98,6 @@ export function CreatePromptModal({ content }: { content?: string }) {
           </Stack>
         </form>
       </Modal>
-      {content ? (
-        <Tooltip label="Save Prompt" withinPortal>
-          <ThemeIcon variant="light" onClick={open}>
-            <IconPlaylistAdd />
-          </ThemeIcon>
-        </Tooltip>
-      ) : (
-        <Button fullWidth onClick={open} leftIcon={<IconPlus size={20} />}>
-          New Prompt
-        </Button>
-      )}
     </>
   );
 }
