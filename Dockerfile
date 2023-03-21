@@ -1,5 +1,7 @@
 # Build the react project
 FROM node:18-alpine as builder
+RUN apk --no-cache add python3
+
 WORKDIR /app
 
 # Install the node_modules first
