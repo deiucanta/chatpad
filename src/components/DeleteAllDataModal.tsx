@@ -3,15 +3,23 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { db } from "../db";
 
-export function DeleteDataModal({ onOpen }: { onOpen: () => void }) {
+export function DeleteAllDataModal({ onOpen }: { onOpen: () => void }) {
   const [opened, { open, close }] = useDisclosure(false, { onOpen });
 
   return (
     <>
+      <Button
+        onClick={open}
+        variant="outline"
+        color="red"
+        leftIcon={<IconTrash size={20} />}
+      >
+        Delete All Data
+      </Button>
       <Modal
         opened={opened}
         onClose={close}
-        title="Delete Data"
+        title="Delete All Data"
         size="md"
         withinPortal
       >
@@ -29,14 +37,6 @@ export function DeleteDataModal({ onOpen }: { onOpen: () => void }) {
           </Button>
         </Stack>
       </Modal>
-      <Button
-        onClick={open}
-        variant="outline"
-        color="red"
-        leftIcon={<IconTrash size={20} />}
-      >
-        Delete Data
-      </Button>
     </>
   );
 }
