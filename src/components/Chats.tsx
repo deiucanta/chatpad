@@ -2,21 +2,30 @@ import { ActionIcon, Flex, Menu } from "@mantine/core";
 import { IconDotsVertical, IconMessages } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-location";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useMemo } from "react";
 import { db } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
 
-export function Chats() {
+export function Chats({ search }: { search: string }) {
   const chatId = useChatId();
   const chats = useLiveQuery(() =>
     db.chats.orderBy("createdAt").reverse().toArray()
   );
+  const filteredChats = useMemo(
+    () =>
+      (chats ?? []).filter((chat) => {
+        if (!search) return true;
+        return chat.description.toLowerCase().includes(search);
+      }),
+    [chats, search]
+  );
 
   return (
     <>
-      {chats?.map((chat) => (
+      {filteredChats.map((chat) => (
         <Flex
           key={chat.id}
           className={chatId === chat.id ? "active" : undefined}

@@ -3,15 +3,33 @@ import { IconPlayerPlay } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-location";
 import { useLiveQuery } from "dexie-react-hooks";
 import { nanoid } from "nanoid";
+import { useMemo } from "react";
 import { db } from "../db";
 import { createChatCompletion } from "../utils/openai";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { EditPromptModal } from "./EditPromptModal";
 
-export function Prompts({ onPlay }: { onPlay: () => void }) {
+export function Prompts({
+  onPlay,
+  search,
+}: {
+  onPlay: () => void;
+  search: string;
+}) {
   const navigate = useNavigate();
   const prompts = useLiveQuery(() =>
     db.prompts.orderBy("createdAt").reverse().toArray()
+  );
+  const filteredPrompts = useMemo(
+    () =>
+      (prompts ?? []).filter((prompt) => {
+        if (!search) return true;
+        return (
+          prompt.title.toLowerCase().includes(search) ||
+          prompt.content.toLowerCase().includes(search)
+        );
+      }),
+    [prompts, search]
   );
   const apiKey = useLiveQuery(async () => {
     return (await db.settings.where({ id: "general" }).first())?.openAiApiKey;
@@ -19,7 +37,7 @@ export function Prompts({ onPlay }: { onPlay: () => void }) {
 
   return (
     <>
-      {prompts?.map((prompt) => (
+      {filteredPrompts.map((prompt) => (
         <Flex
           key={prompt.id}
           sx={(theme) => ({

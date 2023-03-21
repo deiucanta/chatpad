@@ -11,6 +11,7 @@ import {
   rem,
   ScrollArea,
   SegmentedControl,
+  TextInput,
   Tooltip,
   useMantineColorScheme,
   useMantineTheme,
@@ -22,8 +23,10 @@ import {
   IconMessage,
   IconMoonStars,
   IconPlus,
+  IconSearch,
   IconSettings,
   IconSunHigh,
+  IconX,
 } from "@tabler/icons-react";
 import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -52,6 +55,7 @@ export function Layout() {
   const navigate = useNavigate();
   const router = useRouter();
 
+  const [search, setSearch] = useState("");
   const chatId = useChatId();
   const chat = useLiveQuery(async () => {
     if (!chatId) return null;
@@ -145,9 +149,40 @@ export function Layout() {
               {tab === "Prompts" && <CreatePromptModal />}
             </Box>
           </Navbar.Section>
+          <Navbar.Section
+            sx={(theme) => ({
+              padding: rem(4),
+              background:
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[7]
+                  : theme.white,
+              borderBottom: border,
+            })}
+          >
+            <TextInput
+              variant="unstyled"
+              radius={0}
+              placeholder="Search"
+              value={search}
+              onChange={(event) =>
+                setSearch(event.currentTarget.value.toLowerCase())
+              }
+              sx={{ paddingInline: 4 }}
+              icon={<IconSearch opacity={0.8} size={20} />}
+              rightSection={
+                !!search && (
+                  <ActionIcon onClick={() => setSearch("")}>
+                    <IconX opacity={0.5} size={20} />{" "}
+                  </ActionIcon>
+                )
+              }
+            />
+          </Navbar.Section>
           <Navbar.Section grow component={ScrollArea}>
-            {tab === "Chats" && <Chats />}
-            {tab === "Prompts" && <Prompts onPlay={() => setTab("Chats")} />}
+            {tab === "Chats" && <Chats search={search} />}
+            {tab === "Prompts" && (
+              <Prompts search={search} onPlay={() => setTab("Chats")} />
+            )}
           </Navbar.Section>
           <Navbar.Section sx={{ borderTop: border }} p="xs">
             <Center>
