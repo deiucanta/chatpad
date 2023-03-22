@@ -3,6 +3,7 @@ import {
   Box,
   Card,
   Flex,
+  Table,
   Text,
   ThemeIcon,
   Tooltip,
@@ -11,11 +12,11 @@ import { useClipboard } from "@mantine/hooks";
 import { IconCopy, IconUser } from "@tabler/icons-react";
 import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Message } from "../db";
 import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
-
 import { ScrollIntoView } from "./ScrollIntoView";
 
 export function MessageItem({ message }: { message: Message }) {
@@ -36,7 +37,15 @@ export function MessageItem({ message }: { message: Message }) {
           )}
           {message.role === "assistant" && <LogoIcon style={{ height: 32 }} />}
           <Box sx={{ flex: 1, width: 0 }} className="markdown">
-            <ReactMarkdown children={message.content} />
+            <ReactMarkdown
+              children={message.content}
+              remarkPlugins={[remarkGfm]}
+              components={{
+                table: (props) => (
+                  <Table verticalSpacing="sm" highlightOnHover {...props} />
+                ),
+              }}
+            />
             {message.role === "assistant" && (
               <Box>
                 <Text size="sm" color="dimmed">
