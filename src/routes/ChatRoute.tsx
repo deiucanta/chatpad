@@ -132,7 +132,7 @@ export function ChatRoute() {
         const messages = await db.messages
           .where({ chatId })
           .sortBy("createdAt");
-        const createChatDscription = await createChatCompletion(apiKey, [
+        const createChatDescription = await createChatCompletion(apiKey, [
           {
             role: "system",
             content: getSystemMessage(),
@@ -148,15 +148,15 @@ export function ChatRoute() {
           },
         ]);
         const chatDescription =
-          createChatDscription.data.choices[0].message?.content;
+          createChatDescription.data.choices[0].message?.content;
 
-        if (createChatDscription.data.usage) {
+        if (createChatDescription.data.usage) {
           await db.chats.where({ id: chatId }).modify((chat) => {
             chat.description = chatDescription ?? "New Chat";
             if (chat.totalTokens) {
-              chat.totalTokens += createChatDscription.data.usage!.total_tokens;
+              chat.totalTokens += createChatDescription.data.usage!.total_tokens;
             } else {
-              chat.totalTokens = createChatDscription.data.usage!.total_tokens;
+              chat.totalTokens = createChatDescription.data.usage!.total_tokens;
             }
           });
         }
