@@ -93,6 +93,17 @@ export function App() {
                   },
                 },
               },
+              Code: {
+                styles: (theme) => ({
+                  root: {
+                    fontSize: theme.fontSizes.sm,
+                    backgroundColor:
+                      theme.colorScheme == "dark"
+                        ? theme.colors.dark[7]
+                        : theme.colors.gray[1],
+                  },
+                }),
+              },
             },
           }}
         >

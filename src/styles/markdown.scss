@@ -7,33 +7,10 @@
       margin-bottom: 0;
     }
   }
-  pre {
-    overflow-x: auto;
-    padding: 8px 12px;
-    border-radius: 8px;
-  }
   ul {
     padding-left: 20px;
   }
   li {
     padding-left: 4px;
-  }
-}
-
-.dark-theme {
-  .markdown {
-    pre {
-      background-color: var(--mantine-color-dark-7);
-        color: var(--mantine-color-white);
-    }
-  }
-}
-
-.light-theme {
-  .markdown {
-    pre {
-      background-color: var(--mantine-color-gray-1);
-      color: var(--mantine-color-dark-4);
-    }
   }
 }

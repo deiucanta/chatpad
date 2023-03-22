@@ -2,6 +2,8 @@ import {
   ActionIcon,
   Box,
   Card,
+  Code,
+  CopyButton,
   Flex,
   Table,
   Text,
@@ -41,9 +43,38 @@ export function MessageItem({ message }: { message: Message }) {
               children={message.content}
               remarkPlugins={[remarkGfm]}
               components={{
-                table: (props) => (
+                table: ({ node, ...props }) => (
                   <Table verticalSpacing="sm" highlightOnHover {...props} />
                 ),
+                code: ({ node, inline, ...props }) =>
+                  inline ? (
+                    <Code {...props} />
+                  ) : (
+                    <Box sx={{ position: "relative" }}>
+                      <Code block {...props} />
+                      <CopyButton
+                        value={
+                          typeof props.children === "string"
+                            ? props.children
+                            : ""
+                        }
+                      >
+                        {({ copied, copy }) => (
+                          <Tooltip
+                            label={copied ? "Copied" : "Copy"}
+                            position="left"
+                          >
+                            <ActionIcon
+                              sx={{ position: "absolute", top: 4, right: 4 }}
+                              onClick={copy}
+                            >
+                              <IconCopy opacity={0.5} size={20} />
+                            </ActionIcon>
+                          </Tooltip>
+                        )}
+                      </CopyButton>
+                    </Box>
+                  ),
               }}
             />
             {message.role === "assistant" && (
