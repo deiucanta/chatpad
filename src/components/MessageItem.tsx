@@ -68,7 +68,7 @@ export function MessageItem({ message }: { message: Message }) {
                               sx={{ position: "absolute", top: 4, right: 4 }}
                               onClick={copy}
                             >
-                              <IconCopy opacity={0.5} size={20} />
+                              <IconCopy opacity={0.4} size={20} />
                             </ActionIcon>
                           </Tooltip>
                         )}
@@ -87,14 +87,15 @@ export function MessageItem({ message }: { message: Message }) {
           </Box>
           <Box>
             <CreatePromptModal content={message.content} />
-            <Tooltip
-              label={clipboard.copied ? "Copied" : "Copy"}
-              position="left"
-            >
-              <ActionIcon onClick={() => clipboard.copy(message.content)}>
-                <IconCopy opacity={0.5} size={20} />
-              </ActionIcon>
-            </Tooltip>
+            <CopyButton value={message.content}>
+              {({ copied, copy }) => (
+                <Tooltip label={copied ? "Copied" : "Copy"} position="left">
+                  <ActionIcon onClick={copy}>
+                    <IconCopy opacity={0.5} size={20} />
+                  </ActionIcon>
+                </Tooltip>
+              )}
+            </CopyButton>
             {/* <Tooltip label={`${wordCount} words`} position="left">
               <ActionIcon>
                 <IconInfoCircle opacity={0.5} size={20} />
