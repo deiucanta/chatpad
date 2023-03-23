@@ -91,45 +91,10 @@ export function Prompts({
                     description: "New Chat",
                     totalTokens: 0,
                     createdAt: new Date(),
-                  });
-                  await db.messages.add({
-                    id: nanoid(),
-                    chatId: id,
-                    content: prompt.content,
-                    role: "user",
-                    createdAt: new Date(),
+                    promptId: prompt.id,
                   });
                   navigate({ to: `/chats/${id}` });
                   onPlay();
-
-                  const result = await createChatCompletion(apiKey, [
-                    {
-                      role: "system",
-                      content:
-                        "You are ChatGPT, a large language model trained by OpenAI.",
-                    },
-                    { role: "user", content: prompt.content },
-                  ]);
-
-                  const resultDescription =
-                    result.data.choices[0].message?.content;
-                  await db.messages.add({
-                    id: nanoid(),
-                    chatId: id,
-                    content: resultDescription ?? "unknown reponse",
-                    role: "assistant",
-                    createdAt: new Date(),
-                  });
-
-                  if (result.data.usage) {
-                    await db.chats.where({ id: id }).modify((chat) => {
-                      if (chat.totalTokens) {
-                        chat.totalTokens += result.data.usage!.total_tokens;
-                      } else {
-                        chat.totalTokens = result.data.usage!.total_tokens;
-                      }
-                    });
-                  }
                 }}
               >
                 <IconPlayerPlay size={20} />
