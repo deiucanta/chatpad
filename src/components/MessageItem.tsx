@@ -52,13 +52,7 @@ export function MessageItem({ message }: { message: Message }) {
                   ) : (
                     <Box sx={{ position: "relative" }}>
                       <Code block {...props} />
-                      <CopyButton
-                        value={
-                          typeof props.children === "string"
-                            ? props.children
-                            : ""
-                        }
-                      >
+                      <CopyButton value={String(props.children)}>
                         {({ copied, copy }) => (
                           <Tooltip
                             label={copied ? "Copied" : "Copy"}
