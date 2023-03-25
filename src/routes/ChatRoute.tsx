@@ -154,7 +154,8 @@ export function ChatRoute() {
           await db.chats.where({ id: chatId }).modify((chat) => {
             chat.description = chatDescription ?? "New Chat";
             if (chat.totalTokens) {
-              chat.totalTokens += createChatDescription.data.usage!.total_tokens;
+              chat.totalTokens +=
+                createChatDescription.data.usage!.total_tokens;
             } else {
               chat.totalTokens = createChatDescription.data.usage!.total_tokens;
             }
@@ -288,6 +289,9 @@ export function ChatRoute() {
                   submit();
                 }
                 if (event.code === "ArrowUp") {
+                  const { selectionStart, selectionEnd } = event.currentTarget;
+                  if (selectionStart !== selectionEnd) return;
+                  if (selectionStart !== 0) return;
                   event.preventDefault();
                   const nextUserMessage = findLast(
                     messages,
@@ -296,6 +300,10 @@ export function ChatRoute() {
                   setContent(nextUserMessage?.content ?? "");
                 }
                 if (event.code === "ArrowDown") {
+                  const { selectionStart, selectionEnd } = event.currentTarget;
+                  if (selectionStart !== selectionEnd) return;
+                  if (selectionStart !== event.currentTarget.value.length)
+                    return;
                   event.preventDefault();
                   const lastUserMessage = findLast(
                     messages,
