@@ -1,4 +1,4 @@
-FROM nginx:1.23.3-alpine
+FROM nginx:alpine
 
 # Copy the nginx configuration
 COPY ./docker/default.conf.template /etc/nginx/templates/default.conf.template
