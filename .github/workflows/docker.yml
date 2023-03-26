@@ -15,6 +15,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Node.js
         uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
       - run: npm ci
       - run: npm run build
       - name: Setup QEMU
@@ -26,7 +29,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.CR_PAT }}
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
