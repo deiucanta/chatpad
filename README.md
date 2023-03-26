@@ -21,6 +21,12 @@ Crafted with love and care to provide the best experience possible.
 
 ---
 
+## Self-host using Docker
+
+```
+docker run --name chatpad -d -p 1234:80 ghcr.io/deiucanta/chatpad:latest
+```
+
 ## Give Feedback
 
 If you have any feature requests or bug reports, go to [feedback.chatpad.ai](https://feedback.chatpad.ai).
