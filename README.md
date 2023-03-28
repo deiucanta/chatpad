@@ -39,7 +39,7 @@ docker run --name chatpad -d -p 1234:80 ghcr.io/deiucanta/chatpad:latest
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdeiucanta%2Fchatpad&project-name=chatpad&repository-name=chatpad-vercel&demo-title=Chatpad&demo-description=The%20Official%20Chatpad%20Website&demo-url=https%3A%2F%2Fchatpad.ai&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Fdeiucanta%2Fchatpad%2Fmain%2Fbanner.png)
 
 <!-- Railway -->
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/9M8r62)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/Ak6DUw?referralCode=9M8r62)
 
 
 
