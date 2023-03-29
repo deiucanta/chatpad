@@ -6,6 +6,7 @@ import {
   List,
   Modal,
   PasswordInput,
+  TextInput,
   Select,
   Stack,
   Text,
@@ -15,7 +16,7 @@ import { notifications } from "@mantine/notifications";
 import { useLiveQuery } from "dexie-react-hooks";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
-import { availableModels, defaultModel } from "../utils/constants";
+import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
@@ -23,7 +24,11 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [submitting, setSubmitting] = useState(false);
 
   const [value, setValue] = useState("");
-  const [model, setModel] = useState(defaultModel);
+  const [model, setModel] = useState(config.defaultModel);
+  const [type, setType] = useState(config.defaultType);
+  const [auth, setAuth] = useState(config.defaultAuth);
+  const [base, setBase] = useState("");
+  const [version, setVersion] = useState("");
 
   const settings = useLiveQuery(async () => {
     return db.settings.where({ id: "general" }).first();
@@ -35,6 +40,18 @@ export function SettingsModal({ children }: { children: ReactElement }) {
     }
     if (settings?.openAiModel) {
       setModel(settings.openAiModel);
+    }
+    if (settings?.openAiApiType) {
+      setType(settings.openAiApiType);
+    }
+    if (settings?.openAiApiAuth) {
+      setAuth(settings.openAiApiAuth);
+    }
+    if (settings?.openAiApiBase) {
+      setBase(settings.openAiApiBase);
+    }
+    if (settings?.openAiApiVersion) {
+      setVersion(settings.openAiApiVersion);
     }
   }, [settings]);
 
@@ -111,20 +128,213 @@ export function SettingsModal({ children }: { children: ReactElement }) {
             </List.Item>
           </List>
           <Select
-            label="OpenAI Model"
-            value={model}
-            onChange={(value) => {
-              db.settings.update("general", {
-                openAiModel: value ?? undefined,
-              });
+            label="OpenAI Type"
+            value={type}
+            onChange={async (value) => {
+              setSubmitting(true);
+              try {
+                await db.settings.update("general", {
+                  openAiApiType: value ?? 'openai',
+                });
+                notifications.show({
+                  title: "Saved",
+                  message: "Your OpenAI Type has been saved.",
+                });
+              } catch (error: any) {
+                if (error.toJSON().message === "Network Error") {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message: "No internet connection.",
+                  });
+                }
+                const message = error.response?.data?.error?.message;
+                if (message) {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message,
+                  });
+                }
+              } finally {
+                setSubmitting(false);
+              }
             }}
             withinPortal
-            data={availableModels}
+            data={[{ "value": "openai", "label": "OpenAI"}, { "value": "custom", "label": "Custom (e.g. Azure OpenAI)"}]}
+          />
+          <Select
+            label="OpenAI Model (OpenAI Only)"
+            value={model}
+            onChange={async (value) => {
+              setSubmitting(true);
+              try {
+                await db.settings.update("general", {
+                  openAiModel: value ?? undefined,
+                });
+                notifications.show({
+                  title: "Saved",
+                  message: "Your OpenAI Model has been saved.",
+                });
+              } catch (error: any) {
+                if (error.toJSON().message === "Network Error") {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message: "No internet connection.",
+                  });
+                }
+                const message = error.response?.data?.error?.message;
+                if (message) {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message,
+                  });
+                }
+              } finally {
+                setSubmitting(false);
+              }
+            }}
+            withinPortal
+            data={config.availableModels}
           />
           <Alert color="orange" title="Warning">
             The displayed cost was not updated yet to reflect the costs for each
-            model. Right now it will always show the cost for GPT-3.5.
+            model. Right now it will always show the cost for GPT-3.5 on OpenAI.
           </Alert>
+          <Select
+            label="OpenAI Auth (Custom Only)"
+            value={auth}
+            onChange={async (value) => {
+              setSubmitting(true);
+              try {
+                await db.settings.update("general", {
+                  openAiApiAuth: value ?? 'none',
+                });
+                notifications.show({
+                  title: "Saved",
+                  message: "Your OpenAI Auth has been saved.",
+                });
+              } catch (error: any) {
+                if (error.toJSON().message === "Network Error") {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message: "No internet connection.",
+                  });
+                }
+                const message = error.response?.data?.error?.message;
+                if (message) {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message,
+                  });
+                }
+              } finally {
+                setSubmitting(false);
+              }
+            }}
+            withinPortal
+            data={[{ "value": "none", "label": "None"}, { "value": "bearer-token", "label": "Bearer Token"}, { "value": "api-key", "label": "API Key"}]}
+          />
+          <form
+            onSubmit={async (event) => {
+              try {
+                setSubmitting(true);
+                event.preventDefault();
+                await db.settings.where({ id: "general" }).modify((row) => {
+                  row.openAiApiBase = base;
+                  console.log(row);
+                });
+                notifications.show({
+                  title: "Saved",
+                  message: "Your OpenAI Base has been saved.",
+                });
+              } catch (error: any) {
+                if (error.toJSON().message === "Network Error") {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message: "No internet connection.",
+                  });
+                }
+                const message = error.response?.data?.error?.message;
+                if (message) {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message,
+                  });
+                }
+              } finally {
+                setSubmitting(false);
+              }
+            }}
+          >
+            <Flex gap="xs" align="end">
+              <TextInput
+                label="OpenAI API Base (Custom Only)"
+                placeholder="https://<resource-name>.openai.azure.com/openai/deployments/<deployment>"
+                sx={{ flex: 1 }}
+                value={base}
+                onChange={(event) => setBase(event.currentTarget.value)}
+                formNoValidate
+              />
+              <Button type="submit" loading={submitting}>
+                Save
+              </Button>
+            </Flex>
+          </form>
+          <form
+            onSubmit={async (event) => {
+              try {
+                setSubmitting(true);
+                event.preventDefault();
+                await db.settings.where({ id: "general" }).modify((row) => {
+                  row.openAiApiVersion = version;
+                  console.log(row);
+                });
+                notifications.show({
+                  title: "Saved",
+                  message: "Your OpenAI Version has been saved.",
+                });
+              } catch (error: any) {
+                if (error.toJSON().message === "Network Error") {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message: "No internet connection.",
+                  });
+                }
+                const message = error.response?.data?.error?.message;
+                if (message) {
+                  notifications.show({
+                    title: "Error",
+                    color: "red",
+                    message,
+                  });
+                }
+              } finally {
+                setSubmitting(false);
+              }
+            }}
+          >
+            <Flex gap="xs" align="end">
+              <TextInput
+                label="OpenAI API Version (Custom Only)"
+                placeholder="2023-03-15-preview"
+                sx={{ flex: 1 }}
+                value={version}
+                onChange={(event) => setVersion(event.currentTarget.value)}
+                formNoValidate
+              />
+              <Button type="submit" loading={submitting}>
+                Save
+              </Button>
+            </Flex>
+          </form>
         </Stack>
       </Modal>
     </>
