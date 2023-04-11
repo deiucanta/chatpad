@@ -9,24 +9,26 @@ import {
   Select,
   Stack,
   Text,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
-import { useLiveQuery } from "dexie-react-hooks";
-import { cloneElement, ReactElement, useEffect, useState } from "react";
-import { db } from "../db";
-import { availableModels, defaultModel } from "../utils/constants";
-import { checkOpenAIKey } from "../utils/openai";
+  Input,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { cloneElement, ReactElement, useEffect, useState } from 'react';
+import { db } from '../db';
+import { availableModels, defaultModel } from '../utils/constants';
+import { checkOpenAIKey } from '../utils/openai';
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const [model, setModel] = useState(defaultModel);
+  const [host, setHost] = useState('https://api.openai.com/v1');
 
   const settings = useLiveQuery(async () => {
-    return db.settings.where({ id: "general" }).first();
+    return db.settings.where({ id: 'general' }).first();
   });
 
   useEffect(() => {
@@ -35,6 +37,10 @@ export function SettingsModal({ children }: { children: ReactElement }) {
     }
     if (settings?.openAiModel) {
       setModel(settings.openAiModel);
+    }
+
+    if (settings?.host) {
+      setHost(settings.host);
     }
   }, [settings]);
 
@@ -48,28 +54,28 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               try {
                 setSubmitting(true);
                 event.preventDefault();
-                await checkOpenAIKey(value);
-                await db.settings.where({ id: "general" }).modify((apiKey) => {
+                await checkOpenAIKey(value, host);
+                await db.settings.where({ id: 'general' }).modify((apiKey) => {
                   apiKey.openAiApiKey = value;
                   console.log(apiKey);
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Key has been saved.",
+                  title: 'Saved',
+                  message: 'Your OpenAI Key has been saved.',
                 });
               } catch (error: any) {
-                if (error.toJSON().message === "Network Error") {
+                if (error.toJSON().message === 'Network Error') {
                   notifications.show({
-                    title: "Error",
-                    color: "red",
-                    message: "No internet connection.",
+                    title: 'Error',
+                    color: 'red',
+                    message: 'No internet connection.',
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
-                    color: "red",
+                    title: 'Error',
+                    color: 'red',
                     message,
                   });
                 }
@@ -87,6 +93,24 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 onChange={(event) => setValue(event.currentTarget.value)}
                 formNoValidate
               />
+              <Button type="submit" loading={submitting}>
+                Save
+              </Button>
+            </Flex>
+
+            <Flex gap="xs" align="end">
+              <Input.Wrapper
+                label="Host"
+                description="The host of the OpenAI API"
+                sx={{ flex: 1 }}
+              >
+                <Input
+                  defaultValue={host}
+                  onChange={(event) => setHost(event.currentTarget.value)}
+                  formNoValidate
+                />
+              </Input.Wrapper>
+
               <Button type="submit" loading={submitting}>
                 Save
               </Button>
@@ -114,7 +138,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
             label="OpenAI Model"
             value={model}
             onChange={(value) => {
-              db.settings.update("general", {
+              db.settings.update('general', {
                 openAiModel: value ?? undefined,
               });
             }}

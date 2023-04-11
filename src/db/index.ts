@@ -1,5 +1,5 @@
-import Dexie, { Table } from "dexie";
-import "dexie-export-import";
+import Dexie, { Table } from 'dexie';
+import 'dexie-export-import';
 
 export interface Chat {
   id: string;
@@ -11,7 +11,7 @@ export interface Chat {
 export interface Message {
   id: string;
   chatId: string;
-  role: "system" | "assistant" | "user";
+  role: 'system' | 'assistant' | 'user';
   content: string;
   createdAt: Date;
 }
@@ -24,9 +24,10 @@ export interface Prompt {
 }
 
 export interface Settings {
-  id: "general";
+  id: 'general';
   openAiApiKey?: string;
   openAiModel?: string;
+  host?: string;
 }
 
 export class Database extends Dexie {
@@ -36,17 +37,17 @@ export class Database extends Dexie {
   settings!: Table<Settings>;
 
   constructor() {
-    super("chatpad");
+    super('chatpad');
     this.version(2).stores({
-      chats: "id, createdAt",
-      messages: "id, chatId, createdAt",
-      prompts: "id, createdAt",
-      settings: "id",
+      chats: 'id, createdAt',
+      messages: 'id, chatId, createdAt',
+      prompts: 'id, createdAt',
+      settings: 'id',
     });
 
-    this.on("populate", async () => {
+    this.on('populate', async () => {
       db.settings.add({
-        id: "general",
+        id: 'general',
       });
     });
   }

@@ -1,13 +1,13 @@
-import { ActionIcon, Box, Flex, Group, Text, Tooltip } from "@mantine/core";
-import { IconPlayerPlay } from "@tabler/icons-react";
-import { useNavigate } from "@tanstack/react-location";
-import { useLiveQuery } from "dexie-react-hooks";
-import { nanoid } from "nanoid";
-import { useMemo } from "react";
-import { db } from "../db";
-import { createChatCompletion } from "../utils/openai";
-import { DeletePromptModal } from "./DeletePromptModal";
-import { EditPromptModal } from "./EditPromptModal";
+import { ActionIcon, Box, Flex, Group, Text, Tooltip } from '@mantine/core';
+import { IconPlayerPlay } from '@tabler/icons-react';
+import { useNavigate } from '@tanstack/react-location';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { nanoid } from 'nanoid';
+import { useMemo } from 'react';
+import { db } from '../db';
+import { createChatCompletion } from '../utils/openai';
+import { DeletePromptModal } from './DeletePromptModal';
+import { EditPromptModal } from './EditPromptModal';
 
 export function Prompts({
   onPlay,
@@ -18,7 +18,7 @@ export function Prompts({
 }) {
   const navigate = useNavigate();
   const prompts = useLiveQuery(() =>
-    db.prompts.orderBy("createdAt").reverse().toArray()
+    db.prompts.orderBy('createdAt').reverse().toArray(),
   );
   const filteredPrompts = useMemo(
     () =>
@@ -29,10 +29,10 @@ export function Prompts({
           prompt.content.toLowerCase().includes(search)
         );
       }),
-    [prompts, search]
+    [prompts, search],
   );
   const apiKey = useLiveQuery(async () => {
-    return (await db.settings.where({ id: "general" }).first())?.openAiApiKey;
+    return (await db.settings.where({ id: 'general' }).first())?.openAiApiKey;
   });
 
   return (
@@ -43,9 +43,9 @@ export function Prompts({
           sx={(theme) => ({
             marginTop: 1,
             padding: theme.spacing.xs,
-            "&:hover": {
+            '&:hover': {
               backgroundColor:
-                theme.colorScheme === "dark"
+                theme.colorScheme === 'dark'
                   ? theme.colors.dark[6]
                   : theme.colors.gray[1],
             },
@@ -61,9 +61,9 @@ export function Prompts({
             <Text
               weight={500}
               sx={{
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
               }}
             >
               {prompt.title}
@@ -71,9 +71,9 @@ export function Prompts({
             <Text
               color="dimmed"
               sx={{
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
               }}
             >
               {prompt.content}
@@ -88,7 +88,7 @@ export function Prompts({
                   const id = nanoid();
                   await db.chats.add({
                     id,
-                    description: "New Chat",
+                    description: 'New Chat',
                     totalTokens: 0,
                     createdAt: new Date(),
                   });
@@ -96,28 +96,32 @@ export function Prompts({
                     id: nanoid(),
                     chatId: id,
                     content: prompt.content,
-                    role: "user",
+                    role: 'user',
                     createdAt: new Date(),
                   });
                   navigate({ to: `/chats/${id}` });
                   onPlay();
 
-                  const result = await createChatCompletion(apiKey, [
-                    {
-                      role: "system",
-                      content:
-                        "You are ChatGPT, a large language model trained by OpenAI.",
-                    },
-                    { role: "user", content: prompt.content },
-                  ]);
+                  const result = await createChatCompletion({
+                    apiKey,
+                    host: 'https://api.openai.com',
+                    messages: [
+                      {
+                        role: 'system',
+                        content:
+                          'You are ChatGPT, a large language model trained by OpenAI.',
+                      },
+                      { role: 'user', content: prompt.content },
+                    ],
+                  });
 
                   const resultDescription =
                     result.data.choices[0].message?.content;
                   await db.messages.add({
                     id: nanoid(),
                     chatId: id,
-                    content: resultDescription ?? "unknown reponse",
-                    role: "assistant",
+                    content: resultDescription ?? 'unknown reponse',
+                    role: 'assistant',
                     createdAt: new Date(),
                   });
 
