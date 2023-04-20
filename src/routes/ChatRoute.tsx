@@ -203,7 +203,7 @@ export function ChatRoute() {
     event.preventDefault();
 
     const newMsgIndex = userMsgIndex + (event.code === "ArrowUp" ? 1 : -1);
-    const allMessages = [contentDraft, ...userMessages.reverse()];
+    const allMessages = [contentDraft, ...Array.from(userMessages).reverse()];
 
     if (newMsgIndex < 0 || newMsgIndex >= allMessages.length) {
       // index out of range, do nothing
