@@ -26,7 +26,7 @@ import {
   writingStyles,
   writingTones,
 } from "../utils/constants";
-import { createChatCompletion } from "../utils/openai";
+import { createChatCompletion, createStreamChatCompletion } from "../utils/openai";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -96,7 +96,16 @@ export function ChatRoute() {
       });
       setContent("");
 
-      const result = await createChatCompletion(apiKey, [
+      const messageId = nanoid()
+      await db.messages.add({
+        id: messageId,
+        chatId,
+        content: "█",
+        role: "assistant",
+        createdAt: new Date(),
+      });
+
+      await createStreamChatCompletion(apiKey, [
         {
           role: "system",
           content: getSystemMessage(),
@@ -106,27 +115,9 @@ export function ChatRoute() {
           content: message.content,
         })),
         { role: "user", content },
-      ]);
+      ], chatId, messageId);
 
-      const assistantMessage = result.data.choices[0].message?.content;
-      if (result.data.usage) {
-        await db.chats.where({ id: chatId }).modify((chat) => {
-          if (chat.totalTokens) {
-            chat.totalTokens += result.data.usage!.total_tokens;
-          } else {
-            chat.totalTokens = result.data.usage!.total_tokens;
-          }
-        });
-      }
       setSubmitting(false);
-
-      await db.messages.add({
-        id: nanoid(),
-        chatId,
-        content: assistantMessage ?? "unknown reponse",
-        role: "assistant",
-        createdAt: new Date(),
-      });
 
       if (chat?.description === "New Chat") {
         const messages = await db.messages
