@@ -1,5 +1,6 @@
 import Dexie, { Table } from "dexie";
 import "dexie-export-import";
+import { config } from "../utils/config";
 
 export interface Chat {
   id: string;
@@ -27,6 +28,10 @@ export interface Settings {
   id: "general";
   openAiApiKey?: string;
   openAiModel?: string;
+  openAiApiType?: 'openai' | 'custom';
+  openAiApiAuth?: 'none' | 'bearer-token' | 'api-key';
+  openAiApiBase?: string;
+  openAiApiVersion?: string;
 }
 
 export class Database extends Dexie {
@@ -47,6 +52,12 @@ export class Database extends Dexie {
     this.on("populate", async () => {
       db.settings.add({
         id: "general",
+        openAiModel: config.defaultModel,
+        openAiApiType: config.defaultType,
+        openAiApiAuth: config.defaultAuth,
+        ...(config.defaultKey != '' && { openAiApiKey: config.defaultKey }),
+        ...(config.defaultBase != '' && { openAiApiBase: config.defaultBase }),
+        ...(config.defaultVersion != '' && { openAiApiVersion: config.defaultVersion }),
       });
     });
   }

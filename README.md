@@ -24,7 +24,13 @@ Crafted with love and care to provide the best experience possible.
 ## Self-host using Docker
 
 ```
-docker run --name chatpad -d -p 1234:80 ghcr.io/deiucanta/chatpad:latest
+docker run --name chatpad -d -p 8080:80 ghcr.io/deiucanta/chatpad:latest
+```
+
+## Self-host using Docker with custom config
+
+```
+docker run --name chatpad -d -v `pwd`/config.json:/usr/share/nginx/html/config.json -p 8080:80 ghcr.io/deiucanta/chatpad:latest
 ```
 
 ## One click Deployments

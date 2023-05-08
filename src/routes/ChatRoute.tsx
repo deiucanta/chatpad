@@ -19,13 +19,11 @@ import { AiOutlineSend } from "react-icons/ai";
 import { MessageItem } from "../components/MessageItem";
 import { db } from "../db";
 import { useChatId } from "../hooks/useChatId";
+import { config } from "../utils/config";
 import {
-  writingCharacters,
-  writingFormats,
-  writingStyles,
-  writingTones,
-} from "../utils/constants";
-import { createChatCompletion, createStreamChatCompletion } from "../utils/openai";
+  createChatCompletion,
+  createStreamChatCompletion,
+} from "../utils/openai";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -101,7 +99,7 @@ export function ChatRoute() {
       });
       setContent("");
 
-      const messageId = nanoid()
+      const messageId = nanoid();
       await db.messages.add({
         id: messageId,
         chatId,
@@ -110,17 +108,22 @@ export function ChatRoute() {
         createdAt: new Date(),
       });
 
-      await createStreamChatCompletion(apiKey, [
-        {
-          role: "system",
-          content: getSystemMessage(),
-        },
-        ...(messages ?? []).map((message) => ({
-          role: message.role,
-          content: message.content,
-        })),
-        { role: "user", content },
-      ], chatId, messageId);
+      await createStreamChatCompletion(
+        apiKey,
+        [
+          {
+            role: "system",
+            content: getSystemMessage(),
+          },
+          ...(messages ?? []).map((message) => ({
+            role: message.role,
+            content: message.content,
+          })),
+          { role: "user", content },
+        ],
+        chatId,
+        messageId
+      );
 
       setSubmitting(false);
 
@@ -260,7 +263,7 @@ export function ChatRoute() {
               <Select
                 value={writingCharacter}
                 onChange={setWritingCharacter}
-                data={writingCharacters}
+                data={config.writingCharacters}
                 placeholder="Character"
                 variant="filled"
                 searchable
@@ -270,7 +273,7 @@ export function ChatRoute() {
               <Select
                 value={writingTone}
                 onChange={setWritingTone}
-                data={writingTones}
+                data={config.writingTones}
                 placeholder="Tone"
                 variant="filled"
                 searchable
@@ -280,7 +283,7 @@ export function ChatRoute() {
               <Select
                 value={writingStyle}
                 onChange={setWritingStyle}
-                data={writingStyles}
+                data={config.writingStyles}
                 placeholder="Style"
                 variant="filled"
                 searchable
@@ -290,7 +293,7 @@ export function ChatRoute() {
               <Select
                 value={writingFormat}
                 onChange={setWritingFormat}
-                data={writingFormats}
+                data={config.writingFormats}
                 placeholder="Format"
                 variant="filled"
                 searchable
