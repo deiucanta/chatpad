@@ -1,3 +1,5 @@
+import i18n from "i18next";
+
 interface Config {
     defaultModel: AvailableModel["value"];
     defaultType: 'openai' | 'custom';
@@ -36,7 +38,7 @@ interface WritingFormat {
 export let config: Config;
 
 export const loadConfig = async () => {
-    const response = await fetch("config.json");
+    const response = await fetch("config_"+i18n.resolvedLanguage+".json");
     config = await response.json();
     return config;
 };

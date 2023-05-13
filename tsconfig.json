@@ -5,6 +5,7 @@
     "esModuleInterop": true,
     "lib": ["es2018", "dom"],
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   }
 }

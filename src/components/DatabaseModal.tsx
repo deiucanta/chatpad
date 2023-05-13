@@ -8,6 +8,8 @@ import { cloneElement, ReactElement } from "react";
 import { db } from "../db";
 import { DeleteAllDataModal } from "./DeleteAllDataModal";
 import { DeleteChatsModal } from "./DeleteChatsModal";
+import '../i18n'
+import {t} from "i18next";
 
 export function DatabaseModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -27,7 +29,7 @@ export function DatabaseModal({ children }: { children: ReactElement }) {
       <Modal
         opened={opened}
         onClose={close}
-        title="Database"
+        title={t('database')}
         size="lg"
         withinPortal
         keepMounted
@@ -45,7 +47,7 @@ export function DatabaseModal({ children }: { children: ReactElement }) {
                 tt="uppercase"
                 fw={700}
               >
-                Chats
+                {t('chats')}
               </Text>
             </Card>
             <Card withBorder sx={{ flex: 1, marginLeft: -1 }}>
@@ -59,7 +61,7 @@ export function DatabaseModal({ children }: { children: ReactElement }) {
                 tt="uppercase"
                 fw={700}
               >
-                Messages
+                {t('messages')}
               </Text>
             </Card>
             <Card withBorder sx={{ flex: 1, marginLeft: -1 }}>
@@ -73,7 +75,7 @@ export function DatabaseModal({ children }: { children: ReactElement }) {
                 tt="uppercase"
                 fw={700}
               >
-                Prompts
+                {t('prompts')}
               </Text>
             </Card>
           </Flex>
@@ -89,12 +91,12 @@ export function DatabaseModal({ children }: { children: ReactElement }) {
                   "application/json"
                 );
                 notifications.show({
-                  title: "Exporting Data",
-                  message: "Your data is being exported.",
+                  title: t('exportingData.title'),
+                  message: t('exportingData.message'),
                 });
               }}
             >
-              Export Data
+              {t('exportData')}
             </Button>
             <input
               id="file-upload-btn"
@@ -110,15 +112,15 @@ export function DatabaseModal({ children }: { children: ReactElement }) {
                 })
                   .then(() => {
                     notifications.show({
-                      title: "Importing data",
-                      message: "Your data is being imported.",
+                      title: t('importingData.title'),
+                      message: t('importingData.message'),
                     });
                   })
                   .catch((error) => {
                     notifications.show({
-                      title: "Error",
+                      title: t('selectedFileError.title'),
                       color: "red",
-                      message: "The file you selected is invalid",
+                      message: t('selectedFileError.message'),
                     });
                   });
               }}
@@ -131,7 +133,7 @@ export function DatabaseModal({ children }: { children: ReactElement }) {
               variant="default"
               leftIcon={<IconDatabaseImport size={20} />}
             >
-              Import Data
+              {t('importData')}
             </Button>
           </Group>
           <Group>

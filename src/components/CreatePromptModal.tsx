@@ -13,6 +13,8 @@ import { IconPlaylistAdd, IconPlus } from "@tabler/icons-react";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { db } from "../db";
+import '../i18n'
+import {t} from "i18next";
 
 export function CreatePromptModal({ content }: { content?: string }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -27,17 +29,17 @@ export function CreatePromptModal({ content }: { content?: string }) {
   return (
     <>
       {content ? (
-        <Tooltip label="Save Prompt" position="left">
+        <Tooltip label={t('savePrompt')} position="left">
           <ActionIcon onClick={open}>
             <IconPlaylistAdd opacity={0.5} size={20} />
           </ActionIcon>
         </Tooltip>
       ) : (
         <Button fullWidth onClick={open} leftIcon={<IconPlus size={20} />}>
-          New Prompt
+          {t('newPrompt')}
         </Button>
       )}
-      <Modal opened={opened} onClose={close} title="Create Prompt" size="lg">
+      <Modal opened={opened} onClose={close} title={t('createPrompt')} size="lg">
         <form
           onSubmit={async (event) => {
             try {
@@ -51,22 +53,22 @@ export function CreatePromptModal({ content }: { content?: string }) {
                 createdAt: new Date(),
               });
               notifications.show({
-                title: "Saved",
-                message: "Prompt created",
+                title: t('savedPrompt.title'),
+                message: t('savedPrompt.message'),
               });
               close();
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {
                 notifications.show({
-                  title: "Error",
+                  title: t('networkError.title'),
                   color: "red",
-                  message: "No internet connection.",
+                  message: t('networkError.message'),
                 });
               }
               const message = error.response?.data?.error?.message;
               if (message) {
                 notifications.show({
-                  title: "Error",
+                  title: t('error.title'),
                   color: "red",
                   message,
                 });
@@ -78,14 +80,14 @@ export function CreatePromptModal({ content }: { content?: string }) {
         >
           <Stack>
             <TextInput
-              label="Title"
+              label={t('title')}
               value={title}
               onChange={(event) => setTitle(event.currentTarget.value)}
               formNoValidate
               data-autofocus
             />
             <Textarea
-              placeholder="Content"
+              placeholder={t('content')}
               autosize
               minRows={5}
               maxRows={10}
@@ -93,7 +95,7 @@ export function CreatePromptModal({ content }: { content?: string }) {
               onChange={(event) => setValue(event.currentTarget.value)}
             />
             <Button type="submit" loading={submitting}>
-              Save
+              {t('save')}
             </Button>
           </Stack>
         </form>

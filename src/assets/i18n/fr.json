@@ -1,0 +1,157 @@
+{
+  "translation": {
+    "notAnotherUI": "Ce n'est pas juste une autre interface de ChatGPT !",
+    "changeOpenAIKey": "Modifier la clé API d'OpenAI",
+    "enterOpenAIKey": "Entrer la clé API d'OpenAI",
+    "downloadDesktopApp": "Télécharger l'application de bureau",
+    "freeAndOpenSource": {
+      "title": "Gratuit et open source",
+      "description": "Cette application est gratuite et le code source est disponible sur GitHub."
+    },
+    "privacyFocused": {
+      "title": "Centré sur la vie privée",
+      "description": "Pas de suivi, pas de cookies, pas de mensonge. Toutes vos données sont stockées localement."
+    },
+    "bestExperience": {
+      "title": "La meilleure expérience",
+      "description": "Fabriqué avec amour et soin pour offrir la meilleure expérience possible."
+    },
+    "search": "Rechercher",
+    "lightMode": "Mode clair",
+    "darkMode": "Mode sombre",
+    "settings": "Paramètres",
+    "database": "Base de données",
+    "sourceCode": "Code source",
+    "followOnTwitter": "Suivez-nous sur Twitter",
+    "giveFeedback": "Donnez votre avis",
+    "chats": "Conversations",
+    "newChat": "Nouvelle conversation",
+    "prompts": "Prompts",
+    "newPrompt": "Nouveau Prompt",
+    "savePrompt": "Enregistrer le Prompt",
+    "createPrompt": "Créer un Prompt",
+    "savedPrompt": {
+      "title": "Sauvegardé",
+      "message": "Prompt créée"
+    },
+    "error": {
+      "title": "Erreur"
+    },
+    "networkError": {
+      "title": "Erreur",
+      "message": "Pas de connexion internet."
+    },
+    "chatIdError": {
+      "title": "Erreur",
+      "message": "le ChatId n'est pas défini. Veuillez créer une conversation pour commencer."
+    },
+    "apiKeyError": {
+      "title": "Erreur",
+      "message": "La clé API OpenAI n'est pas définie. Veuillez définir votre clé API"
+    },
+    "title": "Titre",
+    "content": "Contenu",
+    "save": "Enregistrer",
+    "youAre": "Tu es",
+    "respondInTone": "Réponds sur un ton",
+    "respondInStyle": "Réponds dans un style",
+    "tone": "",
+    "style": "",
+    "youAreChatGPT": "Tu es ChatGPT, un modèle de langage avancé entraîné par OpenAI.",
+    "defineTitleChat": "Titre court et pertinent pour cette discussion ? Vous devez répondre strictement avec le titre, aucun autre texte n'est autorisé.",
+    "character": "Personnage",
+    "toneList": "Ton",
+    "styleList": "Style",
+    "format": "Format",
+    "yourMessageHere": "Votre message ici...",
+    "deleteChats": "Supprimer les conversations",
+    "confirmDeleteChats": "Êtes-vous sûr de vouloir supprimer les conversations ?",
+    "deleteChat": "Supprimer la conversation",
+    "confirmDeleteChat": "Êtes-vous sûr de vouloir supprimer la conversation ?",
+    "delete": "Supprimer",
+    "deleted": "Supprimée",
+    "chatDeleted": "Conversation supprimée.",
+    "removeChatError": {
+      "title": "Erreur",
+      "message": "Impossible de supprimer la conversation. Veuillez actualiser la page et réessayer."
+    },
+    "openAIAPIKey": "Clé API OpenAI",
+    "getYourOpenAIAPIkey": "Obtenez votre clé API OpenAI",
+    "APIKeyStoredLocally": "La clé API est stockée localement sur votre navigateur et n'est jamais envoyée ailleurs.",
+    "openAIType": "Type d'OpenAI",
+    "openAIKeySaved": {
+      "title": "Sauvegardé",
+      "message": "Votre clé OpenAI a été enregistrée."
+    },
+    "openAITypeSaved": {
+      "title": "Sauvegardé",
+      "message": "Votre type d'OpenAI a été enregistré."
+    },
+    "openIATTypeCustom": "Personnalisé (par exemple: Azure OpenAI)",
+    "openAIModel": "Modèle OpenAI (OpenAI seulement)",
+    "openAIModelSaved": {
+      "title": "Sauvegardé",
+      "message": "Votre modèle OpenAI a été enregistré."
+    },
+    "warning": "Avertissement",
+    "warningCostMessage": "Le coût affiché n'a pas encore été mis à jour pour refléter les coûts de chaque modèle. Pour l'instant, le coût affiché est toujours celui du modèle GPT-3.5 de l'OpenAI.",
+    "openAIAuth": "Methode d'authentification OpenAI (personnalisé seulement)",
+    "openAIAuthSaved": {
+      "title": "Sauvegardé",
+      "message": "Votre methode d'authentification OpenAI a été enregistré."
+    },
+    "none": "Aucune",
+    "bearerToken": "Bearer Token",
+    "apiKey": "Clé API",
+    "openAIBaseSaved": {
+      "title": "Sauvegardé",
+      "message": "Votre URL d'API OpenAI a été enregistrée."
+    },
+    "openAIAPIBase": "URL d'API OpenAI (personnalisé uniquement)",
+    "openAIAPIVersion": "Version de l'API OpenAI (personnalisé uniquement)",
+    "openAIVersionSaved": {
+      "title": "Sauvegardé",
+      "message": "Votre version OpenAI a été enregistrée."
+    },
+    "newChatFromPrompt": "Nouvelle conversattion à partir du prompt",
+    "copied": "Copié !",
+    "copy": "Copier",
+    "words": "mots",
+    "editPrompt": "Modifier le prompt",
+    "promptUpdated": {
+      "title": "Sauvegardé",
+      "message": "Prompt enregistré"
+    },
+    "editChat": "Modifier la conversation",
+    "chatUpdated": {
+      "title": "Sauvegardé",
+      "message": "Conversation enregistrée"
+    },
+    "name": "Nom",
+    "deleteAllData": "Supprimer toutes les données",
+    "confirmDeleteAllData": "Êtes-vous sûr de vouloir effacer toutes vos données ?",
+    "messages": "Messages",
+    "exportingData" : {
+      "title": "Exportation de données",
+      "message": "Vos données sont en cours d'exportation."
+    },
+    "exportData": "Exporter les données",
+    "importingData" : {
+      "title": "Importation de données",
+      "message": "Vos données sont en cours d'importation."
+    },
+    "importData": "Importer les données",
+    "selectedFileError": {
+      "title": "Erreur",
+      "message": "Le fichier sélectionné n'est pas valide"
+    },
+    "edit": "Modifier",
+    "promptDeleted": "Prompt supprimée.",
+    "removePromptError": {
+      "title": "Erreur",
+      "message": "Impossible de supprimer le prompt. Veuillez rafraîchir la page et réessayer."
+    },
+    "deletePrompt": "Supprimer le prompt",
+    "confirmDeletePrompt": "Êtes-vous sûr de vouloir supprimer ce prompt ?"
+  }
+}

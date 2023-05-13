@@ -24,6 +24,8 @@ import {
   createChatCompletion,
   createStreamChatCompletion,
 } from "../utils/openai";
+import '../i18n'
+import {t} from "i18next";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -55,14 +57,13 @@ export function ChatRoute() {
 
   const getSystemMessage = () => {
     const message: string[] = [];
-    if (writingCharacter) message.push(`You are ${writingCharacter}.`);
-    if (writingTone) message.push(`Respond in ${writingTone} tone.`);
-    if (writingStyle) message.push(`Respond in ${writingStyle} style.`);
+    // @ts-ignore
+    if (writingCharacter) message.push(t('youAre') + ` ${writingCharacter}.`);
+    if (writingTone) message.push(t('respondInTone') + ` ${writingTone} ` + t('tone'));
+    if (writingStyle) message.push(t('respondInStyle') +` ${writingStyle} ` + t('style'));
     if (writingFormat) message.push(writingFormat);
     if (message.length === 0)
-      message.push(
-        "You are ChatGPT, a large language model trained by OpenAI."
-      );
+      message.push(t('youAreChatGPT'));
     return message.join(" ");
   };
 
@@ -71,18 +72,18 @@ export function ChatRoute() {
 
     if (!chatId) {
       notifications.show({
-        title: "Error",
+        title: t('chatIdError.title'),
         color: "red",
-        message: "chatId is not defined. Please create a chat to get started.",
+        message: t('chatIdError.message'),
       });
       return;
     }
 
     if (!apiKey) {
       notifications.show({
-        title: "Error",
+        title: t('apiKeyError.title'),
         color: "red",
-        message: "OpenAI API Key is not defined. Please set your API Key",
+        message: t('apiKeyError.message'),
       });
       return;
     }
@@ -127,7 +128,7 @@ export function ChatRoute() {
 
       setSubmitting(false);
 
-      if (chat?.description === "New Chat") {
+      if (chat?.description === t('newChat')) {
         const messages = await db.messages
           .where({ chatId })
           .sortBy("createdAt");
@@ -142,8 +143,7 @@ export function ChatRoute() {
           })),
           {
             role: "user",
-            content:
-              "What would be a short and relevant title for this chat ? You must strictly answer with only the title, no other text is allowed.",
+            content: t('defineTitleChat'),
           },
         ]);
         const chatDescription =
@@ -151,7 +151,7 @@ export function ChatRoute() {
 
         if (createChatDescription.data.usage) {
           await db.chats.where({ id: chatId }).modify((chat) => {
-            chat.description = chatDescription ?? "New Chat";
+            chat.description = chatDescription ?? t('newChat');
             if (chat.totalTokens) {
               chat.totalTokens +=
                 createChatDescription.data.usage!.total_tokens;
@@ -164,15 +164,15 @@ export function ChatRoute() {
     } catch (error: any) {
       if (error.toJSON().message === "Network Error") {
         notifications.show({
-          title: "Error",
+          title: t('networkError.title'),
           color: "red",
-          message: "No internet connection.",
+          message: t('networkError.message'),
         });
       }
       const message = error.response?.data?.error?.message;
       if (message) {
         notifications.show({
-          title: "Error",
+          title: t('error.title'),
           color: "red",
           message,
         });
@@ -264,7 +264,7 @@ export function ChatRoute() {
                 value={writingCharacter}
                 onChange={setWritingCharacter}
                 data={config.writingCharacters}
-                placeholder="Character"
+                placeholder={t('character')}
                 variant="filled"
                 searchable
                 clearable
@@ -274,7 +274,7 @@ export function ChatRoute() {
                 value={writingTone}
                 onChange={setWritingTone}
                 data={config.writingTones}
-                placeholder="Tone"
+                placeholder={t('toneList')}
                 variant="filled"
                 searchable
                 clearable
@@ -284,7 +284,7 @@ export function ChatRoute() {
                 value={writingStyle}
                 onChange={setWritingStyle}
                 data={config.writingStyles}
-                placeholder="Style"
+                placeholder={t('styleList')}
                 variant="filled"
                 searchable
                 clearable
@@ -294,7 +294,7 @@ export function ChatRoute() {
                 value={writingFormat}
                 onChange={setWritingFormat}
                 data={config.writingFormats}
-                placeholder="Format"
+                placeholder={t('format')}
                 variant="filled"
                 searchable
                 clearable
@@ -306,7 +306,7 @@ export function ChatRoute() {
             <Textarea
               key={chatId}
               sx={{ flex: 1 }}
-              placeholder="Your message here..."
+              placeholder={t('yourMessageHere')}
               autosize
               autoFocus
               disabled={submitting}

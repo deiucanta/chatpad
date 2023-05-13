@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { db, Prompt } from "../db";
 import { useApiKey } from "../hooks/useApiKey";
 import { useChatId } from "../hooks/useChatId";
+import '../i18n'
+import {t} from "i18next";
+import * as tty from "tty";
 
 export function DeletePromptModal({ prompt }: { prompt: Prompt }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -23,7 +26,7 @@ export function DeletePromptModal({ prompt }: { prompt: Prompt }) {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Delete Prompt" size="md">
+      <Modal opened={opened} onClose={close} title={t('deletePrompt')} size="md">
         <form
           onSubmit={async (event) => {
             try {
@@ -33,22 +36,21 @@ export function DeletePromptModal({ prompt }: { prompt: Prompt }) {
               close();
 
               notifications.show({
-                title: "Deleted",
-                message: "Chat deleted.",
+                title: t('deleted'),
+                message: t('promptDeleted'),
               });
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {
                 notifications.show({
-                  title: "Error",
+                  title: t('networkError.title'),
                   color: "red",
-                  message: "No internet connection.",
+                  message: t('networkError.message'),
                 });
               } else {
                 notifications.show({
-                  title: "Error",
+                  title: t('removePromptError.title'),
                   color: "red",
-                  message:
-                    "Can't remove chat. Please refresh the page and try again.",
+                  message: t('removePromptError.message'),
                 });
               }
             } finally {
@@ -57,14 +59,14 @@ export function DeletePromptModal({ prompt }: { prompt: Prompt }) {
           }}
         >
           <Stack>
-            <Text size="sm">Are you sure you want to delete this prompt?</Text>
+            <Text size="sm">{t('confirmDeletePrompt')}</Text>
             <Button type="submit" color="red" loading={submitting}>
-              Delete
+              {t('delete')}
             </Button>
           </Stack>
         </form>
       </Modal>
-      <Tooltip label="Delete Prompt">
+      <Tooltip label={t('deletePrompt')}>
         <ActionIcon color="red" size="lg" onClick={open}>
           <IconTrash size={20} />
         </ActionIcon>

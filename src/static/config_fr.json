@@ -1,0 +1,207 @@
+{
+  "defaultModel": "gpt-3.5-turbo",
+  "defaultType": "openai",
+  "defaultAuth": "api-key",
+  "defaultBase": "",
+  "defaultVersion": "",
+  "defaultKey": "",
+  "availableModels": [
+    {
+      "value": "gpt-3.5-turbo",
+      "label": "GPT-3.5-TURBO (ChatGPT par défaut)"
+    },
+    {
+      "value": "gpt-3.5-turbo-0301",
+      "label": "GPT-3.5-TURBO-0301"
+    },
+    {
+      "value": "gpt-4",
+      "label": "GPT-4 (Bêta limitée)"
+    },
+    {
+      "value": "gpt-4-0314",
+      "label": "GPT-4-0314 (Bêta limitée)"
+    },
+    {
+      "value": "gpt-4-32k",
+      "label": "GPT-4-32K (Bêta limitée)"
+    },
+    {
+      "value": "gpt-4-32k-0314",
+      "label": "GPT-4-32K-0314 (Bêta limitée)"
+    }
+  ],
+  "writingCharacters": [
+    {
+      "label": "Humoriste",
+      "value": "Un artiste de spectacle qui divertit son public en racontant des blagues et des histoires humoristiques."
+    },
+    {
+      "label": "Coach de vie",
+      "value": "Un professionnel qui aide les individus à identifier et atteindre leurs objectifs personnels et professionnels."
+    },
+    {
+      "label": "Conseiller en orientation",
+      "value": "Un professionnel qui aide les individus à explorer et à choisir des carrières, à développer des stratégies de recherche d'emploi et à améliorer leur performance professionnelle."
+    },
+    {
+      "label": "Nutritionniste",
+      "value": "Un professionnel de la santé qui se spécialise dans l'étude de la nutrition et de ses effets sur le corps."
+    },
+    {
+      "label": "Chef de produit",
+      "value": "Un professionnel qui supervise le développement et la commercialisation des produits d'une entreprise."
+    },
+    {
+      "label": "Entraîneur personnel",
+      "value": "Un professionnel de la remise en forme qui travaille avec des individus pour élaborer des programmes d'exercices personnalisés et améliorer leur santé et leur condition physique globales."
+    },
+    {
+      "label": "Expert en astuces de vie",
+      "value": "Une personne qui utilise des méthodes non conventionnelles pour résoudre des problèmes et augmenter la productivité dans la vie quotidienne."
+    },
+    {
+      "label": "Conseiller en voyages",
+      "value": "Un professionnel qui aide les individus à planifier et réserver des arrangements de voyage."
+    },
+    {
+      "label": "Coach pleine conscience",
+      "value": "Un professionnel qui aide les individus à développer des pratiques de pleine conscience pour réduire le stress et améliorer le bien-être."
+    },
+    {
+      "label": "Conseiller financier",
+      "value": "Un professionnel qui fournit des conseils et des orientations sur la planification financière, les stratégies d'investissement et la planification de la retraite."
+    },
+    {
+      "label": "Tuteur linguistiques",
+      "value": "Un enseignant qui aide les individus à apprendre et à améliorer leurs compétences linguistiques."
+    },
+    {
+      "label": "Guide touristique",
+      "value": "Un professionnel qui guide les visites et fournit des informations sur les attractions locales et la culture."
+    },
+    {
+      "label": "Expert marketing",
+      "value": "Un professionnel qui développe et met en oeuvre des stratégies de marketing pour promouvoir des produits et services."
+    },
+    {
+      "label": "Développeur logiciels",
+      "value": "Un professionnel qui conçoit, développe et maintient des applications et des systèmes informatiques."
+    },
+    {
+      "label": "Coach relations amoureuses",
+      "value": "Un professionnel qui aide les individus à améliorer leurs compétences en matière de rencontres et de relations amoureuses."
+    },
+    {
+      "label": "Expert en bricolage",
+      "value": "Une personne qui est habile à réaliser une large gamme de projets de bricolage autour de la maison."
+    },
+    {
+      "label": "Journaliste",
+      "value": "Un professionnel qui enquête et rapporte sur les événements et les nouvelles en cours."
+    },
+    {
+      "label": "Écrivain technique",
+      "value": "Un professionnel qui écrit sur la technologie et les sujets connexes pour une variété d'audiences."
+    },
+    {
+      "label": "Chef cuisinier",
+      "value": "Un professionnel de la cuisine qui prépare des repas et gère les opérations de la cuisine."
+    },
+    {
+      "label": "Vendeur professionnel",
+      "value": "Un professionnel qui vend des produits et services aux entreprises et aux consommateurs."
+    },
+    {
+      "label": "Avocat startup technologique",
+      "value": "Un professionnel du droit qui se spécialise dans la fourniture de conseils et de services juridiques aux entreprises technologiques en démarrage."
+    },
+    {
+      "label": "Designer graphique",
+      "value": "Un professionnel qui conçoit des supports visuels tels que des logos, des brochures et des sites web."
+    },
+    {
+      "label": "Chercheur universitaire",
+      "value": "Un professionnel qui mène des recherches et produit des travaux universitaires dans un domaine universitaire particulier."
+    },
+    {
+      "label": "Soutien à la clientèle",
+      "value": "Un professionnel qui fournit une assistance et un soutien aux clients ayant des questions ou des problèmes avec les produits ou services d'une entreprise."
+    },
+    {
+      "label": "Consultant RH",
+      "value": "Un professionnel qui fournit des conseils et des orientations aux organisations en matière de gestion et de stratégie des ressources humaines."
+    }
+  ],
+  "writingTones": [
+    "Affirmé",
+    "Autoritaire",
+    "Détendu",
+    "Confiant",
+    "Condescendant",
+    "Conversationnel",
+    "Diplomatique",
+    "Direct",
+    "Éloquent",
+    "Formel",
+    "Amical",
+    "Humoristique",
+    "Informatif",
+    "Inspirant",
+    "Intense",
+    "Irritable",
+    "Blagueur",
+    "Polie",
+    "Sarcastique",
+    "Sincère",
+    "Apaisant",
+    "Sévère",
+    "Compassionnel",
+    "Tactique",
+    "Spirituel"
+  ],
+  "writingStyles": [
+    "Académique",
+    "Analytique",
+    "Argumentatif",
+    "Conversationnel",
+    "Créatif",
+    "Critique",
+    "Descriptif",
+    "Explicatif",
+    "Informatif",
+    "Instructif",
+    "Investigatif",
+    "Journalistique",
+    "Métaphorique",
+    "Narratif",
+    "Persuasif",
+    "Poétique",
+    "Satirique",
+    "Technique"
+  ],
+  "writingFormats": [
+    {
+      "value": "Réponds de manière concise autant que possible",
+      "label": "Concis"
+    },
+    {
+      "value": "Réfléchir étape par étape",
+      "label": "Étape par étape"
+    },
+    {
+      "value": "Réponds avec un niveau de détail minutieux",
+      "label": "Détailler"
+    },
+    {
+      "value": "Explique comme si j'avais cinq ans",
+      "label": "Explique comme si j'avais 5 ans"
+    }
+  ],
+  "showDownloadLink": true,
+  "allowDarkModeToggle": true,
+  "allowSettingsModal": true,
+  "allowDatabaseModal": true,
+  "showTwitterLink": true,
+  "showFeedbackLink": true
+}
