@@ -1,0 +1,117 @@
+{
+  "translation": {
+    "notAnotherUI": "Not just another ChatGPT user-interface!",
+    "changeOpenAIKey": "Change OpenAI Key",
+    "enterOpenAIKey": "Enter OpenAI Key",
+    "downloadDesktopApp": "Download Desktop App",
+    "freeAndOpenSource": {
+      "title": "Free and open source",
+      "description": "This app is provided for free and the source code is available on GitHub."
+    },
+    "privacyFocused": {
+      "title": "Privacy focused",
+      "description": "No tracking, no cookies, no bullshit. All your data is stored locally."
+    },
+    "bestExperience": {
+      "title": "Best experience",
+      "description": "Crafted with love and care to provide the best experience possible."
+    },
+    "search": "Search",
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode",
+    "settings": "Settings",
+    "database": "Database",
+    "sourceCode": "Source Code",
+    "followOnTwitter": "Follow on Twitter",
+    "giveFeedback": "Give Feedback",
+    "chats": "Chats",
+    "newChat": "New Chat",
+    "prompts": "Prompts",
+    "newPrompt": "New Prompt",
+    "savePrompt": "Save Prompt",
+    "createPrompt": "Create Prompt",
+    "savedPrompt": {
+      "title": "Saved",
+      "message": "Prompt created"
+    },
+    "error": {
+      "title": "Error"
+    },
+    "networkError": {
+      "title": "Error",
+      "message": "No internet connection."
+    },
+    "chatIdError": {
+      "title": "Error",
+      "message": "chatId is not defined. Please create a chat to get started."
+    },
+    "apiKeyError": {
+      "title": "Error",
+      "message": "OpenAI API Key is not defined. Please set your API Key"
+    },
+    "title": "Title",
+    "content": "Content",
+    "save": "save",
+    "youAre": "You are",
+    "respondInTone": "Respond in",
+    "respondInStyle": "Respond in",
+    "tone": "tone",
+    "style": "style",
+    "youAreChatGPT": "You are ChatGPT, a large language model trained by OpenAI.",
+    "defineTitleChat": "What would be a short and relevant title for this chat ? You must strictly answer with only the title, no other text is allowed.",
+    "character": "Character",
+    "toneList": "Tone",
+    "styleList": "Style",
+    "format": "Format",
+    "yourMessageHere": "Your message here...",
+    "deleteChats": "Delete Chats",
+    "confirmDeleteChats": "Are you sure you want to delete your chats?",
+    "deleteChat": "Delete Chat",
+    "confirmDeleteChat": "Are you sure you want to delete this chat?",
+    "delete": "Delete",
+    "deleted": "Deleted",
+    "chatDeleted": "Chat deleted.",
+    "removeChatError": {
+      "title": "Error",
+      "message": "Can't remove chat. Please refresh the page and try again."
+    },
+    "openAIAPIKey": "OpenAI API Key",
+    "getYourOpenAIAPIkey": "Get your OpenAI API key",
+    "APIKeyStoredLocally": "The API Key is stored locally on your browser and never sent anywhere else.",
+    "openAIType": "OpenAI Type",
+    "openAIKeySaved": {
+      "title": "saved",
+      "message": "Your OpenAI Key has been saved."
+    },
+    "openAITypeSaved": {
+      "title": "saved",
+      "message": "Your OpenAI Type has been saved."
+    },
+    "openIATTypeCustom": "Custom (e.g. Azure OpenAI)",
+    "openAIModel": "OpenAI Model (OpenAI Only)",
+    "openAIModelSaved": {
+      "title": "saved",
+      "message": "Your OpenAI Model has been saved."
+    },
+    "warning": "Warning",
+    "warningCostMessage": "The displayed cost was not updated yet to reflect the costs for each model. Right now it will always show the cost for GPT-3.5 on OpenAI.",
+    "openAIAuth": "OpenAI Auth (Custom Only)",
+    "openAIAuthSaved": {
+      "title": "saved",
+      "message": "Your OpenAI Auth has been saved."
+    },
+    "none": "None",
+    "bearerToken": "Bearer Token",
+    "apiKey": "API Key",
+    "openAIBaseSaved": {
+      "title": "saved",
+      "message": "Your OpenAI Base has been saved."
+    },
+    "openAIAPIBase": "OpenAI API Base (Custom Only)",
+    "openAIAPIVersion": "OpenAI API Version (Custom Only)",
+    "openAIVersionSaved": {
+      "title": "saved",
+      "message": "Your OpenAI Version has been saved."
+    }
+  }
+}
