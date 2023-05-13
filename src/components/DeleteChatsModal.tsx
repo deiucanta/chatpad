@@ -15,18 +15,18 @@ export function DeleteChatsModal({ onOpen }: { onOpen: () => void }) {
         variant="outline"
         color="red"
         leftIcon={<IconTrash size={20} />}
-      >"
-          {t("deleteChats")}
+      >
+          {t('deleteChats')}
       </Button>
       <Modal
         opened={opened}
         onClose={close}
-        title={t("deleteChats")}
+        title={t('deleteChats')}
         size="md"
         withinPortal
       >
         <Stack>
-          <Text size="sm">{t("confirmDeleteChats")}</Text>
+          <Text size="sm">{t('confirmDeleteChats')}</Text>
           <Button
             onClick={async () => {
               await db.chats.clear();
@@ -36,7 +36,7 @@ export function DeleteChatsModal({ onOpen }: { onOpen: () => void }) {
             }}
             color="red"
           >
-              {t("delete")}
+              {t('delete')}
           </Button>
         </Stack>
       </Modal>

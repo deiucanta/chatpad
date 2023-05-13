@@ -112,6 +112,46 @@
     "openAIVersionSaved": {
       "title": "Sauvegardé",
       "message": "Votre version OpenAI a été enregistrée."
-    }
+    },
+    "newChatFromPrompt": "Nouvelle conversattion à partir du prompt",
+    "copied": "Copié !",
+    "copy": "Copier",
+    "words": "mots",
+    "editPrompt": "Modifier le prompt",
+    "promptUpdated": {
+      "title": "Sauvegardé",
+      "message": "Prompt enregistré"
+    },
+    "editChat": "Modifier la conversation",
+    "chatUpdated": {
+      "title": "Sauvegardé",
+      "message": "Conversation enregistrée"
+    },
+    "name": "Nom",
+    "deleteAllData": "Supprimer toutes les données",
+    "confirmDeleteAllData": "Êtes-vous sûr de vouloir effacer toutes vos données ?",
+    "messages": "Messages",
+    "exportingData" : {
+      "title": "Exportation de données",
+      "message": "Vos données sont en cours d'exportation."
+    },
+    "exportData": "Exporter les données",
+    "importingData" : {
+      "title": "Importation de données",
+      "message": "Vos données sont en cours d'importation."
+    },
+    "importData": "Importer les données",
+    "selectedFileError": {
+      "title": "Erreur",
+      "message": "Le fichier sélectionné n'est pas valide"
+    },
+    "edit": "Modifier",
+    "promptDeleted": "Prompt supprimée.",
+    "removePromptError": {
+      "title": "Erreur",
+      "message": "Impossible de supprimer le prompt. Veuillez rafraîchir la page et réessayer."
+    },
+    "deletePrompt": "Supprimer le prompt",
+    "confirmDeletePrompt": "Êtes-vous sûr de vouloir supprimer ce prompt ?"
   }
 }

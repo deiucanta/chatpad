@@ -112,6 +112,46 @@
     "openAIVersionSaved": {
       "title": "saved",
       "message": "Your OpenAI Version has been saved."
-    }
+    },
+    "newChatFromPrompt": "New Chat From Prompt",
+    "copied": "Copied",
+    "copy": "Copy",
+    "words": "words",
+    "editPrompt": "Edit Prompt",
+    "promptUpdated": {
+      "title": "saved",
+      "message": "Prompt updated"
+    },
+    "editChat": "Edit Chat",
+    "chatUpdated": {
+      "title": "saved",
+      "message": "Chat updated"
+    },
+    "name": "Name",
+    "deleteAllData": "Delete All Data",
+    "confirmDeleteAllData": "Are you sure you want to delete your data?",
+    "messages": "Messages",
+    "exportingData" : {
+      "title": "Exporting Data",
+      "message": "Your data is being exported."
+    },
+    "exportData": "Export Data",
+    "importingData" : {
+      "title": "Import Data",
+      "message": "Your data is being imported."
+    },
+    "importData": "Import Data",
+    "selectedFileError": {
+      "title": "Error",
+      "message": "The file you selected is invalid"
+    },
+    "edit": "Edit",
+    "promptDeleted": "Prompt deleted.",
+    "removePromptError": {
+      "title": "Error",
+      "message": "Can't remove prompt. Please refresh the page and try again."
+    },
+    "deletePrompt": "Delete Prompt",
+    "confirmDeletePrompt": "Are you sure you want to delete this prompt?"
   }
 }
