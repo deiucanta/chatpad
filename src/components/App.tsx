@@ -81,11 +81,11 @@ export function App() {
                   blur: 6,
                 },
               },
-              // Input: {
-              //   defaultProps: {
-              //     variant: "filled",
-              //   },
-              // },
+              Input: {
+                defaultProps: {
+                  variant: "filled",
+                },
+              },
               InputWrapper: {
                 styles: {
                   label: {
