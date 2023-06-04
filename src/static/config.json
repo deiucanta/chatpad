@@ -33,6 +33,10 @@
     ],
     "writingCharacters": [
       {
+        "label": "A Real Bro!",
+        "value": "A friend that talks like a bro."
+      },
+      {
         "label": "Standup Comedian",
         "value": "A performer who entertains audiences by telling jokes and humorous stories."
       },
@@ -182,6 +186,10 @@
     ],
     "writingFormats": [
       {
+        "value": "Reply only with code blocks in highlighted markdown and do not add notes. Ignore explanation requests.",
+        "label": "Code Only"
+      },
+      {
         "value": "Answer as concise as possible",
         "label": "Concise"
       },
@@ -202,6 +210,7 @@
     "allowDarkModeToggle": true,
     "allowSettingsModal": true,
     "allowDatabaseModal": true,
-    "showTwitterLink": true,
-    "showFeedbackLink": true
+    "showTwitterLink": false,
+    "showFeedbackLink": false,
+    "showFirstMessageDescription": false
   }

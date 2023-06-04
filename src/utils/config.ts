@@ -16,6 +16,7 @@ interface Config {
     allowDatabaseModal: boolean;
     showTwitterLink: boolean;
     showFeedbackLink: boolean;
+    showFirstMessageDescription: boolean;
 }
 
 interface AvailableModel {

@@ -1,5 +1,6 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
 import { useLiveQuery } from "dexie-react-hooks";
+import { config } from "../utils/config";
 import { Chat, db } from "../db";
 
 interface MainLinkProps {
@@ -42,7 +43,7 @@ export function MainLink({ icon, color, label, chat }: MainLinkProps) {
           }}
         >
           {label} <br />
-          {firstMessage?.content}
+          {config.showFirstMessageDescription && firstMessage?.content}
         </Text>
       </Group>
     </UnstyledButton>
