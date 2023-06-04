@@ -2,3 +2,5 @@
 /.parcel-cache
 /dist
 notes.txt
+package-lock.json
+yarn.lock
