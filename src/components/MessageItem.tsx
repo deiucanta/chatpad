@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   ActionIcon,
   Box,
@@ -20,6 +22,9 @@ import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 import { ScrollIntoView } from "./ScrollIntoView";
+
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
 
 export function MessageItem({ message }: { message: Message }) {
   const clipboard = useClipboard({ timeout: 500 });
@@ -46,12 +51,16 @@ export function MessageItem({ message }: { message: Message }) {
                 table: ({ node, ...props }) => (
                   <Table verticalSpacing="sm" highlightOnHover {...props} />
                 ),
-                code: ({ node, inline, ...props }) =>
-                  inline ? (
-                    <Code {...props} />
-                  ) : (
+                code: ({ node, inline, ...props }) => {
+                  if (inline) {
+                    return <Code {...props} />;
+                  }
+                  const codeString = React.Children.toArray(props.children).join('');
+                  const highlightedCode = hljs.highlightAuto(codeString).value;
+                  const { children: _, ...propsWithoutChildren } = props;
+                  return (
                     <Box sx={{ position: "relative" }}>
-                      <Code block {...props} />
+                      <Code block {...propsWithoutChildren} dangerouslySetInnerHTML={{ __html: highlightedCode }} />
                       <CopyButton value={String(props.children)}>
                         {({ copied, copy }) => (
                           <Tooltip
@@ -68,7 +77,8 @@ export function MessageItem({ message }: { message: Message }) {
                         )}
                       </CopyButton>
                     </Box>
-                  ),
+                  );
+                }
               }}
             />
             {message.role === "assistant" && (
