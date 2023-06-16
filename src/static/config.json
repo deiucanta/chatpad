@@ -11,24 +11,44 @@
         "label": "GPT-3.5-TURBO (Default ChatGPT)"
       },
       {
+        "value": "gpt-3.5-turbo-0613",
+        "label": "GPT-3.5-TURBO-0613"
+      },
+      {
         "value": "gpt-3.5-turbo-0301",
-        "label": "GPT-3.5-TURBO-0301"
+        "label": "GPT-3.5-TURBO-0301 (Legacy)"
+      },
+      {
+        "value": "gpt-3.5-turbo-16k",
+        "label": "GPT-3.5-TURBO-16K"
+      },
+      {
+        "value": "gpt-3.5-turbo-16k-0613",
+        "label": "GPT-3.5-TURBO-16K-0613"
       },
       {
         "value": "gpt-4",
         "label": "GPT-4 (Limited Beta)"
       },
       {
+        "value": "gpt-4-0613",
+        "label": "GPT-4-0613 (Limited Beta)"
+      },
+      {
         "value": "gpt-4-0314",
-        "label": "GPT-4-0314 (Limited Beta)"
+        "label": "GPT-4-0314 (Limited Beta, Legacy)"
       },
       {
         "value": "gpt-4-32k",
         "label": "GPT-4-32K (Limited Beta)"
       },
       {
+        "value": "gpt-4-32k-0613",
+        "label": "GPT-4-32K-0613 (Limited Beta)"
+      },
+      {
         "value": "gpt-4-32k-0314",
-        "label": "GPT-4-32K-0314 (Limited Beta)"
+        "label": "GPT-4-32K-0314 (Limited Beta, Legacy)"
       }
     ],
     "writingCharacters": [
