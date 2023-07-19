@@ -347,7 +347,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
           <Stack spacing="xs">
             <Text children="Theme color" />
             <Group spacing="xs">
-              {["red", "pink", "grape", "violet", "indigo", "blue", "cyan", "green", "lime", "yellow", "orange", "teal"].map((color) => (
+              {["red", "pink", "grape", "violet", "indigo", "blue", "cyan", "teal", "green", "lime", "yellow", "orange"].map((color) => (
                 <ColorSwatch
                   component="button"
                   color={theme.colors[color][6]}
