@@ -8,6 +8,7 @@ import { useChatId } from "../hooks/useChatId";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
+import { usePrimaryColor } from "../hooks/usePrimaryColor";
 
 export function Chats({ search }: { search: string }) {
   const chatId = useChatId();
@@ -22,6 +23,8 @@ export function Chats({ search }: { search: string }) {
       }),
     [chats, search]
   );
+
+  const [primaryColor] = usePrimaryColor();
 
   return (
     <>
@@ -42,7 +45,7 @@ export function Chats({ search }: { search: string }) {
           <Link to={`/chats/${chat.id}`} style={{ flex: 1 }}>
             <MainLink
               icon={<IconMessages size="1rem" />}
-              color="primary"
+              color={primaryColor}
               chat={chat}
               label={chat.description}
             />
