@@ -20,6 +20,7 @@ import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 import { ScrollIntoView } from "./ScrollIntoView";
+import "../utils/prisma-setup";
 
 export function MessageItem({ message }: { message: Message }) {
   const wordCount = useMemo(() => {
