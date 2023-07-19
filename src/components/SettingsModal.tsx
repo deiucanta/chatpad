@@ -10,6 +10,11 @@ import {
   Select,
   Stack,
   Text,
+  useMantineTheme,
+  Group,
+  ColorSwatch,
+  CheckIcon,
+  rem,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -18,6 +23,7 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
+import { usePrimaryColor } from "../hooks/usePrimaryColor";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -29,6 +35,9 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [auth, setAuth] = useState(config.defaultAuth);
   const [base, setBase] = useState("");
   const [version, setVersion] = useState("");
+  const [primaryColor, setPrimaryColor] = usePrimaryColor();
+
+  const theme = useMantineTheme();
 
   const settings = useLiveQuery(async () => {
     return db.settings.where({ id: "general" }).first();
@@ -335,6 +344,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               </Button>
             </Flex>
           </form>
+          <Stack spacing="xs">
+            <Text children="Theme color" />
+            <Group spacing="xs">
+              {["red", "pink", "grape", "violet", "indigo", "blue", "cyan", "green", "lime", "yellow", "orange", "teal"].map((color) => (
+                <ColorSwatch
+                  component="button"
+                  color={theme.colors[color][6]}
+                  onClick={() => setPrimaryColor(color)}
+                  sx={{ color: "#fff", cursor: "pointer" }}
+                >
+                  {color === primaryColor && <CheckIcon width={rem(10)} />}
+                </ColorSwatch>
+              ))}
+            </Group>
+          </Stack>
         </Stack>
       </Modal>
     </>
