@@ -10,7 +10,7 @@ import {
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
+import { Prism } from '@mantine/prism'
 import { IconCopy, IconUser } from "@tabler/icons-react";
 import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
@@ -22,7 +22,6 @@ import { LogoIcon } from "./Logo";
 import { ScrollIntoView } from "./ScrollIntoView";
 
 export function MessageItem({ message }: { message: Message }) {
-  const clipboard = useClipboard({ timeout: 500 });
   const wordCount = useMemo(() => {
     var matches = message.content.match(/[\w\d\’\'-\(\)]+/gi);
     return matches ? matches.length : 0;
@@ -46,12 +45,18 @@ export function MessageItem({ message }: { message: Message }) {
                 table: ({ node, ...props }) => (
                   <Table verticalSpacing="sm" highlightOnHover {...props} />
                 ),
-                code: ({ node, inline, ...props }) =>
-                  inline ? (
+                code: ({ node, inline, className, lang, ...props }) => {
+                  const languageMatch = /language-(\w+)/.exec(className || "");
+                  const language = languageMatch ? languageMatch[1] : undefined;
+
+                  return inline ? (
                     <Code {...props} />
                   ) : (
                     <Box sx={{ position: "relative" }}>
-                      <Code block {...props} />
+                      <Prism
+                        language={language as any}
+                        children={`${props.children as string}`}
+                      />
                       <CopyButton value={String(props.children)}>
                         {({ copied, copy }) => (
                           <Tooltip
@@ -68,7 +73,8 @@ export function MessageItem({ message }: { message: Message }) {
                         )}
                       </CopyButton>
                     </Box>
-                  ),
+                  );
+                },
               }}
             />
             {message.role === "assistant" && (
