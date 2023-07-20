@@ -10,6 +10,8 @@ import {
   Select,
   Stack,
   Text,
+  Tabs,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -18,6 +20,11 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
+import {
+  IconBrightnessHalf,
+  IconMoonStars,
+  IconSunHigh,
+} from "@tabler/icons-react";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -29,6 +36,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [auth, setAuth] = useState(config.defaultAuth);
   const [base, setBase] = useState("");
   const [version, setVersion] = useState("");
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   const settings = useLiveQuery(async () => {
     return db.settings.where({ id: "general" }).first();
@@ -335,6 +343,33 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               </Button>
             </Flex>
           </form>
+          {config.allowDarkModeToggle && (
+            <Stack spacing={0}>
+              <Text children="Theme" />
+              <Tabs variant="pills" value={colorScheme}>
+                <Tabs.List>
+                  <Tabs.Tab
+                    value="light"
+                    icon={<IconSunHigh size="1rem" />}
+                    children="Light Mode"
+                    onClick={() => toggleColorScheme()}
+                  />
+                  <Tabs.Tab
+                    value="dark"
+                    icon={<IconMoonStars size="1rem" />}
+                    children="Dark Mode"
+                    onClick={() => toggleColorScheme()}
+                  />
+                  <Tabs.Tab
+                    value="system"
+                    icon={<IconBrightnessHalf size="1rem" />}
+                    children="System theme"
+                    onClick={() => toggleColorScheme()}
+                  />
+                </Tabs.List>
+              </Tabs>
+            </Stack>
+          )}
         </Stack>
       </Modal>
     </>

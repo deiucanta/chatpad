@@ -3,7 +3,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
-import { useHotkeys, useLocalStorage } from "@mantine/hooks";
+import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import {
   createHashHistory,
@@ -18,11 +18,11 @@ const history = createHashHistory();
 const location = new ReactLocation({ history });
 
 export function App() {
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const preferredColorScheme = useColorScheme();
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
-    defaultValue: prefersDark ? "dark" : "light",
+    defaultValue: preferredColorScheme,
     getInitialValueInEffect: true,
   });
 
