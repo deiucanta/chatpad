@@ -1,6 +1,12 @@
-import PrismRenderer from "prism-react-renderer/prism";
+import { Prism } from "prism-react-renderer";
 
-window.Prism = PrismRenderer;
+declare global {
+  interface Window {
+    Prism: any;
+  }
+}
+
+window.Prism = Prism;
 
 // Load all languages like this as webpack doesn't detect prism's loadLanguages call and doesn't load any
 require("prismjs/components/prism-abap");
