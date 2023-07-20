@@ -10,7 +10,7 @@ import {
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
-import { Prism } from '@mantine/prism'
+import { Prism } from "@mantine/prism";
 import { IconCopy, IconUser } from "@tabler/icons-react";
 import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
@@ -58,21 +58,6 @@ export function MessageItem({ message }: { message: Message }) {
                         language={language as any}
                         children={`${props.children as string}`}
                       />
-                      <CopyButton value={String(props.children)}>
-                        {({ copied, copy }) => (
-                          <Tooltip
-                            label={copied ? "Copied" : "Copy"}
-                            position="left"
-                          >
-                            <ActionIcon
-                              sx={{ position: "absolute", top: 4, right: 4 }}
-                              onClick={copy}
-                            >
-                              <IconCopy opacity={0.4} size={20} />
-                            </ActionIcon>
-                          </Tooltip>
-                        )}
-                      </CopyButton>
                     </Box>
                   );
                 },
