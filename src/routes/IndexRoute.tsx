@@ -20,12 +20,29 @@ import { Logo } from "../components/Logo";
 import { SettingsModal } from "../components/SettingsModal";
 import { db } from "../db";
 import { config } from "../utils/config";
-import '../i18n'
 import {t} from "i18next";
 
 export function IndexRoute() {
   const settings = useLiveQuery(() => db.settings.get("general"));
   const { openAiApiKey } = settings ?? {};
+
+  const features = [
+    {
+      icon: IconCurrencyDollar,
+      title: t('freeAndOpenSource.title'),
+      description: t('freeAndOpenSource.description'),
+    },
+    {
+      icon: IconLock,
+      title: t('privacyFocused.title'),
+      description: t('privacyFocused.description'),
+    },
+    {
+      icon: IconNorthStar,
+      title: t('bestExperience.title'),
+      description: t('bestExperience.description'),
+    },
+  ];
 
   return (
     <>
@@ -44,8 +61,8 @@ export function IndexRoute() {
             spacing={30}
             breakpoints={[{ maxWidth: "md", cols: 1 }]}
           >
-            {features.map((feature) => (
-              <div key={feature.title}>
+            {features.map((feature, index) => (
+              <div key={index}>
                 <ThemeIcon variant="outline" size={50} radius={50}>
                   <feature.icon size={26} stroke={1.5} />
                 </ThemeIcon>
@@ -88,21 +105,3 @@ export function IndexRoute() {
     </>
   );
 }
-
-const features = [
-  {
-    icon: IconCurrencyDollar,
-    title: t('freeAndOpenSource.title'),
-    description: t('freeAndOpenSource.description'),
-  },
-  {
-    icon: IconLock,
-    title: t('privacyFocused.title'),
-    description: t('privacyFocused.description'),
-  },
-  {
-    icon: IconNorthStar,
-    title: t('bestExperience.title'),
-    description: t('bestExperience.description'),
-  },
-];

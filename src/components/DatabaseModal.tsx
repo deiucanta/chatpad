@@ -8,7 +8,6 @@ import { cloneElement, ReactElement } from "react";
 import { db } from "../db";
 import { DeleteAllDataModal } from "./DeleteAllDataModal";
 import { DeleteChatsModal } from "./DeleteChatsModal";
-import '../i18n'
 import {t} from "i18next";
 
 export function DatabaseModal({ children }: { children: ReactElement }) {

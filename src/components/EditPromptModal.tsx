@@ -12,7 +12,6 @@ import { notifications } from "@mantine/notifications";
 import { IconPencil } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { db, Prompt } from "../db";
-import '../i18n'
 import {t} from "i18next";
 
 export function EditPromptModal({ prompt }: { prompt: Prompt }) {

@@ -41,7 +41,6 @@ import { LogoText } from "./Logo";
 import { Prompts } from "./Prompts";
 import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
-import '../i18n'
 import {t} from "i18next";
 
 declare global {

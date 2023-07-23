@@ -2,7 +2,6 @@ import { Button, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { db } from "../db";
-import '../i18n'
 import {t} from "i18next";
 
 export function DeleteChatsModal({ onOpen }: { onOpen: () => void }) {

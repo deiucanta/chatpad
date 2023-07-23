@@ -8,7 +8,6 @@ import { db } from "../db";
 import { createChatCompletion } from "../utils/openai";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { EditPromptModal } from "./EditPromptModal";
-import '../i18n'
 import {t} from "i18next";
 
 export function Prompts({

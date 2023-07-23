@@ -13,7 +13,6 @@ import { IconPlaylistAdd, IconPlus } from "@tabler/icons-react";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { db } from "../db";
-import '../i18n'
 import {t} from "i18next";
 
 export function CreatePromptModal({ content }: { content?: string }) {

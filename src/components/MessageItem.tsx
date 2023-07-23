@@ -20,7 +20,6 @@ import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 import { ScrollIntoView } from "./ScrollIntoView";
-import '../i18n'
 import {t} from "i18next";
 
 export function MessageItem({ message }: { message: Message }) {

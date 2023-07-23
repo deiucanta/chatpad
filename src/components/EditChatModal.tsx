@@ -3,7 +3,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { Chat, db } from "../db";
-import '../i18n'
 import {t} from "i18next";
 
 export function EditChatModal({

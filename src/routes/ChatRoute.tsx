@@ -24,7 +24,6 @@ import {
   createChatCompletion,
   createStreamChatCompletion,
 } from "../utils/openai";
-import '../i18n'
 import {t} from "i18next";
 
 export function ChatRoute() {

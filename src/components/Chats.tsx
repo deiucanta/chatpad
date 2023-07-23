@@ -8,7 +8,6 @@ import { useChatId } from "../hooks/useChatId";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
-import '../i18n'
 import {t} from "i18next";
 
 export function Chats({ search }: { search: string }) {

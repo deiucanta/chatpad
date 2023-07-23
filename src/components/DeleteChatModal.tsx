@@ -6,7 +6,6 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { Chat, db } from "../db";
 import { useApiKey } from "../hooks/useApiKey";
 import { useChatId } from "../hooks/useChatId";
-import '../i18n'
 import {t} from "i18next";
 
 export function DeleteChatModal({

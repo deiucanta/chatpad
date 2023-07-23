@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { db, Prompt } from "../db";
 import { useApiKey } from "../hooks/useApiKey";
 import { useChatId } from "../hooks/useChatId";
-import '../i18n'
 import {t} from "i18next";
 import * as tty from "tty";
 

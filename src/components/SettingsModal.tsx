@@ -18,7 +18,6 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
-import '../i18n'
 import {t} from "i18next";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
