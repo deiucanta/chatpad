@@ -1,17 +1,20 @@
+import { ColorTheme } from '../db'
+
 interface Config {
     defaultModel: AvailableModel["value"];
     defaultType: 'openai' | 'custom';
     defaultAuth: 'none' | 'bearer-token' | 'api-key';
     defaultBase: string;
     defaultVersion: string;
-    defaultKey: string;
+	defaultKey: string;
+	defaultTheme: ColorTheme;
     availableModels: AvailableModel[];
     writingCharacters: WritingCharacter[];
     writingTones: string[];
     writingStyles: string[];
     writingFormats: WritingFormat[];
     showDownloadLink: boolean;
-    allowDarkModeToggle: boolean;
+    allowThemeToggle: boolean;
     allowSettingsModal: boolean;
     allowDatabaseModal: boolean;
     showTwitterLink: boolean;
