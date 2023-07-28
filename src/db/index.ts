@@ -1,6 +1,9 @@
 import Dexie, { Table } from "dexie";
 import "dexie-export-import";
+import { ColorScheme } from "@mantine/core";
 import { config } from "../utils/config";
+
+export type ColorTheme = ColorScheme | "system";
 
 export interface Chat {
   id: string;
@@ -32,6 +35,7 @@ export interface Settings {
   openAiApiAuth?: 'none' | 'bearer-token' | 'api-key';
   openAiApiBase?: string;
   openAiApiVersion?: string;
+  theme?: ColorTheme;
 }
 
 export class Database extends Dexie {
@@ -58,6 +62,7 @@ export class Database extends Dexie {
         ...(config.defaultKey != '' && { openAiApiKey: config.defaultKey }),
         ...(config.defaultBase != '' && { openAiApiBase: config.defaultBase }),
         ...(config.defaultVersion != '' && { openAiApiVersion: config.defaultVersion }),
+        theme: config.defaultTheme,
       });
     });
   }

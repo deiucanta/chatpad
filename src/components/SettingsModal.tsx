@@ -10,20 +10,27 @@ import {
   Select,
   Stack,
   Text,
+  Tabs,
+  useMantineColorScheme,
   useMantineTheme,
   Group,
   ColorSwatch,
   CheckIcon,
   rem,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useColorScheme, useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useLiveQuery } from "dexie-react-hooks";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
-import { db } from "../db";
+import { ColorTheme, db } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
 import { usePrimaryColor } from "../hooks/usePrimaryColor";
+import {
+  IconBrightnessHalf,
+  IconMoonStars,
+  IconSunHigh,
+} from "@tabler/icons-react";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -35,9 +42,25 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [auth, setAuth] = useState(config.defaultAuth);
   const [base, setBase] = useState("");
   const [version, setVersion] = useState("");
+  const [selectedTheme, setSelectedTheme] = useState<ColorTheme>("system");
   const [primaryColor, setPrimaryColor] = usePrimaryColor();
 
   const theme = useMantineTheme();
+  const { toggleColorScheme } = useMantineColorScheme();
+
+  const preferredColorScheme = useColorScheme();
+
+  useEffect(() => {
+    if (selectedTheme === "system") {
+      toggleColorScheme(preferredColorScheme);
+    }
+  }, [preferredColorScheme]);
+
+  useEffect(() => {
+    toggleColorScheme(
+      selectedTheme === "system" ? preferredColorScheme : selectedTheme
+    );
+  }, [selectedTheme]);
 
   const settings = useLiveQuery(async () => {
     return db.settings.where({ id: "general" }).first();
@@ -62,7 +85,43 @@ export function SettingsModal({ children }: { children: ReactElement }) {
     if (settings?.openAiApiVersion) {
       setVersion(settings.openAiApiVersion);
     }
+    if (settings?.theme) {
+      setSelectedTheme(settings.theme);
+    }
   }, [settings]);
+
+  const onThemeChange = async (colorTheme: ColorTheme) => {
+    try {
+      setSubmitting(true);
+      await db.settings.where({ id: "general" }).modify((row) => {
+        row.theme = colorTheme;
+        console.log(row);
+      });
+      setSelectedTheme(colorTheme);
+      notifications.show({
+        title: "Saved",
+        message: "Your theme has been saved.",
+      });
+    } catch (error: any) {
+      if (error.toJSON().message === "Network Error") {
+        notifications.show({
+          title: "Error",
+          color: "red",
+          message: "No internet connection.",
+        });
+      }
+      const message = error.response?.data?.error?.message;
+      if (message) {
+        notifications.show({
+          title: "Error",
+          color: "red",
+          message,
+        });
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -359,6 +418,33 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               ))}
             </Group>
           </Stack>
+          {config.allowThemeToggle && (
+            <Stack spacing={0}>
+              <Text children="Theme" />
+              <Tabs variant="pills" value={selectedTheme}>
+                <Tabs.List>
+                  <Tabs.Tab
+                    value="light"
+                    icon={<IconSunHigh size="1rem" />}
+                    children="Light Mode"
+                    onClick={() => onThemeChange("light")}
+                  />
+                  <Tabs.Tab
+                    value="dark"
+                    icon={<IconMoonStars size="1rem" />}
+                    children="Dark Mode"
+                    onClick={() => onThemeChange("dark")}
+                  />
+                  <Tabs.Tab
+                    value="system"
+                    icon={<IconBrightnessHalf size="1rem" />}
+                    children="System theme"
+                    onClick={() => onThemeChange("system")}
+                  />
+                </Tabs.List>
+              </Tabs>
+            </Stack>
+          )}
         </Stack>
       </Modal>
     </>
