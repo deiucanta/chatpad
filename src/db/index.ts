@@ -10,6 +10,7 @@ export interface Chat {
   description: string;
   totalTokens: number;
   createdAt: Date;
+  pinned: boolean;
 }
 
 export interface Message {
