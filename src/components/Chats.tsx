@@ -1,4 +1,4 @@
-import { ActionIcon, Flex, Menu } from "@mantine/core";
+import { ActionIcon, Flex, Menu, Text } from "@mantine/core";
 import {
 	IconDotsVertical,
 	IconMessages,
@@ -57,53 +57,65 @@ export function Chats({ search }: { search: string }) {
     }
   };
 
+  const ChatItem = ({ chat }: { chat: Chat }) => (
+    <Flex
+      key={chat.id}
+      className={chatId === chat.id ? "active" : undefined}
+      sx={(theme) => ({
+        marginTop: 1,
+        "&:hover, &.active": {
+          backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[1],
+        },
+      })}
+    >
+      <Link to={`/chats/${chat.id}`} style={{ flex: 1 }}>
+        <MainLink
+          icon={chat.pinned ? <IconPinned size="1rem" /> : <IconMessages size="1rem" />}
+          color="teal"
+          chat={chat}
+          label={chat.description}
+        />
+      </Link>
+      <Menu shadow="md" width={200} keepMounted>
+        <Menu.Target>
+          <ActionIcon sx={{ height: "auto" }}>
+            <IconDotsVertical size={20} />
+          </ActionIcon>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item
+            icon={chat.pinned ? <IconPinnedOff size="1rem" /> : <IconPin size="1rem" />}
+            onClick={(event) => toggleChatPin(chat.id, event)}
+          >
+            {chat.pinned ? "Remove pin" : "Pin this"}
+          </Menu.Item>
+          <EditChatModal chat={chat}>
+            <Menu.Item icon={<IconPencil size="1rem" />}>Edit</Menu.Item>
+          </EditChatModal>
+          <DeleteChatModal chat={chat}>
+            <Menu.Item color="red" icon={<IconTrash size="1rem" />}>
+              Delete
+            </Menu.Item>
+          </DeleteChatModal>
+        </Menu.Dropdown>
+      </Menu>
+    </Flex>
+  );
+
   return (
     <>
+      <Text p="xs" fz="xs" fw={700} color="gray" children={"Pinned"} />
       {filteredChats
-        .sort((chat) => (chat.pinned ? -1 : 1))
+        .filter((chat) => chat.pinned)
         .map((chat) => (
-          <Flex
-            key={chat.id}
-            className={chatId === chat.id ? "active" : undefined}
-            sx={(theme) => ({
-              marginTop: 1,
-              "&:hover, &.active": {
-                backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[1],
-              },
-            })}
-          >
-            <Link to={`/chats/${chat.id}`} style={{ flex: 1 }}>
-              <MainLink
-                icon={chat.pinned ? <IconPinned size="1rem" /> : <IconMessages size="1rem" />}
-                color="teal"
-                chat={chat}
-                label={chat.description}
-              />
-            </Link>
-            <Menu shadow="md" width={200} keepMounted>
-              <Menu.Target>
-                <ActionIcon sx={{ height: "auto" }}>
-                  <IconDotsVertical size={20} />
-                </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item
-                  icon={chat.pinned ? <IconPinnedOff size="1rem" /> : <IconPin size="1rem" />}
-                  onClick={(event) => toggleChatPin(chat.id, event)}
-                >
-                  {chat.pinned ? "Remove pin" : "Pin this"}
-                </Menu.Item>
-                <EditChatModal chat={chat}>
-                  <Menu.Item icon={<IconPencil size="1rem" />}>Edit</Menu.Item>
-                </EditChatModal>
-                <DeleteChatModal chat={chat}>
-                  <Menu.Item color="red" icon={<IconTrash size="1rem" />}>
-                    Delete
-                  </Menu.Item>
-                </DeleteChatModal>
-              </Menu.Dropdown>
-            </Menu>
-          </Flex>
+          <ChatItem chat={chat} />
+        ))}
+
+      <Text p="xs" fz="xs" fw={700} color="gray" children={"Unpinned"} />
+      {filteredChats
+        .filter((chat) => !chat.pinned)
+        .map((chat) => (
+          <ChatItem chat={chat} />
         ))}
     </>
   );
