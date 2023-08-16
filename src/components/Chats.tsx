@@ -87,7 +87,7 @@ export function Chats({ search }: { search: string }) {
             icon={chat.pinned ? <IconPinnedOff size="1rem" /> : <IconPin size="1rem" />}
             onClick={(event) => toggleChatPin(chat.id, event)}
           >
-            {chat.pinned ? "Remove pin" : "Pin this"}
+            {chat.pinned ? "Remove pin" : "Pin chat"}
           </Menu.Item>
           <EditChatModal chat={chat}>
             <Menu.Item icon={<IconPencil size="1rem" />}>Edit</Menu.Item>
