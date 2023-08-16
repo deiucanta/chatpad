@@ -11,7 +11,7 @@ import {
 import { Link } from "@tanstack/react-location";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo } from "react";
-import { db } from "../db";
+import { Chat, db } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
