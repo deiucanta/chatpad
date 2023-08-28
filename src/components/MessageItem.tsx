@@ -1,21 +1,24 @@
 import {
   ActionIcon,
   Box,
+  Button,
   Card,
   Code,
+  Collapse,
   CopyButton,
   Flex,
   Table,
   Text,
   ThemeIcon,
   Tooltip,
+  Transition,
 } from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
-import { IconCopy, IconUser } from "@tabler/icons-react";
-import { useMemo } from "react";
+import { useClickOutside, useClipboard } from "@mantine/hooks";
+import { IconCopy, IconInfoCircle, IconTrash, IconUser } from "@tabler/icons-react";
+import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Message } from "../db";
+import { Message, detaDB } from "../db";
 import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
@@ -28,9 +31,17 @@ export function MessageItem({ message }: { message: Message }) {
     return matches ? matches.length : 0;
   }, [message.content]);
 
+  const [isExpanded, setExpanded] = useState(false);
+  const ref = useClickOutside(() => setExpanded(false));
+
+  const handleDelete = async () => {
+    await detaDB.messages.delete(message.key);
+    setExpanded(false);
+  }
+
   return (
     <ScrollIntoView>
-      <Card withBorder>
+      <Card ref={ref} withBorder onClick={() => setExpanded(true)} style={{ cursor: 'pointer' }}>
         <Flex gap="sm">
           {message.role === "user" && (
             <ThemeIcon color="gray" size="lg">
@@ -71,32 +82,36 @@ export function MessageItem({ message }: { message: Message }) {
                   ),
               }}
             />
-            {message.role === "assistant" && (
-              <Box>
-                <Text size="sm" color="dimmed">
-                  {wordCount} words
-                </Text>
-              </Box>
-            )}
-          </Box>
-          <Box>
-            <CreatePromptModal content={message.content} />
-            <CopyButton value={message.content}>
-              {({ copied, copy }) => (
-                <Tooltip label={copied ? "Copied" : "Copy"} position="left">
-                  <ActionIcon onClick={copy}>
-                    <IconCopy opacity={0.5} size={20} />
-                  </ActionIcon>
-                </Tooltip>
-              )}
-            </CopyButton>
-            {/* <Tooltip label={`${wordCount} words`} position="left">
-              <ActionIcon>
-                <IconInfoCircle opacity={0.5} size={20} />
-              </ActionIcon>
-            </Tooltip> */}
           </Box>
         </Flex>
+
+        <Collapse in={isExpanded}>
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
+            <Box>
+              <Text size="sm" color="dimmed">
+                {wordCount} words
+              </Text>
+            </Box>
+
+            <Box style={{ display: 'flex' }}>
+              <CreatePromptModal content={message.content} />
+              <CopyButton value={message.content}>
+                {({ copied, copy }) => (
+                  <Tooltip label={copied ? "Copied" : "Copy"} position="top">
+                    <ActionIcon onClick={copy}>
+                      <IconCopy opacity={0.5} size={20} />
+                    </ActionIcon>
+                  </Tooltip>
+                )}
+              </CopyButton>
+              <Tooltip label="Delete Message" position="top">
+                  <ActionIcon onClick={handleDelete}>
+                    <IconTrash opacity={0.5} size={20} />
+                  </ActionIcon>
+                </Tooltip>
+            </Box>
+            </Box>
+          </Collapse>
       </Card>
     </ScrollIntoView>
   );

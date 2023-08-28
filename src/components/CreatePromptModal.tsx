@@ -27,7 +27,7 @@ export function CreatePromptModal({ content }: { content?: string }) {
   return (
     <>
       {content ? (
-        <Tooltip label="Save Prompt" position="left">
+        <Tooltip label="Save Prompt" position="top">
           <ActionIcon onClick={open}>
             <IconPlaylistAdd opacity={0.5} size={20} />
           </ActionIcon>
