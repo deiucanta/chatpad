@@ -1,0 +1,10 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: app
+    src: .
+    engine: static
+    serve: dist
+    primary: true
+    commands:
+      - NODE_OPTIONS="--max-old-space-size=1024" npm run build

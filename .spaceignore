@@ -1,0 +1,4 @@
+docker/
+.github/
+.parcel-cache
+node_modules/

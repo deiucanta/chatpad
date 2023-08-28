@@ -35,8 +35,6 @@ interface WritingFormat {
 
 export let config: Config;
 
-export const loadConfig = async () => {
-    const response = await fetch("config.json");
-    config = await response.json();
-    return config;
-};
+export async function loadConfig() {
+    config = await import('../config.json') as Config;
+}

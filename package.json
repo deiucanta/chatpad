@@ -1,26 +1,23 @@
 {
   "name": "chatpad",
   "private": true,
-  "source": "src/index.html",
+  "source": "src/main.tsx",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "start": "parcel",
-    "build": "parcel build"
-  },
-  "staticFiles": {
-    "staticPath": "src/static"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.8.3",
     "@types/downloadjs": "^1.4.3",
     "@types/lodash": "^4.14.191",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react": "^4.0.4",
     "buffer": "^5.7.1",
-    "parcel": "^2.8.3",
     "path-browserify": "^1.0.1",
-    "parcel-reporter-static-files-copy": "^1.5.0",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "vite": "^4.4.9"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",

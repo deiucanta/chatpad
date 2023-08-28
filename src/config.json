@@ -218,10 +218,10 @@
         "label": "Explain Like I'm Five"
       }
     ],
-    "showDownloadLink": true,
+    "showDownloadLink": false,
     "allowDarkModeToggle": true,
     "allowSettingsModal": true,
     "allowDatabaseModal": true,
-    "showTwitterLink": true,
-    "showFeedbackLink": true
+    "showTwitterLink": false,
+    "showFeedbackLink": false
   }
