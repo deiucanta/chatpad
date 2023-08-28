@@ -8,3 +8,4 @@ micros:
     primary: true
     commands:
       - NODE_OPTIONS="--max-old-space-size=1024" npm run build
+    dev: npm run dev

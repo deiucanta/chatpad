@@ -1,9 +1,8 @@
 import { ActionIcon, Flex, Menu } from "@mantine/core";
 import { IconDotsVertical, IconMessages } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-location";
-import { useLiveQuery } from "dexie-react-hooks";
-import { useMemo } from "react";
-import { db } from "../db";
+import { useEffect, useMemo, useState } from "react";
+import { Chat, detaDB } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
@@ -11,9 +10,23 @@ import { MainLink } from "./MainLink";
 
 export function Chats({ search }: { search: string }) {
   const chatId = useChatId();
-  const chats = useLiveQuery(() =>
-    db.chats.orderBy("createdAt").reverse().toArray()
-  );
+
+  const [chats, setChats] = useState<Chat[]>();
+
+  useEffect(() => {
+    // fetch data
+    const dataFetch = async () => {
+      const { items } = await detaDB.chats.fetch();
+
+      setChats(items as unknown as Chat[]);
+    };
+
+    dataFetch();
+  }, []);
+
+  // const chats = useLiveQuery(() =>
+  //   db.chats.orderBy("createdAt").reverse().toArray()
+  // );
   const filteredChats = useMemo(
     () =>
       (chats ?? []).filter((chat) => {
@@ -27,8 +40,8 @@ export function Chats({ search }: { search: string }) {
     <>
       {filteredChats.map((chat) => (
         <Flex
-          key={chat.id}
-          className={chatId === chat.id ? "active" : undefined}
+          key={chat.key}
+          className={chatId === chat.key ? "active" : undefined}
           sx={(theme) => ({
             marginTop: 1,
             "&:hover, &.active": {
@@ -39,7 +52,7 @@ export function Chats({ search }: { search: string }) {
             },
           })}
         >
-          <Link to={`/chats/${chat.id}`} style={{ flex: 1 }}>
+          <Link to={`/chats/${chat.key}`} style={{ flex: 1 }}>
             <MainLink
               icon={<IconMessages size="1rem" />}
               color="teal"

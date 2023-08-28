@@ -1,7 +1,7 @@
 import { encode } from "gpt-token-utils";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { OpenAIExt } from "openai-ext";
-import { db } from "../db";
+import { db, detaDB } from "../db";
 import { config } from "./config";
 
 function getClient(
@@ -24,7 +24,8 @@ export async function createStreamChatCompletion(
   apiKey: string,
   messages: ChatCompletionRequestMessage[],
   chatId: string,
-  messageId: string
+  messageId: string,
+  onContent: (content: string, isFinal: boolean) => void
 ) {
   const settings = await db.settings.get("general");
   const model = settings?.openAiModel ?? config.defaultModel;
@@ -42,6 +43,7 @@ export async function createStreamChatCompletion(
           if (isFinal) {
             setTotalTokens(chatId, content);
           }
+          onContent(content, isFinal);
         },
         onDone(stream) {},
         onError(error, stream) {
@@ -52,24 +54,25 @@ export async function createStreamChatCompletion(
   );
 }
 
-function setStreamContent(
+async function setStreamContent(
   messageId: string,
   content: string,
   isFinal: boolean
 ) {
   content = isFinal ? content : content + "█";
-  db.messages.update(messageId, { content: content });
+
+  await detaDB.messages.update({ content: content }, messageId);
 }
 
 function setTotalTokens(chatId: string, content: string) {
   let total_tokens = encode(content).length;
-  db.chats.where({ id: chatId }).modify((chat) => {
-    if (chat.totalTokens) {
-      chat.totalTokens += total_tokens;
-    } else {
-      chat.totalTokens = total_tokens;
-    }
-  });
+  // db.chats.where({ id: chatId }).modify((chat) => {
+  //   if (chat.totalTokens) {
+  //     chat.totalTokens += total_tokens;
+  //   } else {
+  //     chat.totalTokens = total_tokens;
+  //   }
+  // });
 }
 
 export async function createChatCompletion(

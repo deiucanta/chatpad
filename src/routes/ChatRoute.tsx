@@ -14,10 +14,10 @@ import {
 import { notifications } from "@mantine/notifications";
 import { useLiveQuery } from "dexie-react-hooks";
 import { nanoid } from "nanoid";
-import { KeyboardEvent, useState, type ChangeEvent } from "react";
+import { KeyboardEvent, useState, type ChangeEvent, useEffect } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import { MessageItem } from "../components/MessageItem";
-import { db } from "../db";
+import { Chat, Message, db, detaDB, generateKey } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { config } from "../utils/config";
 import {
@@ -30,10 +30,24 @@ export function ChatRoute() {
   const apiKey = useLiveQuery(async () => {
     return (await db.settings.where({ id: "general" }).first())?.openAiApiKey;
   });
-  const messages = useLiveQuery(() => {
-    if (!chatId) return [];
-    return db.messages.where("chatId").equals(chatId).sortBy("createdAt");
+
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    // fetch data
+    const dataFetch = async () => {
+      const { items } = await detaDB.messages.fetch({ chatId }, { desc: false });
+
+      setMessages(items as unknown as Message[]);
+    };
+
+    dataFetch();
   }, [chatId]);
+
+  // const messages = useLiveQuery(() => {
+  //   if (!chatId) return [];
+  //   return db.messages.where("chatId").equals(chatId).sortBy("createdAt");
+  // }, [chatId]);
   const userMessages =
     messages
       ?.filter((message) => message.role === "user")
@@ -43,10 +57,22 @@ export function ChatRoute() {
   const [contentDraft, setContentDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const chat = useLiveQuery(async () => {
-    if (!chatId) return null;
-    return db.chats.get(chatId);
+  const [chat, setChat] = useState<Chat>();
+
+  useEffect(() => {
+    const dataFetch = async () => {
+      const item = await detaDB.chats.get(chatId!);
+
+      setChat(item as unknown as Chat);
+    };
+
+    dataFetch();
   }, [chatId]);
+
+  // const chat = useLiveQuery(async () => {
+  //   if (!chatId) return null;
+  //   return db.chats.get(chatId);
+  // }, [chatId]);
 
   const [writingCharacter, setWritingCharacter] = useState<string | null>(null);
   const [writingTone, setWritingTone] = useState<string | null>(null);
@@ -90,23 +116,42 @@ export function ChatRoute() {
     try {
       setSubmitting(true);
 
-      await db.messages.add({
-        id: nanoid(),
+      const userMessage = await detaDB.messages.put({
         chatId,
         content,
         role: "user",
-        createdAt: new Date(),
-      });
+        createdAt: new Date().toISOString(),
+      }, generateKey())
+
+      setMessages(current => [...current, userMessage as unknown as Message])
+
+      // await db.messages.add({
+      //   id: nanoid(),
+      //   chatId,
+      //   content,
+      //   role: "user",
+      //   createdAt: new Date(),
+      // });
       setContent("");
 
-      const messageId = nanoid();
-      await db.messages.add({
-        id: messageId,
+      const systemMessage = await detaDB.messages.put({
         chatId,
         content: "█",
         role: "assistant",
-        createdAt: new Date(),
-      });
+        createdAt: new Date().toISOString(),
+      }, generateKey())
+
+      setMessages(current => [...current, systemMessage as unknown as Message])
+
+      const messageId = systemMessage!.key as string
+
+      // await db.messages.add({
+      //   id: messageId,
+      //   chatId,
+      //   content: "█",
+      //   role: "assistant",
+      //   createdAt: new Date(),
+      // });
 
       await createStreamChatCompletion(
         apiKey,
@@ -122,15 +167,26 @@ export function ChatRoute() {
           { role: "user", content },
         ],
         chatId,
-        messageId
+        messageId,
+        (content) => {      
+          setMessages(current => current.map(message => {
+            if (message.key === messageId) {
+              return { ...message, content };
+            }
+      
+            return message;
+          }));
+        }
       );
 
       setSubmitting(false);
 
       if (chat?.description === "New Chat") {
-        const messages = await db.messages
-          .where({ chatId })
-          .sortBy("createdAt");
+        const res = await detaDB.messages.fetch({ chatId })
+        const messages = res.items as unknown as Message[]
+        // const messages = await db.messages
+        //   .where({ chatId })
+        //   .sortBy("createdAt");
         const createChatDescription = await createChatCompletion(apiKey, [
           {
             role: "system",
@@ -150,15 +206,24 @@ export function ChatRoute() {
           createChatDescription.data.choices[0].message?.content;
 
         if (createChatDescription.data.usage) {
-          await db.chats.where({ id: chatId }).modify((chat) => {
-            chat.description = chatDescription ?? "New Chat";
-            if (chat.totalTokens) {
-              chat.totalTokens +=
-                createChatDescription.data.usage!.total_tokens;
-            } else {
-              chat.totalTokens = createChatDescription.data.usage!.total_tokens;
-            }
-          });
+          const chatUpdates = {
+            description: chatDescription ?? "New Chat",
+            // todo: add to existing count instead of replacing
+            totalTokens: createChatDescription.data.usage!.total_tokens,
+          }
+          await detaDB.chats.update(chatUpdates, chatId)
+
+          setChat(chat => ({ ...chat!, ...chatUpdates }))
+
+          // await db.chats.where({ id: chatId }).modify((chat) => {
+          //   chat.description = chatDescription ?? "New Chat";
+          //   if (chat.totalTokens) {
+          //     chat.totalTokens +=
+          //       createChatDescription.data.usage!.total_tokens;
+          //   } else {
+          //     chat.totalTokens = createChatDescription.data.usage!.total_tokens;
+          //   }
+          // });
         }
       }
     } catch (error: any) {
@@ -221,7 +286,7 @@ export function ChatRoute() {
       <Container pt="xl" pb={100}>
         <Stack spacing="xs">
           {messages?.map((message) => (
-            <MessageItem key={message.id} message={message} />
+            <MessageItem key={message.key} message={message} />
           ))}
         </Stack>
         {submitting && (

@@ -1,16 +1,18 @@
+import { Deta } from "deta";
 import Dexie, { Table } from "dexie";
 import "dexie-export-import";
 import { config } from "../utils/config";
+import { nanoid } from "nanoid";
 
 export interface Chat {
-  id: string;
+  key: string;
   description: string;
   totalTokens: number;
   createdAt: Date;
 }
 
 export interface Message {
-  id: string;
+  key: string;
   chatId: string;
   role: "system" | "assistant" | "user";
   content: string;
@@ -18,7 +20,7 @@ export interface Message {
 }
 
 export interface Prompt {
-  id: string;
+  key: string;
   title: string;
   content: string;
   createdAt: Date;
@@ -32,6 +34,24 @@ export interface Settings {
   openAiApiAuth?: 'none' | 'bearer-token' | 'api-key';
   openAiApiBase?: string;
   openAiApiVersion?: string;
+}
+
+export const deta = Deta()
+
+export const detaDB = {
+  chats: deta.Base("chats"),
+  messages: deta.Base("messages"),
+  prompts: deta.Base("prompts"),
+  settings: deta.Base("settings"),
+}
+
+// Used as large number to make sure keys are generated in descending order
+const maxDateNowValue = 8.64e15 
+
+export const generateKey = (ascending: boolean = true): string => {
+	const timestamp = ascending ? Date.now() : maxDateNowValue - Date.now()
+
+	return `${ timestamp.toString(16) }${ nanoid(5) }`
 }
 
 export class Database extends Dexie {

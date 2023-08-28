@@ -29,10 +29,8 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
-import { useLiveQuery } from "dexie-react-hooks";
-import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
-import { db } from "../db";
+import { Chat, db, detaDB, generateKey } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { Chats } from "./Chats";
 import { CreatePromptModal } from "./CreatePromptModal";
@@ -58,9 +56,17 @@ export function Layout() {
 
   const [search, setSearch] = useState("");
   const chatId = useChatId();
-  const chat = useLiveQuery(async () => {
-    if (!chatId) return null;
-    return db.chats.get(chatId);
+
+  const [chat, setChat] = useState<Chat>();
+
+  useEffect(() => {
+    const dataFetch = async () => {
+      const item = await detaDB.chats.get(chatId!);
+
+      setChat(item as unknown as Chat);
+    };
+
+    dataFetch();
   }, [chatId]);
 
   const border = `${rem(1)} solid ${
@@ -133,14 +139,21 @@ export function Layout() {
                 <Button
                   fullWidth
                   leftIcon={<IconPlus size={20} />}
-                  onClick={() => {
-                    const id = nanoid();
-                    db.chats.add({
-                      id,
+                  onClick={async () => {
+                    const item = await detaDB.chats.put({
                       description: "New Chat",
                       totalTokens: 0,
-                      createdAt: new Date(),
-                    });
+                      createdAt: new Date().toISOString(),
+                    }, generateKey())
+
+                    const id = item!.key as string
+                    // const id = nanoid();
+                    // db.chats.add({
+                    //   id,
+                    //   description: "New Chat",
+                    //   totalTokens: 0,
+                    //   createdAt: new Date(),
+                    // });
                     navigate({ to: `/chats/${id}` });
                   }}
                 >
@@ -282,10 +295,7 @@ export function Layout() {
                 height: "100%",
               }}
             >
-              {`${chat.description} - ${chat.totalTokens ?? 0} tokens ~ $${(
-                ((chat.totalTokens ?? 0) * 0.002) /
-                1000
-              ).toFixed(5)}`}
+              {chat.description}
             </div>
           </Header>
         ) : undefined
