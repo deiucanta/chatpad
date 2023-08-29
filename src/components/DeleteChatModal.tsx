@@ -6,7 +6,7 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { Chat, Message, detaDB } from "../db";
 import { useApiKey } from "../hooks/useApiKey";
 import { useChatId } from "../hooks/useChatId";
-import { useChats } from "../hooks/contexts";
+import { useChat, useChats } from "../hooks/contexts";
 
 export function DeleteChatModal({
   chat,
@@ -28,6 +28,7 @@ export function DeleteChatModal({
   const navigate = useNavigate();
 
   const { setChats } = useChats()
+  const { setChat } = useChat()
 
   return (
     <>
@@ -40,7 +41,7 @@ export function DeleteChatModal({
               event.preventDefault();
 
               await detaDB.chats.delete(chat.key);
-              
+
               // todo: handle pagination
               const { items } = await detaDB.messages.fetch({ chatId: chat.key })
               await Promise.all(items.map(async (message) => {
@@ -48,6 +49,7 @@ export function DeleteChatModal({
               }))
 
               setChats(current => (current || [])?.filter((c) => c.key !== chat.key))
+              setChat(null)
 
               if (chatId === chat.key) {
                 navigate({ to: `/` });
