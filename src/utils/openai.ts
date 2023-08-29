@@ -3,6 +3,7 @@ import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { OpenAIExt } from "openai-ext";
 import { db, detaDB } from "../db";
 import { config } from "./config";
+import { useDebounce } from "./debounce";
 
 function getClient(
   apiKey: string,
@@ -30,6 +31,8 @@ export async function createStreamChatCompletion(
   const settings = await db.settings.get("general");
   const model = settings?.openAiModel ?? config.defaultModel;
 
+  const debouncedSetStreamContent = useDebounce(setStreamContent, 200);
+
   return OpenAIExt.streamClientChatCompletion(
     {
       model,
@@ -38,15 +41,15 @@ export async function createStreamChatCompletion(
     {
       apiKey: apiKey,
       handler: {
-        onContent(content, isFinal, stream) {
-          setStreamContent(messageId, content, isFinal);
+        onContent(content, isFinal) {
+          debouncedSetStreamContent(messageId, content, isFinal);
           if (isFinal) {
             setTotalTokens(chatId, content);
           }
           onContent(content, isFinal);
         },
-        onDone(stream) {},
-        onError(error, stream) {
+        onDone() {},
+        onError(error) {
           console.error(error);
         },
       },
@@ -64,8 +67,12 @@ async function setStreamContent(
   await detaDB.messages.update({ content: content }, messageId);
 }
 
-function setTotalTokens(chatId: string, content: string) {
+async function setTotalTokens(chatId: string, content: string) {
   let total_tokens = encode(content).length;
+
+  // todo: add to existing totalTokens
+  await detaDB.chats.update({ totalTokens: total_tokens }, chatId);
+
   // db.chats.where({ id: chatId }).modify((chat) => {
   //   if (chat.totalTokens) {
   //     chat.totalTokens += total_tokens;

@@ -2,24 +2,23 @@ import { ActionIcon, Button, Modal, Stack, Text, Tooltip } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconTrash } from "@tabler/icons-react";
-import { useNavigate } from "@tanstack/react-location";
 import { useEffect, useState } from "react";
-import { db, Prompt } from "../db";
+import { detaDB, Prompt } from "../db";
 import { useApiKey } from "../hooks/useApiKey";
-import { useChatId } from "../hooks/useChatId";
+import { usePrompts } from "../hooks/contexts";
 
 export function DeletePromptModal({ prompt }: { prompt: Prompt }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const [key, setKey] = useApiKey();
+  const [key] = useApiKey();
 
-  const [value, setValue] = useState("");
+  const { setPrompts } = usePrompts()
+
+  const [_, setValue] = useState("");
   useEffect(() => {
     setValue(key);
   }, [key]);
-  const chatId = useChatId();
-  const navigate = useNavigate();
 
   return (
     <>
@@ -29,12 +28,15 @@ export function DeletePromptModal({ prompt }: { prompt: Prompt }) {
             try {
               setSubmitting(true);
               event.preventDefault();
-              await db.prompts.where({ id: prompt.id }).delete();
+
+              await detaDB.prompts.delete(prompt.key);
+              setPrompts(current => (current || [])?.filter((c) => c.key !== prompt.key))
+
               close();
 
               notifications.show({
                 title: "Deleted",
-                message: "Chat deleted.",
+                message: "Prompt deleted.",
               });
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {

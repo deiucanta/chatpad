@@ -1,13 +1,12 @@
 import { ActionIcon, Box, Flex, Group, Text, Tooltip } from "@mantine/core";
 import { IconPlayerPlay } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-location";
-import { useLiveQuery } from "dexie-react-hooks";
-import { nanoid } from "nanoid";
 import { useMemo } from "react";
-import { db } from "../db";
+import { Chat, detaDB, generateKey } from "../db";
 import { createChatCompletion } from "../utils/openai";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { EditPromptModal } from "./EditPromptModal";
+import { useChats, usePrompts, useSettings } from "../hooks/contexts";
 
 export function Prompts({
   onPlay,
@@ -17,9 +16,10 @@ export function Prompts({
   search: string;
 }) {
   const navigate = useNavigate();
-  const prompts = useLiveQuery(() =>
-    db.prompts.orderBy("createdAt").reverse().toArray()
-  );
+
+  const { prompts } = usePrompts()
+  const { setChats } = useChats()
+
   const filteredPrompts = useMemo(
     () =>
       (prompts ?? []).filter((prompt) => {
@@ -31,15 +31,14 @@ export function Prompts({
       }),
     [prompts, search]
   );
-  const apiKey = useLiveQuery(async () => {
-    return (await db.settings.where({ id: "general" }).first())?.openAiApiKey;
-  });
+
+  const { settings } = useSettings()
 
   return (
     <>
       {filteredPrompts.map((prompt) => (
         <Flex
-          key={prompt.id}
+          key={prompt.key}
           sx={(theme) => ({
             marginTop: 1,
             padding: theme.spacing.xs,
@@ -84,25 +83,28 @@ export function Prompts({
               <ActionIcon
                 size="lg"
                 onClick={async () => {
-                  if (!apiKey) return;
-                  const id = nanoid();
-                  await db.chats.add({
-                    id,
+                  if (!settings?.openAiApiKey) return;
+
+                  const item = await detaDB.chats.put({
                     description: "New Chat",
                     totalTokens: 0,
-                    createdAt: new Date(),
-                  });
-                  await db.messages.add({
-                    id: nanoid(),
-                    chatId: id,
+                    createdAt: new Date().toISOString(),
+                  }, generateKey())
+
+                  const chat = item as unknown as Chat
+                  setChats(current => ([...(current || []), chat]))
+
+                  await detaDB.messages.put({
+                    chatId: chat.key,
                     content: prompt.content,
                     role: "user",
-                    createdAt: new Date(),
-                  });
-                  navigate({ to: `/chats/${id}` });
+                    createdAt: new Date().toISOString(),
+                  }, generateKey())
+
+                  navigate({ to: `/chats/${chat.key}` });
                   onPlay();
 
-                  const result = await createChatCompletion(apiKey, [
+                  const result = await createChatCompletion(settings?.openAiApiKey, [
                     {
                       role: "system",
                       content:
@@ -113,22 +115,25 @@ export function Prompts({
 
                   const resultDescription =
                     result.data.choices[0].message?.content;
-                  await db.messages.add({
-                    id: nanoid(),
-                    chatId: id,
+
+                  await detaDB.messages.put({
+                    chatId: chat.key,
                     content: resultDescription ?? "unknown reponse",
                     role: "assistant",
-                    createdAt: new Date(),
-                  });
+                    createdAt: new Date().toISOString(),
+                  }, generateKey())
 
                   if (result.data.usage) {
-                    await db.chats.where({ id: id }).modify((chat) => {
-                      if (chat.totalTokens) {
-                        chat.totalTokens += result.data.usage!.total_tokens;
-                      } else {
-                        chat.totalTokens = result.data.usage!.total_tokens;
-                      }
-                    });
+                    // todo: add to chat totalTokens
+                    await detaDB.chats.update({ totalTokens: result.data.usage!.total_tokens }, chat.key)
+
+                    // await db.chats.where({ id: chat.key }).modify((chat) => {
+                    //   if (chat.totalTokens) {
+                    //     chat.totalTokens += result.data.usage!.total_tokens;
+                    //   } else {
+                    //     chat.totalTokens = result.data.usage!.total_tokens;
+                    //   }
+                    // });
                   }
                 }}
               >

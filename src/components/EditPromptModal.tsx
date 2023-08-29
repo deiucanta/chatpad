@@ -11,11 +11,14 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconPencil } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { db, Prompt } from "../db";
+import { detaDB, Prompt } from "../db";
+import { usePrompts } from "../hooks/contexts";
 
 export function EditPromptModal({ prompt }: { prompt: Prompt }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const { setPrompts } = usePrompts()
 
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
@@ -32,14 +35,22 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
             try {
               setSubmitting(true);
               event.preventDefault();
-              await db.prompts.where({ id: prompt.id }).modify((chat) => {
-                chat.title = title;
-                chat.content = value;
-              });
+
+              await detaDB.prompts.update({ title: title, content: value }, prompt.key)
+              setPrompts(current => (current || []).map(item => {
+                if (item.key === prompt.key) {
+                  return { ...item, title, content: value };
+                }
+          
+                return item;
+              }))
+
               notifications.show({
                 title: "Saved",
                 message: "Prompt updated",
               });
+
+              close()
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {
                 notifications.show({

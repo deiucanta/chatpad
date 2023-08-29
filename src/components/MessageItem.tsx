@@ -1,7 +1,6 @@
 import {
   ActionIcon,
   Box,
-  Button,
   Card,
   Code,
   Collapse,
@@ -11,10 +10,9 @@ import {
   Text,
   ThemeIcon,
   Tooltip,
-  Transition,
 } from "@mantine/core";
-import { useClickOutside, useClipboard } from "@mantine/hooks";
-import { IconCopy, IconInfoCircle, IconTrash, IconUser } from "@tabler/icons-react";
+import { useClickOutside } from "@mantine/hooks";
+import { IconCopy, IconTrash, IconUser } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -23,9 +21,9 @@ import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 import { ScrollIntoView } from "./ScrollIntoView";
+import { notifications } from "@mantine/notifications";
 
-export function MessageItem({ message }: { message: Message }) {
-  const clipboard = useClipboard({ timeout: 500 });
+export function MessageItem({ message, onDeleted }: { message: Message, onDeleted: (key: string) => void }) {
   const wordCount = useMemo(() => {
     var matches = message.content.match(/[\w\d\’\'-\(\)]+/gi);
     return matches ? matches.length : 0;
@@ -34,14 +32,31 @@ export function MessageItem({ message }: { message: Message }) {
   const [isExpanded, setExpanded] = useState(false);
   const ref = useClickOutside(() => setExpanded(false));
 
+  const [isHovered, setHovered] = useState(false);
+
   const handleDelete = async () => {
     await detaDB.messages.delete(message.key);
+
+    onDeleted(message.key)
+
     setExpanded(false);
+
+    notifications.show({
+      title: "Deleted",
+      message: "Message deleted.",
+    });
   }
 
   return (
     <ScrollIntoView>
-      <Card ref={ref} withBorder onClick={() => setExpanded(true)} style={{ cursor: 'pointer' }}>
+      <Card
+        ref={ref}
+        withBorder
+        onClick={() => setExpanded(true)}
+        onMouseOver={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{ cursor: 'pointer', border: isHovered ? '1px solid #acacac' : '' }}
+      >
         <Flex gap="sm">
           {message.role === "user" && (
             <ThemeIcon color="gray" size="lg">

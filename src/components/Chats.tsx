@@ -1,28 +1,30 @@
 import { ActionIcon, Flex, Menu } from "@mantine/core";
 import { IconDotsVertical, IconMessages } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-location";
-import { useEffect, useMemo, useState } from "react";
-import { Chat, detaDB } from "../db";
+import { useMemo } from "react";
 import { useChatId } from "../hooks/useChatId";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
+import { useChats } from "../hooks/contexts";
 
 export function Chats({ search }: { search: string }) {
   const chatId = useChatId();
 
-  const [chats, setChats] = useState<Chat[]>();
+  const { chats } = useChats()
 
-  useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const { items } = await detaDB.chats.fetch();
+  // const [chats, setChats] = useState<Chat[]>();
 
-      setChats(items as unknown as Chat[]);
-    };
+  // useEffect(() => {
+  //   // fetch data
+  //   const dataFetch = async () => {
+  //     const { items } = await detaDB.chats.fetch();
 
-    dataFetch();
-  }, []);
+  //     setChats(items as unknown as Chat[]);
+  //   };
+
+  //   dataFetch();
+  // }, []);
 
   // const chats = useLiveQuery(() =>
   //   db.chats.orderBy("createdAt").reverse().toArray()

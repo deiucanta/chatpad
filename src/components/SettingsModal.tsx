@@ -13,11 +13,11 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { useLiveQuery } from "dexie-react-hooks";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
-import { db } from "../db";
+import { db, detaDB } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
+import { useSettings } from "../hooks/contexts";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -30,9 +30,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [base, setBase] = useState("");
   const [version, setVersion] = useState("");
 
-  const settings = useLiveQuery(async () => {
-    return db.settings.where({ id: "general" }).first();
-  });
+  const { settings, setSettings } = useSettings()
 
   useEffect(() => {
     if (settings?.openAiApiKey) {
@@ -66,10 +64,29 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 setSubmitting(true);
                 event.preventDefault();
                 await checkOpenAIKey(value);
-                await db.settings.where({ id: "general" }).modify((apiKey) => {
-                  apiKey.openAiApiKey = value;
-                  console.log(apiKey);
-                });
+
+                if (settings?.openAiApiKey) {
+                  await detaDB.settings.update({
+                    openAiApiKey: value,
+                  }, 'general');
+                } else {
+                  await detaDB.settings.put({
+                    openAiApiKey: value
+                  }, 'general')
+                }
+
+                setSettings(current => {
+                  if (current) {
+                    return { ...current, openAiApiKey: value };
+                  } else {
+                    return { key: 'general', openAiApiKey: value };
+                  }
+                })
+
+                // await db.settings.where({ id: "general" }).modify((apiKey) => {
+                //   apiKey.openAiApiKey = value;
+                //   console.log(apiKey);
+                // });
                 notifications.show({
                   title: "Saved",
                   message: "Your OpenAI Key has been saved.",

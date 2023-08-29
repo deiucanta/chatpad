@@ -221,7 +221,8 @@
     "showDownloadLink": false,
     "allowDarkModeToggle": true,
     "allowSettingsModal": true,
-    "allowDatabaseModal": true,
+    "allowDatabaseModal": false,
     "showTwitterLink": false,
-    "showFeedbackLink": false
+    "showFeedbackLink": false,
+    "githubUrl": "https://github.com/deta/chatpad"
   }

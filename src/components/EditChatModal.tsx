@@ -2,7 +2,8 @@ import { Button, Modal, Stack, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
-import { Chat, db } from "../db";
+import { Chat, detaDB } from "../db";
+import { useChat, useChats } from "../hooks/contexts";
 
 export function EditChatModal({
   chat,
@@ -13,6 +14,9 @@ export function EditChatModal({
 }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const { setChats } = useChats()
+  const { setChat } = useChat()
 
   const [value, setValue] = useState("");
   useEffect(() => {
@@ -28,9 +32,23 @@ export function EditChatModal({
             try {
               setSubmitting(true);
               event.preventDefault();
-              await db.chats.where({ id: chat.id }).modify((chat) => {
-                chat.description = value;
-              });
+
+              await detaDB.chats.update({ description: value }, chat.key);
+              setChats(current => (current || []).map(item => {
+                if (item.key === chat.key) {
+                  return { ...item, description: value };
+                }
+          
+                return item;
+              }));
+              setChat(current => {
+                if (current?.key === chat.key) {
+                  return { ...current, description: value };
+                }
+          
+                return current;
+              })
+
               notifications.show({
                 title: "Saved",
                 message: "",

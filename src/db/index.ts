@@ -27,7 +27,7 @@ export interface Prompt {
 }
 
 export interface Settings {
-  id: "general";
+  key: "general";
   openAiApiKey?: string;
   openAiModel?: string;
   openAiApiType?: 'openai' | 'custom';
@@ -71,7 +71,7 @@ export class Database extends Dexie {
 
     this.on("populate", async () => {
       db.settings.add({
-        id: "general",
+        key: "general",
         openAiModel: config.defaultModel,
         openAiApiType: config.defaultType,
         openAiApiAuth: config.defaultAuth,

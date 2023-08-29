@@ -12,24 +12,22 @@ import {
   Textarea,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useLiveQuery } from "dexie-react-hooks";
-import { nanoid } from "nanoid";
 import { KeyboardEvent, useState, type ChangeEvent, useEffect } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import { MessageItem } from "../components/MessageItem";
-import { Chat, Message, db, detaDB, generateKey } from "../db";
+import { Chat, Message, detaDB, generateKey } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { config } from "../utils/config";
 import {
   createChatCompletion,
   createStreamChatCompletion,
 } from "../utils/openai";
+import { useChat, useChats, useSettings } from "../hooks/contexts";
 
 export function ChatRoute() {
   const chatId = useChatId();
-  const apiKey = useLiveQuery(async () => {
-    return (await db.settings.where({ id: "general" }).first())?.openAiApiKey;
-  });
+
+  const { settings } = useSettings()
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -57,7 +55,8 @@ export function ChatRoute() {
   const [contentDraft, setContentDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const [chat, setChat] = useState<Chat>();
+  const { setChats } = useChats()
+  const { chat, setChat } = useChat()
 
   useEffect(() => {
     const dataFetch = async () => {
@@ -66,7 +65,9 @@ export function ChatRoute() {
       setChat(item as unknown as Chat);
     };
 
-    dataFetch();
+    if (!chat) {
+      dataFetch();
+    }
   }, [chatId]);
 
   // const chat = useLiveQuery(async () => {
@@ -104,7 +105,7 @@ export function ChatRoute() {
       return;
     }
 
-    if (!apiKey) {
+    if (!settings?.openAiApiKey) {
       notifications.show({
         title: "Error",
         color: "red",
@@ -154,7 +155,7 @@ export function ChatRoute() {
       // });
 
       await createStreamChatCompletion(
-        apiKey,
+        settings.openAiApiKey,
         [
           {
             role: "system",
@@ -187,7 +188,7 @@ export function ChatRoute() {
         // const messages = await db.messages
         //   .where({ chatId })
         //   .sortBy("createdAt");
-        const createChatDescription = await createChatCompletion(apiKey, [
+        const createChatDescription = await createChatCompletion(settings.openAiApiKey, [
           {
             role: "system",
             content: getSystemMessage(),
@@ -199,7 +200,7 @@ export function ChatRoute() {
           {
             role: "user",
             content:
-              "What would be a short and relevant title for this chat ? You must strictly answer with only the title, no other text is allowed.",
+              "What would be a short and relevant title for this chat ? You must strictly answer with only the title, no other text is allowed. Don't use quotation marks",
           },
         ]);
         const chatDescription =
@@ -214,6 +215,13 @@ export function ChatRoute() {
           await detaDB.chats.update(chatUpdates, chatId)
 
           setChat(chat => ({ ...chat!, ...chatUpdates }))
+          setChats(current => (current || []).map(item => {
+            if (item.key === chat.key) {
+              return { ...item, ...chatUpdates };
+            }
+      
+            return item;
+          }));
 
           // await db.chats.where({ id: chatId }).modify((chat) => {
           //   chat.description = chatDescription ?? "New Chat";
@@ -279,6 +287,10 @@ export function ChatRoute() {
     setUserMsgIndex(0);
   };
 
+  const handleMessageDelete = (key: string) => {
+    setMessages(current => current.filter(message => message.key !== key))
+  }
+
   if (!chatId) return null;
 
   return (
@@ -286,7 +298,7 @@ export function ChatRoute() {
       <Container pt="xl" pb={100}>
         <Stack spacing="xs">
           {messages?.map((message) => (
-            <MessageItem key={message.key} message={message} />
+            <MessageItem key={message.key} message={message} onDeleted={handleMessageDelete} />
           ))}
         </Stack>
         {submitting && (

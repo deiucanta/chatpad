@@ -10,13 +10,15 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconPlaylistAdd, IconPlus } from "@tabler/icons-react";
-import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
-import { db } from "../db";
+import { detaDB, generateKey, Prompt } from "../db";
+import { usePrompts } from "../hooks/contexts";
 
 export function CreatePromptModal({ content }: { content?: string }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const { setPrompts } = usePrompts()
 
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
@@ -43,17 +45,24 @@ export function CreatePromptModal({ content }: { content?: string }) {
             try {
               setSubmitting(true);
               event.preventDefault();
-              const id = nanoid();
-              db.prompts.add({
-                id,
+
+              const item = await detaDB.prompts.put({
                 title,
                 content: value,
-                createdAt: new Date(),
-              });
+                createdAt: new Date().toISOString(),
+              }, generateKey())
+
+              const prompt = item as unknown as Prompt
+              setPrompts(current => [...(current || []), prompt])
+              
               notifications.show({
                 title: "Saved",
                 message: "Prompt created",
               });
+
+              setTitle("")
+              setValue("")
+
               close();
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {

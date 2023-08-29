@@ -15,15 +15,13 @@ import {
   IconLock,
   IconNorthStar,
 } from "@tabler/icons-react";
-import { useLiveQuery } from "dexie-react-hooks";
 import { Logo } from "../components/Logo";
 import { SettingsModal } from "../components/SettingsModal";
-import { db } from "../db";
 import { config } from "../utils/config";
+import { useSettings } from "../hooks/contexts";
 
 export function IndexRoute() {
-  const settings = useLiveQuery(() => db.settings.get("general"));
-  const { openAiApiKey } = settings ?? {};
+  const { settings } = useSettings()
 
   return (
     <>
@@ -61,10 +59,10 @@ export function IndexRoute() {
               <SettingsModal>
                 <Button
                   size="md"
-                  variant={openAiApiKey ? "light" : "filled"}
+                  variant={settings?.openAiApiKey ? "light" : "filled"}
                   leftIcon={<IconKey size={20} />}
                 >
-                  {openAiApiKey ? "Change OpenAI Key" : "Enter OpenAI Key"}
+                  {settings?.openAiApiKey ? "Change OpenAI Key" : "Enter OpenAI Key"}
                 </Button>
               </SettingsModal>
             )}
