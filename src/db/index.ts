@@ -6,7 +6,13 @@ export interface Chat {
   key: string;
   description: string;
   totalTokens: number;
-  createdAt: Date;
+  prompt?: string;
+  writingInstructions?: string | null;
+  writingCharacter?: string | null;
+  writingTone?: string | null;
+  writingStyle?: string | null;
+  writingFormat?: string | null;
+  createdAt: string;
 }
 
 export interface Message {
@@ -14,14 +20,18 @@ export interface Message {
   chatId: string;
   role: "system" | "assistant" | "user";
   content: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface Prompt {
   key: string;
   title: string;
   content: string;
-  createdAt: Date;
+  writingCharacter?: string | null;
+  writingTone?: string | null;
+  writingStyle?: string | null;
+  writingFormat?: string | null;
+  createdAt: string;
 }
 
 export interface Settings {

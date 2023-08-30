@@ -4,7 +4,6 @@ import {
   Box,
   Burger,
   Button,
-  Center,
   Header,
   MediaQuery,
   Navbar,
@@ -17,14 +16,9 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import {
-  IconBrandGithub,
-  IconBrandTwitter,
-  IconMessage,
-  IconMoonStars,
   IconPlus,
   IconSearch,
   IconSettings,
-  IconSunHigh,
   IconX,
 } from "@tabler/icons-react";
 import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
@@ -49,7 +43,7 @@ export function Layout() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [tab, setTab] = useState<"Chats" | "Prompts">("Chats");
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { colorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
   const router = useRouter();
 
@@ -140,7 +134,8 @@ export function Layout() {
                         height: 60,
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
+                        justifyContent: "space-between",
+                        padding: 10,
                         borderBottom: border,
                       }}
                     >
@@ -157,16 +152,29 @@ export function Layout() {
                           }}
                         />
                       </Link>
-                      <MediaQuery largerThan="md" styles={{ display: "none" }}>
-                        <Burger
-                          opened={opened}
-                          onClick={() => setOpened((o) => !o)}
-                          size="sm"
-                          color={theme.colors.gray[6]}
-                          className="app-region-no-drag"
-                          sx={{ position: "fixed", right: 16 }}
-                        />
-                      </MediaQuery>
+                      <Box
+                        style={{
+                          display: "flex",
+                          alignItems: "center"
+                        }}
+                      >
+                        <SettingsModal>
+                            <Tooltip label="Settings">
+                              <ActionIcon size="xl">
+                                <IconSettings size={20} />
+                              </ActionIcon>
+                            </Tooltip>
+                        </SettingsModal>
+                        <MediaQuery largerThan="md" styles={{ display: "none" }}>
+                          <Burger
+                            opened={opened}
+                            onClick={() => setOpened((o) => !o)}
+                            size="sm"
+                            color={theme.colors.gray[6]}
+                            className="app-region-no-drag"
+                          />
+                        </MediaQuery>
+                      </Box>
                     </Box>
                   </Navbar.Section>
                   <Navbar.Section
@@ -185,36 +193,6 @@ export function Layout() {
                       onChange={(value) => setTab(value as typeof tab)}
                       data={["Chats", "Prompts"]}
                     />
-                    <Box sx={{ padding: 4 }}>
-                      {tab === "Chats" && (
-                        <Button
-                          fullWidth
-                          leftIcon={<IconPlus size={20} />}
-                          onClick={async () => {
-                            const item = await detaDB.chats.put({
-                              description: "New Chat",
-                              totalTokens: 0,
-                              createdAt: new Date().toISOString(),
-                            }, generateKey())
-
-                            setChats(chats => ([...(chats || []), item as unknown as Chat]))
-
-                            const id = item!.key as string
-                            // const id = nanoid();
-                            // db.chats.add({
-                            //   id,
-                            //   description: "New Chat",
-                            //   totalTokens: 0,
-                            //   createdAt: new Date(),
-                            // });
-                            navigate({ to: `/chats/${id}`, replace: true });
-                          }}
-                        >
-                          New Chat
-                        </Button>
-                      )}
-                      {tab === "Prompts" && <CreatePromptModal />}
-                    </Box>
                   </Navbar.Section>
                   <Navbar.Section
                     sx={(theme) => ({
@@ -251,7 +229,39 @@ export function Layout() {
                       <Prompts search={search} onPlay={() => setTab("Chats")} />
                     )}
                   </Navbar.Section>
-                  <Navbar.Section sx={{ borderTop: border }} p="xs">
+                  <Navbar.Section>
+                  <Box sx={{ padding: 10 }}>
+                      {tab === "Chats" && (
+                        <Button
+                          fullWidth
+                          leftIcon={<IconPlus size={20} />}
+                          onClick={async () => {
+                            const item = await detaDB.chats.put({
+                              description: "New Chat",
+                              totalTokens: 0,
+                              createdAt: new Date().toISOString(),
+                            }, generateKey())
+
+                            setChats(chats => ([...(chats || []), item as unknown as Chat]))
+
+                            const id = item!.key as string
+                            // const id = nanoid();
+                            // db.chats.add({
+                            //   id,
+                            //   description: "New Chat",
+                            //   totalTokens: 0,
+                            //   createdAt: new Date(),
+                            // });
+                            navigate({ to: `/chats/${id}`, replace: true });
+                          }}
+                        >
+                          New Chat
+                        </Button>
+                      )}
+                      {tab === "Prompts" && <CreatePromptModal />}
+                    </Box>
+                  </Navbar.Section>
+                  {/* <Navbar.Section sx={{ borderTop: border }} p="xs">
                     <Center>
                       {config.allowDarkModeToggle && (
                         <Tooltip
@@ -327,7 +337,7 @@ export function Layout() {
                         </Tooltip>
                       )}
                     </Center>
-                  </Navbar.Section>
+                  </Navbar.Section> */}
                 </Navbar>
               }
               header={

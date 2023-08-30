@@ -3,7 +3,6 @@ import { IconPlayerPlay } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-location";
 import { useMemo } from "react";
 import { Chat, detaDB, generateKey } from "../db";
-import { createChatCompletion } from "../utils/openai";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { EditPromptModal } from "./EditPromptModal";
 import { useChats, usePrompts, useSettings } from "../hooks/contexts";
@@ -75,7 +74,7 @@ export function Prompts({
                 overflow: "hidden",
               }}
             >
-              {prompt.content}
+              {prompt.content || prompt.writingCharacter || prompt.writingTone || prompt.writingFormat || prompt.writingStyle}
             </Text>
           </Box>
           <Group spacing="none">
@@ -86,7 +85,13 @@ export function Prompts({
                   if (!settings?.openAiApiKey) return;
 
                   const item = await detaDB.chats.put({
-                    description: "New Chat",
+                    description: prompt.title ? `New ${prompt.title} Chat` : "New Chat",
+                    prompt: prompt.key,
+                    writingInstructions: prompt.content,
+                    writingCharacter: prompt.writingCharacter,
+                    writingTone: prompt.writingTone,
+                    writingStyle: prompt.writingStyle,
+                    writingFormat: prompt.writingFormat,
                     totalTokens: 0,
                     createdAt: new Date().toISOString(),
                   }, generateKey())
@@ -94,47 +99,47 @@ export function Prompts({
                   const chat = item as unknown as Chat
                   setChats(current => ([...(current || []), chat]))
 
-                  await detaDB.messages.put({
-                    chatId: chat.key,
-                    content: prompt.content,
-                    role: "user",
-                    createdAt: new Date().toISOString(),
-                  }, generateKey())
+                  // const systemMessage = getSystemMessage(prompt);
+
+                  // await detaDB.messages.put({
+                  //   chatId: chat.key,
+                  //   content: systemMessage,
+                  //   role: "system",
+                  //   createdAt: new Date().toISOString(),
+                  // }, generateKey())
 
                   navigate({ to: `/chats/${chat.key}` });
                   onPlay();
 
-                  const result = await createChatCompletion(settings, [
-                    {
-                      role: "system",
-                      content:
-                        "You are ChatGPT, a large language model trained by OpenAI.",
-                    },
-                    { role: "user", content: prompt.content },
-                  ]);
+                  // const result = await createChatCompletion(settings, [
+                  //   {
+                  //     role: "system",
+                  //     content: systemMessage,
+                  //   },
+                  // ]);
 
-                  const resultDescription =
-                    result.data.choices[0].message?.content;
+                  // const resultDescription =
+                  //   result.data.choices[0].message?.content;
 
-                  await detaDB.messages.put({
-                    chatId: chat.key,
-                    content: resultDescription ?? "unknown reponse",
-                    role: "assistant",
-                    createdAt: new Date().toISOString(),
-                  }, generateKey())
+                  // await detaDB.messages.put({
+                  //   chatId: chat.key,
+                  //   content: resultDescription ?? "unknown reponse",
+                  //   role: "assistant",
+                  //   createdAt: new Date().toISOString(),
+                  // }, generateKey())
 
-                  if (result.data.usage) {
-                    // todo: add to chat totalTokens
-                    await detaDB.chats.update({ totalTokens: result.data.usage!.total_tokens }, chat.key)
+                  // if (result.data.usage) {
+                  //   // todo: add to chat totalTokens
+                  //   await detaDB.chats.update({ totalTokens: result.data.usage!.total_tokens }, chat.key)
 
-                    // await db.chats.where({ id: chat.key }).modify((chat) => {
-                    //   if (chat.totalTokens) {
-                    //     chat.totalTokens += result.data.usage!.total_tokens;
-                    //   } else {
-                    //     chat.totalTokens = result.data.usage!.total_tokens;
-                    //   }
-                    // });
-                  }
+                  //   // await db.chats.where({ id: chat.key }).modify((chat) => {
+                  //   //   if (chat.totalTokens) {
+                  //   //     chat.totalTokens += result.data.usage!.total_tokens;
+                  //   //   } else {
+                  //   //     chat.totalTokens = result.data.usage!.total_tokens;
+                  //   //   }
+                  //   // });
+                  // }
                 }}
               >
                 <IconPlayerPlay size={20} />

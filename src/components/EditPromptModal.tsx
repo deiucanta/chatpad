@@ -2,6 +2,8 @@ import {
   ActionIcon,
   Button,
   Modal,
+  Select,
+  SimpleGrid,
   Stack,
   Textarea,
   TextInput,
@@ -13,6 +15,7 @@ import { IconPencil } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { detaDB, Prompt } from "../db";
 import { usePrompts } from "../hooks/contexts";
+import { config } from "../utils/config";
 
 export function EditPromptModal({ prompt }: { prompt: Prompt }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -20,11 +23,20 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
 
   const { setPrompts } = usePrompts()
 
+  const [writingCharacter, setWritingCharacter] = useState<string | null>(null);
+  const [writingTone, setWritingTone] = useState<string | null>(null);
+  const [writingStyle, setWritingStyle] = useState<string | null>(null);
+  const [writingFormat, setWritingFormat] = useState<string | null>(null);
+
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
   useEffect(() => {
     setValue(prompt?.content ?? "");
     setTitle(prompt?.title ?? "");
+    setWritingCharacter(prompt?.writingCharacter ?? null);
+    setWritingTone(prompt?.writingTone ?? null);
+    setWritingStyle(prompt?.writingStyle ?? null);
+    setWritingFormat(prompt?.writingFormat ?? null);
   }, [prompt]);
 
   return (
@@ -36,10 +48,21 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
               setSubmitting(true);
               event.preventDefault();
 
-              await detaDB.prompts.update({ title: title, content: value }, prompt.key)
+              const updates: Partial<Prompt> = {
+                title,
+                content: value,
+                writingCharacter,
+                writingFormat,
+                writingStyle,
+                writingTone
+              }
+
+              console.log({ updates })
+
+              await detaDB.prompts.update(updates, prompt.key)
               setPrompts(current => (current || []).map(item => {
                 if (item.key === prompt.key) {
-                  return { ...item, title, content: value };
+                  return { ...item, ...updates };
                 }
           
                 return item;
@@ -80,8 +103,57 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
               formNoValidate
               data-autofocus
             />
+            <SimpleGrid
+              spacing="xs"
+              breakpoints={[
+                { minWidth: "sm", cols: 4 },
+                { maxWidth: "sm", cols: 2 },
+              ]}
+            >
+              <Select
+                value={writingCharacter}
+                onChange={setWritingCharacter}
+                data={config.writingCharacters}
+                placeholder="Character"
+                variant="filled"
+                searchable
+                clearable
+                sx={{ flex: 1 }}
+              />
+              <Select
+                value={writingTone}
+                onChange={setWritingTone}
+                data={config.writingTones}
+                placeholder="Tone"
+                variant="filled"
+                searchable
+                clearable
+                sx={{ flex: 1 }}
+              />
+              <Select
+                value={writingStyle}
+                onChange={setWritingStyle}
+                data={config.writingStyles}
+                placeholder="Style"
+                variant="filled"
+                searchable
+                clearable
+                sx={{ flex: 1 }}
+              />
+              <Select
+                value={writingFormat}
+                onChange={setWritingFormat}
+                data={config.writingFormats}
+                placeholder="Format"
+                variant="filled"
+                searchable
+                clearable
+                sx={{ flex: 1 }}
+              />
+            </SimpleGrid>
             <Textarea
               label="Content"
+              placeholder="Further instructions..."
               autosize
               minRows={5}
               maxRows={10}

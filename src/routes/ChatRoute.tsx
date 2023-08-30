@@ -6,7 +6,6 @@ import {
   Flex,
   MediaQuery,
   Select,
-  SimpleGrid,
   Skeleton,
   Stack,
   Textarea,
@@ -15,19 +14,22 @@ import { notifications } from "@mantine/notifications";
 import { KeyboardEvent, useState, type ChangeEvent, useEffect } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import { MessageItem } from "../components/MessageItem";
-import { Chat, Message, detaDB, generateKey } from "../db";
+import { Chat, Message, Prompt, detaDB, generateKey } from "../db";
 import { useChatId } from "../hooks/useChatId";
-import { config } from "../utils/config";
 import {
   createChatCompletion,
   createStreamChatCompletion,
+  getSystemMessage,
 } from "../utils/openai";
-import { useChat, useChats, useSettings } from "../hooks/contexts";
+import { useChat, useChats, usePrompts, useSettings } from "../hooks/contexts";
+import { CreatePromptModal } from "../components/CreatePromptModal";
 
 export function ChatRoute() {
   const chatId = useChatId();
 
   const { settings } = useSettings()
+
+  const { prompts } = usePrompts()
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -54,6 +56,8 @@ export function ChatRoute() {
   const [content, setContent] = useState("");
   const [contentDraft, setContentDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [promptKey, setPromptKey] = useState<string | null>(null);
+  const [newPromptTitle, setNewPromptTitle] = useState<string | null>(null);
 
   const { setChats } = useChats()
   const { chat, setChat } = useChat()
@@ -61,8 +65,13 @@ export function ChatRoute() {
   useEffect(() => {
     const dataFetch = async () => {
       const item = await detaDB.chats.get(chatId!);
+      const fetchedChat = item as unknown as Chat
 
-      setChat(item as unknown as Chat);
+      setChat(fetchedChat);
+
+      if (fetchedChat.prompt) {
+        setPromptKey(fetchedChat.prompt)
+      }
     };
 
     if (!chat) {
@@ -74,24 +83,6 @@ export function ChatRoute() {
   //   if (!chatId) return null;
   //   return db.chats.get(chatId);
   // }, [chatId]);
-
-  const [writingCharacter, setWritingCharacter] = useState<string | null>(null);
-  const [writingTone, setWritingTone] = useState<string | null>(null);
-  const [writingStyle, setWritingStyle] = useState<string | null>(null);
-  const [writingFormat, setWritingFormat] = useState<string | null>(null);
-
-  const getSystemMessage = () => {
-    const message: string[] = [];
-    if (writingCharacter) message.push(`You are ${writingCharacter}.`);
-    if (writingTone) message.push(`Respond in ${writingTone} tone.`);
-    if (writingStyle) message.push(`Respond in ${writingStyle} style.`);
-    if (writingFormat) message.push(writingFormat);
-    if (message.length === 0)
-      message.push(
-        "You are ChatGPT, a large language model trained by OpenAI."
-      );
-    return message.join(" ");
-  };
 
   const submit = async () => {
     if (submitting) return;
@@ -117,6 +108,42 @@ export function ChatRoute() {
     try {
       setSubmitting(true);
 
+      let systemMessageValue = ""
+      if (promptKey) {
+        const item = await detaDB.prompts.get(promptKey);
+        if (item) {
+          const prompt = item as unknown as Prompt
+
+          systemMessageValue = getSystemMessage({
+            content: prompt.content,
+            character: prompt?.writingCharacter ?? undefined,
+            tone: prompt?.writingTone ?? undefined,
+            style: prompt?.writingStyle ?? undefined,
+            format: prompt?.writingFormat ?? undefined,
+          })
+
+          const updates = {
+            writingInstructions: prompt.content,
+            writingCharacter: prompt.writingCharacter,
+            writingTone: prompt.writingTone,
+            writingStyle: prompt.writingStyle,
+            writingFormat: prompt.writingFormat,
+          }
+          setChat(chat => ({ ...chat!, ...updates }))
+          await detaDB.chats.update(updates, chatId)
+        }
+      }
+
+      if (!systemMessageValue) {
+        systemMessageValue = getSystemMessage({
+          content: chat?.writingInstructions ?? undefined,
+          character: chat?.writingCharacter ?? undefined,
+          tone: chat?.writingTone ?? undefined,
+          style: chat?.writingStyle ?? undefined,
+          format: chat?.writingFormat ?? undefined,
+        })
+      }
+
       const userMessage = await detaDB.messages.put({
         chatId,
         content,
@@ -134,6 +161,7 @@ export function ChatRoute() {
       //   createdAt: new Date(),
       // });
       setContent("");
+      setPromptKey(null);
 
       const systemMessage = await detaDB.messages.put({
         chatId,
@@ -159,7 +187,7 @@ export function ChatRoute() {
         [
           {
             role: "system",
-            content: getSystemMessage(),
+            content: systemMessageValue,
           },
           ...(messages ?? []).map((message) => ({
             role: message.role,
@@ -191,7 +219,7 @@ export function ChatRoute() {
         const createChatDescription = await createChatCompletion(settings, [
           {
             role: "system",
-            content: getSystemMessage(),
+            content: systemMessageValue,
           },
           ...(messages ?? []).map((message) => ({
             role: message.role,
@@ -329,55 +357,80 @@ export function ChatRoute() {
       >
         <Container>
           {messages?.length === 0 && (
-            <SimpleGrid
+            <Box
               mb="sm"
-              spacing="xs"
-              breakpoints={[
-                { minWidth: "sm", cols: 4 },
-                { maxWidth: "sm", cols: 2 },
-              ]}
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
             >
               <Select
-                value={writingCharacter}
-                onChange={setWritingCharacter}
-                data={config.writingCharacters}
-                placeholder="Character"
+                value={promptKey}
+                onChange={setPromptKey}
+                data={prompts.map(prompt => ({ value: prompt.key, label: prompt.title }))}
+                placeholder="Select Prompt"
                 variant="filled"
                 searchable
                 clearable
-                sx={{ flex: 1 }}
+                creatable
+                getCreateLabel={(query) => `+ Create "${query}" Prompt`}
+                onCreate={(query) => {
+                  setNewPromptTitle(query)
+                  return query;
+                }}
               />
-              <Select
-                value={writingTone}
-                onChange={setWritingTone}
-                data={config.writingTones}
-                placeholder="Tone"
-                variant="filled"
-                searchable
-                clearable
-                sx={{ flex: 1 }}
-              />
-              <Select
-                value={writingStyle}
-                onChange={setWritingStyle}
-                data={config.writingStyles}
-                placeholder="Style"
-                variant="filled"
-                searchable
-                clearable
-                sx={{ flex: 1 }}
-              />
-              <Select
-                value={writingFormat}
-                onChange={setWritingFormat}
-                data={config.writingFormats}
-                placeholder="Format"
-                variant="filled"
-                searchable
-                clearable
-                sx={{ flex: 1 }}
-              />
-            </SimpleGrid>
+
+              {newPromptTitle && <CreatePromptModal title={newPromptTitle} open={true} />}
+            </Box>
+            // <SimpleGrid
+            //   mb="sm"
+            //   spacing="xs"
+            //   breakpoints={[
+            //     { minWidth: "sm", cols: 4 },
+            //     { maxWidth: "sm", cols: 2 },
+            //   ]}
+            // >
+            //   <Select
+            //     value={writingCharacter}
+            //     onChange={setWritingCharacter}
+            //     data={config.writingCharacters}
+            //     placeholder="Character"
+            //     variant="filled"
+            //     searchable
+            //     clearable
+            //     sx={{ flex: 1 }}
+            //   />
+            //   <Select
+            //     value={writingTone}
+            //     onChange={setWritingTone}
+            //     data={config.writingTones}
+            //     placeholder="Tone"
+            //     variant="filled"
+            //     searchable
+            //     clearable
+            //     sx={{ flex: 1 }}
+            //   />
+            //   <Select
+            //     value={writingStyle}
+            //     onChange={setWritingStyle}
+            //     data={config.writingStyles}
+            //     placeholder="Style"
+            //     variant="filled"
+            //     searchable
+            //     clearable
+            //     sx={{ flex: 1 }}
+            //   />
+            //   <Select
+            //     value={writingFormat}
+            //     onChange={setWritingFormat}
+            //     data={config.writingFormats}
+            //     placeholder="Format"
+            //     variant="filled"
+            //     searchable
+            //     clearable
+            //     sx={{ flex: 1 }}
+            //   />
+            // </SimpleGrid>
           )}
           <Flex gap="sm">
             <Textarea

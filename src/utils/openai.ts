@@ -119,3 +119,17 @@ export async function checkOpenAIKey(settings: Settings) {
     },
   ]);
 }
+
+export function getSystemMessage(prompt: { content?: string, character?: string, tone?: string, style?: string, format?: string }) {
+  const message: string[] = [];
+  if (prompt.character) message.push(`You are ${prompt.character}`);
+  if (prompt.tone) message.push(`Respond in ${prompt.tone.toLowerCase()} tone.`);
+  if (prompt.style) message.push(`Respond in ${prompt.style.toLowerCase()} style.`);
+  if (prompt.format) message.push(`${prompt.format.toLowerCase()}.`);
+  if (message.length === 0)
+    message.push(
+      "You are ChatGPT, a large language model trained by OpenAI."
+    );
+  if (prompt.content) message.push(prompt.content);
+  return message.join(" ");
+};

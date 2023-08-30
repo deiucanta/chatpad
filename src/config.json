@@ -202,6 +202,10 @@
     ],
     "writingFormats": [
       {
+        "value": "Answer with a One-Liner",
+        "label": "One-Liner"
+      },
+      {
         "value": "Answer as concise as possible",
         "label": "Concise"
       },
