@@ -102,6 +102,9 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
               onChange={(event) => setTitle(event.currentTarget.value)}
               formNoValidate
               data-autofocus
+              autoComplete="off"
+              data-lpignore="true"
+              data-form-type="other"
             />
             <SimpleGrid
               spacing="xs"

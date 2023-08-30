@@ -117,6 +117,9 @@ export function CreatePromptModal({ content, title: titleProp, open: openProp }:
               onChange={(event) => setTitle(event.currentTarget.value)}
               formNoValidate
               data-autofocus
+              autoComplete="off"
+              data-lpignore="true"
+              data-form-type="other"
             />
             <SimpleGrid
               spacing="xs"

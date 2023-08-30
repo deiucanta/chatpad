@@ -139,6 +139,9 @@ export function EditChatModal({
               onChange={(event) => setValue(event.currentTarget.value)}
               formNoValidate
               data-autofocus
+              autoComplete="off"
+              data-lpignore="true"
+              data-form-type="other"
             />
             <Select
               value={promptKey}
