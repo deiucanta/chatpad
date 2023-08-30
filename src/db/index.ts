@@ -1,7 +1,5 @@
 import { Deta } from "deta";
-import Dexie, { Table } from "dexie";
 import "dexie-export-import";
-import { config } from "../utils/config";
 import { nanoid } from "nanoid";
 
 export interface Chat {
@@ -54,33 +52,33 @@ export const generateKey = (ascending: boolean = true): string => {
 	return `${ timestamp.toString(16) }${ nanoid(5) }`
 }
 
-export class Database extends Dexie {
-  chats!: Table<Chat>;
-  messages!: Table<Message>;
-  prompts!: Table<Prompt>;
-  settings!: Table<Settings>;
+// export class Database extends Dexie {
+//   chats!: Table<Chat>;
+//   messages!: Table<Message>;
+//   prompts!: Table<Prompt>;
+//   settings!: Table<Settings>;
 
-  constructor() {
-    super("chatpad");
-    this.version(2).stores({
-      chats: "id, createdAt",
-      messages: "id, chatId, createdAt",
-      prompts: "id, createdAt",
-      settings: "id",
-    });
+//   constructor() {
+//     super("chatpad");
+//     this.version(2).stores({
+//       chats: "id, createdAt",
+//       messages: "id, chatId, createdAt",
+//       prompts: "id, createdAt",
+//       settings: "id",
+//     });
 
-    this.on("populate", async () => {
-      db.settings.add({
-        key: "general",
-        openAiModel: config.defaultModel,
-        openAiApiType: config.defaultType,
-        openAiApiAuth: config.defaultAuth,
-        ...(config.defaultKey != '' && { openAiApiKey: config.defaultKey }),
-        ...(config.defaultBase != '' && { openAiApiBase: config.defaultBase }),
-        ...(config.defaultVersion != '' && { openAiApiVersion: config.defaultVersion }),
-      });
-    });
-  }
-}
+//     this.on("populate", async () => {
+//       db.settings.add({
+//         key: "general",
+//         openAiModel: config.defaultModel,
+//         openAiApiType: config.defaultType,
+//         openAiApiAuth: config.defaultAuth,
+//         ...(config.defaultKey != '' && { openAiApiKey: config.defaultKey }),
+//         ...(config.defaultBase != '' && { openAiApiBase: config.defaultBase }),
+//         ...(config.defaultVersion != '' && { openAiApiVersion: config.defaultVersion }),
+//       });
+//     });
+//   }
+// }
 
-export const db = new Database();
+// export const db = new Database();

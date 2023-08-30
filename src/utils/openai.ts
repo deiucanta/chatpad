@@ -1,7 +1,7 @@
 import { encode } from "gpt-token-utils";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { OpenAIExt } from "openai-ext";
-import { db, detaDB } from "../db";
+import { Settings, detaDB } from "../db";
 import { config } from "./config";
 import { useDebounce } from "./debounce";
 
@@ -22,13 +22,12 @@ function getClient(
 }
 
 export async function createStreamChatCompletion(
-  apiKey: string,
+  settings: Settings,
   messages: ChatCompletionRequestMessage[],
   chatId: string,
   messageId: string,
   onContent: (content: string, isFinal: boolean) => void
 ) {
-  const settings = await db.settings.get("general");
   const model = settings?.openAiModel ?? config.defaultModel;
 
   const debouncedSetStreamContent = useDebounce(setStreamContent, 200);
@@ -39,7 +38,7 @@ export async function createStreamChatCompletion(
       messages,
     },
     {
-      apiKey: apiKey,
+      apiKey: settings.openAiApiKey!,
       handler: {
         onContent(content, isFinal) {
           debouncedSetStreamContent(messageId, content, isFinal);
@@ -83,15 +82,15 @@ async function setTotalTokens(chatId: string, content: string) {
 }
 
 export async function createChatCompletion(
-  apiKey: string,
+  settings: Settings,
   messages: ChatCompletionRequestMessage[]
 ) {
-  const settings = await db.settings.get("general");
   const model = settings?.openAiModel ?? config.defaultModel;
   const type = settings?.openAiApiType ?? config.defaultType;
   const auth = settings?.openAiApiAuth ?? config.defaultAuth;
   const base = settings?.openAiApiBase ?? config.defaultBase;
   const version = settings?.openAiApiVersion ?? config.defaultVersion;
+  const apiKey = settings.openAiApiKey!;
 
   const client = getClient(apiKey, type, auth, base);
   return client.createChatCompletion(
@@ -112,8 +111,8 @@ export async function createChatCompletion(
   );
 }
 
-export async function checkOpenAIKey(apiKey: string) {
-  return createChatCompletion(apiKey, [
+export async function checkOpenAIKey(settings: Settings) {
+  return createChatCompletion(settings, [
     {
       role: "user",
       content: "hello",

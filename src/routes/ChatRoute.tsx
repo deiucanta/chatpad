@@ -155,7 +155,7 @@ export function ChatRoute() {
       // });
 
       await createStreamChatCompletion(
-        settings.openAiApiKey,
+        settings,
         [
           {
             role: "system",
@@ -188,7 +188,7 @@ export function ChatRoute() {
         // const messages = await db.messages
         //   .where({ chatId })
         //   .sortBy("createdAt");
-        const createChatDescription = await createChatCompletion(settings.openAiApiKey, [
+        const createChatDescription = await createChatCompletion(settings, [
           {
             role: "system",
             content: getSystemMessage(),

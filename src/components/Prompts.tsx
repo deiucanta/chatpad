@@ -104,7 +104,7 @@ export function Prompts({
                   navigate({ to: `/chats/${chat.key}` });
                   onPlay();
 
-                  const result = await createChatCompletion(settings?.openAiApiKey, [
+                  const result = await createChatCompletion(settings, [
                     {
                       role: "system",
                       content:

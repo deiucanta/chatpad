@@ -58,7 +58,6 @@ export function Chats({ search }: { search: string }) {
             <MainLink
               icon={<IconMessages size="1rem" />}
               color="teal"
-              chat={chat}
               label={chat.description}
             />
           </Link>

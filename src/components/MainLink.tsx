@@ -1,21 +1,12 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
-import { useLiveQuery } from "dexie-react-hooks";
-import { Chat, db } from "../db";
 
 interface MainLinkProps {
   icon: React.ReactNode;
   color: string;
   label: string;
-  chat: Chat;
 }
 
-export function MainLink({ icon, color, label, chat }: MainLinkProps) {
-  const firstMessage = useLiveQuery(async () => {
-    return (await db.messages.orderBy("createdAt").toArray()).filter(
-      (m) => m.chatId === chat.id
-    )[0];
-  }, [chat]);
-
+export function MainLink({ icon, color, label }: MainLinkProps) {
   return (
     <UnstyledButton
       sx={(theme) => ({
@@ -41,8 +32,7 @@ export function MainLink({ icon, color, label, chat }: MainLinkProps) {
             width: 0,
           }}
         >
-          {label} <br />
-          {firstMessage?.content}
+          {label}
         </Text>
       </Group>
     </UnstyledButton>

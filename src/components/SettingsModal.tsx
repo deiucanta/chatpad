@@ -14,7 +14,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
-import { db, detaDB } from "../db";
+import { Settings, detaDB } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
 import { useSettings } from "../hooks/contexts";
@@ -63,7 +63,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               try {
                 setSubmitting(true);
                 event.preventDefault();
-                await checkOpenAIKey(value);
+                await checkOpenAIKey({ ...(settings as Settings), openAiApiKey: value });
 
                 if (settings?.openAiApiKey) {
                   await detaDB.settings.update({
@@ -92,14 +92,14 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   message: "Your OpenAI Key has been saved.",
                 });
               } catch (error: any) {
-                if (error.toJSON().message === "Network Error") {
+                if (error.message === "Network Error") {
                   notifications.show({
                     title: "Error",
                     color: "red",
                     message: "No internet connection.",
                   });
                 }
-                const message = error.response?.data?.error?.message;
+                const message = error.message
                 if (message) {
                   notifications.show({
                     title: "Error",
@@ -150,9 +150,13 @@ export function SettingsModal({ children }: { children: ReactElement }) {
             onChange={async (value) => {
               setSubmitting(true);
               try {
-                await db.settings.update("general", {
-                  openAiApiType: value ?? 'openai',
-                });
+                const updates = {
+                  openAiApiType: value as any ?? 'openai',
+                }
+                await detaDB.settings.update(updates, "general");
+
+                setSettings(current => ({ ...(current!), ...updates }))
+
                 notifications.show({
                   title: "Saved",
                   message: "Your OpenAI Type has been saved.",
@@ -186,9 +190,12 @@ export function SettingsModal({ children }: { children: ReactElement }) {
             onChange={async (value) => {
               setSubmitting(true);
               try {
-                await db.settings.update("general", {
+                const updates = {
                   openAiModel: value ?? undefined,
-                });
+                }
+                await detaDB.settings.update(updates, "general");
+                setSettings(current => ({ ...(current!), ...updates }))
+
                 notifications.show({
                   title: "Saved",
                   message: "Your OpenAI Model has been saved.",
@@ -226,9 +233,12 @@ export function SettingsModal({ children }: { children: ReactElement }) {
             onChange={async (value) => {
               setSubmitting(true);
               try {
-                await db.settings.update("general", {
-                  openAiApiAuth: value ?? 'none',
-                });
+                const updates = {
+                  openAiApiAuth: value as any ?? 'none',
+                }
+                await detaDB.settings.update(updates, "general");
+                setSettings(current => ({ ...(current!), ...updates }))
+
                 notifications.show({
                   title: "Saved",
                   message: "Your OpenAI Auth has been saved.",
@@ -261,10 +271,13 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               try {
                 setSubmitting(true);
                 event.preventDefault();
-                await db.settings.where({ id: "general" }).modify((row) => {
-                  row.openAiApiBase = base;
-                  console.log(row);
-                });
+
+                const updates = {
+                  openAiApiBase: base,
+                }
+                await detaDB.settings.update(updates, "general");
+                setSettings(current => ({ ...(current!), ...updates }))
+
                 notifications.show({
                   title: "Saved",
                   message: "Your OpenAI Base has been saved.",
@@ -309,10 +322,13 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               try {
                 setSubmitting(true);
                 event.preventDefault();
-                await db.settings.where({ id: "general" }).modify((row) => {
-                  row.openAiApiVersion = version;
-                  console.log(row);
-                });
+
+                const updates = {
+                  openAiApiVersion: version,
+                }
+                await detaDB.settings.update(updates, "general");
+                setSettings(current => ({ ...(current!), ...updates }))
+
                 notifications.show({
                   title: "Saved",
                   message: "Your OpenAI Version has been saved.",

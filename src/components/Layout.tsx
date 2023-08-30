@@ -19,7 +19,6 @@ import {
 import {
   IconBrandGithub,
   IconBrandTwitter,
-  IconDatabase,
   IconMessage,
   IconMoonStars,
   IconPlus,
@@ -34,7 +33,6 @@ import { Chat, detaDB, generateKey, Prompt, Settings } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { Chats } from "./Chats";
 import { CreatePromptModal } from "./CreatePromptModal";
-import { DatabaseModal } from "./DatabaseModal";
 import { LogoText } from "./Logo";
 import { Prompts } from "./Prompts";
 import { SettingsModal } from "./SettingsModal";
@@ -280,15 +278,6 @@ export function Layout() {
                             </ActionIcon>
                           </Tooltip>
                         </SettingsModal>
-                      )}
-                      {config.allowDatabaseModal && (
-                        <DatabaseModal>
-                          <Tooltip label="Database">
-                            <ActionIcon sx={{ flex: 1 }} size="xl">
-                              <IconDatabase size={20} />
-                            </ActionIcon>
-                          </Tooltip>
-                        </DatabaseModal>
                       )}
                       {config.githubUrl && (
                         <Tooltip label="Source Code">

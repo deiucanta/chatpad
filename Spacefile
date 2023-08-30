@@ -1,5 +1,6 @@
 # Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
 v: 0
+icon: public/icon.png
 micros:
   - name: app
     src: .
