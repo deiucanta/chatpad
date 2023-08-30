@@ -6,7 +6,7 @@ export interface Chat {
   key: string;
   description: string;
   totalTokens: number;
-  prompt?: string;
+  prompt?: string | null;
   writingInstructions?: string | null;
   writingCharacter?: string | null;
   writingTone?: string | null;

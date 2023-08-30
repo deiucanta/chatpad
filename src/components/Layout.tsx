@@ -16,6 +16,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import {
+  IconAdjustments,
   IconPlus,
   IconSearch,
   IconSettings,
@@ -32,6 +33,7 @@ import { Prompts } from "./Prompts";
 import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
 import { ChatContext, ChatsContext, PromptsContext, SettingsContext } from "../hooks/contexts";
+import { EditChatModal } from "./EditChatModal";
 
 declare global {
   interface Window {
@@ -343,16 +345,27 @@ export function Layout() {
               header={
                 chat ? (
                   <Header height={60} p="xs" className="app-region-drag">
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                      }}
-                    >
-                      {chat.description}
-                    </div>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div></div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: "100%",
+                        }}
+                      >
+                        {chat.description}
+                      </div>
+
+                      <EditChatModal chat={chat}>
+                        <Tooltip label="Chat Settings">
+                          <ActionIcon size="xl">
+                            <IconAdjustments size={20} />
+                          </ActionIcon>
+                        </Tooltip>
+                      </EditChatModal>
+                    </Box>
                   </Header>
                 ) : undefined
               }

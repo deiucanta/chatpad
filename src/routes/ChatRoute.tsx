@@ -123,6 +123,7 @@ export function ChatRoute() {
           })
 
           const updates = {
+            prompt: prompt.key,
             writingInstructions: prompt.content,
             writingCharacter: prompt.writingCharacter,
             writingTone: prompt.writingTone,
