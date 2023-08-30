@@ -10,6 +10,7 @@ import {
   Text,
   ThemeIcon,
   Tooltip,
+  useMantineTheme,
 } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
 import { IconCopy, IconTrash, IconUser } from "@tabler/icons-react";
@@ -31,6 +32,8 @@ export function MessageItem({ message, onDeleted }: { message: Message, onDelete
 
   const [isExpanded, setExpanded] = useState(false);
   const ref = useClickOutside(() => setExpanded(false));
+
+  const theme = useMantineTheme();
 
   const [isHovered, setHovered] = useState(false);
 
@@ -63,7 +66,7 @@ export function MessageItem({ message, onDeleted }: { message: Message, onDelete
               <IconUser size={20} />
             </ThemeIcon>
           )}
-          {message.role === "assistant" && <LogoIcon style={{ height: 32 }} />}
+          {message.role === "assistant" && <LogoIcon style={{ height: 32 }} color1={theme.colors[theme.primaryColor][3]} color2={theme.colors[theme.primaryColor][7]} />}
           <Box sx={{ flex: 1, width: 0 }} className="markdown">
             <ReactMarkdown
               children={message.content}

@@ -147,7 +147,7 @@ export function Layout() {
                         <LogoText
                           style={{
                             height: 22,
-                            color: "#27B882",
+                            color: theme.colors[theme.primaryColor][6],
                             display: "block",
                           }}
                         />

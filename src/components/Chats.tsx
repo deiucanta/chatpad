@@ -1,4 +1,4 @@
-import { ActionIcon, Flex, Menu } from "@mantine/core";
+import { ActionIcon, Flex, Menu, useMantineTheme } from "@mantine/core";
 import { IconDotsVertical, IconMessages } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-location";
 import { useMemo } from "react";
@@ -10,6 +10,9 @@ import { useChats } from "../hooks/contexts";
 
 export function Chats({ search }: { search: string }) {
   const chatId = useChatId();
+
+  const theme = useMantineTheme();
+
 
   const { chats } = useChats()
 
@@ -57,7 +60,7 @@ export function Chats({ search }: { search: string }) {
           <Link to={`/chats/${chat.key}`} style={{ flex: 1 }}>
             <MainLink
               icon={<IconMessages size="1rem" />}
-              color="teal"
+              color={theme.primaryColor}
               label={chat.description}
             />
           </Link>

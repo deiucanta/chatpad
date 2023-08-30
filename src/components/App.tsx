@@ -50,6 +50,7 @@ export function App() {
           theme={{
             colorScheme,
             primaryColor: "teal",
+            defaultRadius: "md",
             globalStyles: (theme) => ({
               body: {
                 backgroundColor:

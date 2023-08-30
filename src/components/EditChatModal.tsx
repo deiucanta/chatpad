@@ -28,6 +28,8 @@ export function EditChatModal({
   const [writingStyle, setWritingStyle] = useState<string | null>(null);
   const [writingFormat, setWritingFormat] = useState<string | null>(null);
 
+  // const [model, setModel] = useState<string | null>(null);
+
   const [value, setValue] = useState("");
   useEffect(() => {
     setValue(chat?.description ?? "");
@@ -209,6 +211,13 @@ export function EditChatModal({
               value={writingInstructions || ''}
               onChange={(event) => setWritingInstructions(event.currentTarget.value)}
             />
+            {/* <Select
+              label="OpenAI Model"
+              value={model}
+              onChange={setModel}
+              withinPortal
+              data={config.availableModels}
+            /> */}
             <Button type="submit" loading={submitting}>
               Save
             </Button>

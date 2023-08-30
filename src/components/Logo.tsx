@@ -49,7 +49,7 @@ export function Logo(props: JSX.IntrinsicElements["svg"]) {
   );
 }
 
-export function LogoIcon(props: JSX.IntrinsicElements["svg"]) {
+export function LogoIcon(props: JSX.IntrinsicElements["svg"] & { color1: string, color2: string }) {
   return (
     <svg
       fill="none"
@@ -72,8 +72,8 @@ export function LogoIcon(props: JSX.IntrinsicElements["svg"]) {
           y2={116.46}
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#41E094" />
-          <stop offset={1} stopColor="#27B882" />
+          <stop stopColor={props.color1} />
+          <stop offset={1} stopColor={props.color2} />
         </linearGradient>
       </defs>
     </svg>
