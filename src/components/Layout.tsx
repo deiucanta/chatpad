@@ -32,6 +32,7 @@ import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
 import { ChatContext, ChatsContext, PromptsContext, SettingsContext } from "../hooks/contexts";
 import { ChatHeader } from "./ChatHeader";
+import { notifications } from "@mantine/notifications";
 
 declare global {
   interface Window {
@@ -236,6 +237,15 @@ export function Layout() {
                           fullWidth
                           leftIcon={<IconPlus size={20} />}
                           onClick={async () => {
+                            if (!settings?.openAiApiKey) {
+                              notifications.show({
+                                title: "Error",
+                                color: "red",
+                                message: "OpenAI API Key is not defined. Please set your API Key",
+                              });
+                              return;
+                            };
+                            
                             const item = await detaDB.chats.put({
                               description: "New Chat",
                               totalTokens: 0,

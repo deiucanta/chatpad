@@ -6,6 +6,7 @@ import { Chat, detaDB, generateKey } from "../db";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { EditPromptModal } from "./EditPromptModal";
 import { useChats, usePrompts, useSettings } from "../hooks/contexts";
+import { notifications } from "@mantine/notifications";
 
 export function Prompts({
   onPlay,
@@ -82,7 +83,14 @@ export function Prompts({
               <ActionIcon
                 size="lg"
                 onClick={async () => {
-                  if (!settings?.openAiApiKey) return;
+                  if (!settings?.openAiApiKey) {
+                    notifications.show({
+                      title: "Error",
+                      color: "red",
+                      message: "OpenAI API Key is not defined. Please set your API Key",
+                    });
+                    return;
+                  };
 
                   const item = await detaDB.chats.put({
                     description: prompt.title ? `New ${prompt.title} Chat` : "New Chat",
