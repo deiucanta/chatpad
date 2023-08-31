@@ -36,3 +36,12 @@ export const SettingsContext = React.createContext<{
 export function useSettings() {
   return useContext(SettingsContext);
 }
+
+export const IncognitoModeContext = React.createContext<{
+  incognitoMode: boolean,
+  setIncognitoMode: React.Dispatch<React.SetStateAction<boolean>>
+}>({ incognitoMode: false, setIncognitoMode: () => {} });
+
+export function useIncognitoMode() {
+  return useContext(IncognitoModeContext);
+}

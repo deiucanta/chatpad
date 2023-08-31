@@ -27,25 +27,24 @@ export function EditChatModal({
   const [writingTone, setWritingTone] = useState<string | null>(null);
   const [writingStyle, setWritingStyle] = useState<string | null>(null);
   const [writingFormat, setWritingFormat] = useState<string | null>(null);
-
   const [model, setModel] = useState<string>('default');
 
   const [value, setValue] = useState("");
   useEffect(() => {
     setValue(chat?.description ?? "");
+    setModel(chat.model ?? 'default')
+    setWritingInstructions(chat.writingInstructions ?? null)
+    setWritingCharacter(chat.writingCharacter ?? null)
+    setWritingTone(chat.writingTone ?? null)
+    setWritingStyle(chat.writingStyle ?? null)
+    setWritingFormat(chat.writingFormat ?? null)
 
-    if (chat.model) setModel(chat.model)
     if (chat.prompt) {
       setPromptKey(chat.prompt)
     } else {
       setPromptKey(null)
-      if (chat.writingInstructions) setWritingInstructions(chat.writingInstructions)
-      if (chat.writingCharacter) setWritingCharacter(chat.writingCharacter)
-      if (chat.writingTone) setWritingTone(chat.writingTone)
-      if (chat.writingStyle) setWritingStyle(chat.writingStyle)
-      if (chat.writingFormat) setWritingFormat(chat.writingFormat)
     }
-  }, [chat]);
+  }, [chat, opened]);
 
   useEffect(() => {
     const prompt = prompts.find(prompt => prompt.key === promptKey)
@@ -72,6 +71,17 @@ export function EditChatModal({
       }
     }
   }, [writingInstructions, writingCharacter, writingFormat, writingStyle, writingTone]);
+
+  // const handleClose = () => {
+  //   close()
+  //   setPromptKey(null)
+  //   setWritingInstructions(null)
+  //   setWritingCharacter(null)
+  //   setWritingTone(null)
+  //   setWritingStyle(null)
+  //   setWritingFormat(null)
+  //   setModel('default')
+  // }
 
   return (
     <>

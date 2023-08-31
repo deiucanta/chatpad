@@ -6,10 +6,12 @@ import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
 import { useHover } from "@mantine/hooks";
 import { Chat } from "../db";
+import { useIncognitoMode } from "../hooks/contexts";
 
 export function ChatItem({ chat, active = false }: { chat: Chat, active?: boolean }) {
   const { hovered, ref } = useHover();
   const theme = useMantineTheme();
+  const { incognitoMode } = useIncognitoMode()
 
   return (
     <Flex
@@ -24,6 +26,13 @@ export function ChatItem({ chat, active = false }: { chat: Chat, active?: boolea
               ? theme.colors.dark[6]
               : theme.colors.gray[1],
         },
+        ...(incognitoMode ? {
+          filter: 'blur(2.5px)',
+          transition: 'filter 300ms ease-out',
+          "&:hover, &.active": {
+            filter: 'none'
+          }
+        } : {})
       })}
     >
       <Link to={`/chats/${chat.key}`} style={{ flex: 1 }}>

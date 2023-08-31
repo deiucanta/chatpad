@@ -6,7 +6,7 @@ import {
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import {
-  createHashHistory,
+  createBrowserHistory,
   ReactLocation,
   Router,
 } from "@tanstack/react-location";
@@ -14,7 +14,7 @@ import { ChatRoute } from "../routes/ChatRoute";
 import { IndexRoute } from "../routes/IndexRoute";
 import { Layout } from "./Layout";
 
-const history = createHashHistory();
+const history = createBrowserHistory();
 const location = new ReactLocation({ history });
 
 export function App() {

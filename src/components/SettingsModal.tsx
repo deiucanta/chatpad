@@ -3,13 +3,16 @@ import {
   Anchor,
   Button,
   Flex,
-  List,
   Modal,
   PasswordInput,
   TextInput,
   Select,
   Stack,
   Text,
+  useMantineColorScheme,
+  Box,
+  SegmentedControl,
+  Center,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -18,6 +21,7 @@ import { Settings, detaDB } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
 import { useSettings } from "../hooks/contexts";
+import { IconMoonStars, IconSunHigh } from "@tabler/icons-react";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -31,6 +35,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [version, setVersion] = useState("");
 
   const { settings, setSettings } = useSettings()
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   useEffect(() => {
     if (settings?.openAiApiKey) {
@@ -58,6 +63,33 @@ export function SettingsModal({ children }: { children: ReactElement }) {
       {cloneElement(children, { onClick: open })}
       <Modal opened={opened} onClose={close} title="Settings" size="lg">
         <Stack>
+          <Box>
+            <Text size="sm" weight={500} mb={4}>Theme</Text>
+            <SegmentedControl
+              value={colorScheme}
+              onChange={() => toggleColorScheme()}
+              data={[
+                {
+                  value: 'light',
+                  label: (
+                    <Center>
+                      <IconSunHigh size="1rem" />
+                      <Box ml={10}>Light</Box>
+                    </Center>
+                  ),
+                },
+                {
+                  value: 'dark',
+                  label: (
+                    <Center>
+                      <IconMoonStars size="1rem" />
+                      <Box ml={10}>Dark</Box>
+                    </Center>
+                  ),
+                },
+              ]}
+            />
+          </Box>
           <form
             onSubmit={async (event) => {
               try {
@@ -127,24 +159,14 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               </Button>
             </Flex>
           </form>
-          <List withPadding>
-            <List.Item>
-              <Text size="sm">
-                <Anchor
-                  href="https://platform.openai.com/account/api-keys"
-                  target="_blank"
-                >
-                  Get your OpenAI API key
-                </Anchor>
-              </Text>
-            </List.Item>
-            <List.Item>
-              <Text size="sm" color="dimmed">
-                The API Key is stored locally on your browser and never sent
-                anywhere else.
-              </Text>
-            </List.Item>
-          </List>
+          <Text size="sm">
+            <Anchor
+              href="https://platform.openai.com/account/api-keys"
+              target="_blank"
+            >
+              Get your OpenAI API key
+            </Anchor>
+          </Text>
           <Select
             label="OpenAI Type"
             value={type}
