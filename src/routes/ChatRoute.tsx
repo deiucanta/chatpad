@@ -66,8 +66,8 @@ export function ChatRoute() {
   const { chat, setChat } = useChat()
 
   useEffect(() => {
-    if (chat?.prompt) {
-      setPromptKey(chat.prompt)
+    if (chat) {
+      setPromptKey(chat.prompt ?? null)
     }
   }, [chat]);
 

@@ -239,6 +239,7 @@ export function Layout() {
                             
                             const item = await detaDB.chats.put({
                               description: "New Chat",
+                              prompt: null,
                               totalTokens: 0,
                               createdAt: new Date().toISOString(),
                             }, generateKey())
