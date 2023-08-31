@@ -107,47 +107,8 @@ export function Prompts({
                   const chat = item as unknown as Chat
                   setChats(current => ([...(current || []), chat]))
 
-                  // const systemMessage = getSystemMessage(prompt);
-
-                  // await detaDB.messages.put({
-                  //   chatId: chat.key,
-                  //   content: systemMessage,
-                  //   role: "system",
-                  //   createdAt: new Date().toISOString(),
-                  // }, generateKey())
-
                   navigate({ to: `/chats/${chat.key}` });
                   onPlay();
-
-                  // const result = await createChatCompletion(settings, [
-                  //   {
-                  //     role: "system",
-                  //     content: systemMessage,
-                  //   },
-                  // ]);
-
-                  // const resultDescription =
-                  //   result.data.choices[0].message?.content;
-
-                  // await detaDB.messages.put({
-                  //   chatId: chat.key,
-                  //   content: resultDescription ?? "unknown reponse",
-                  //   role: "assistant",
-                  //   createdAt: new Date().toISOString(),
-                  // }, generateKey())
-
-                  // if (result.data.usage) {
-                  //   // todo: add to chat totalTokens
-                  //   await detaDB.chats.update({ totalTokens: result.data.usage!.total_tokens }, chat.key)
-
-                  //   // await db.chats.where({ id: chat.key }).modify((chat) => {
-                  //   //   if (chat.totalTokens) {
-                  //   //     chat.totalTokens += result.data.usage!.total_tokens;
-                  //   //   } else {
-                  //   //     chat.totalTokens = result.data.usage!.total_tokens;
-                  //   //   }
-                  //   // });
-                  // }
                 }}
               >
                 <IconPlayerPlay size={20} />

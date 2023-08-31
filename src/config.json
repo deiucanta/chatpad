@@ -51,6 +51,16 @@
         "label": "GPT-4-32K-0314 (Limited Beta, Legacy)"
       }
     ],
+    "simplifiedModels": [
+      {
+        "value": "gpt-3.5-turbo",
+        "label": "GPT-3.5"
+      },
+      {
+        "value": "gpt-4",
+        "label": "GPT-4"
+      }
+    ],
     "writingCharacters": [
       {
         "label": "Standup Comedian",

@@ -1,4 +1,4 @@
-import { Button, Modal, Select, SimpleGrid, Stack, TextInput, Textarea } from "@mantine/core";
+import { Button, Modal, SegmentedControl, Select, SimpleGrid, Stack, TextInput, Textarea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
@@ -28,12 +28,13 @@ export function EditChatModal({
   const [writingStyle, setWritingStyle] = useState<string | null>(null);
   const [writingFormat, setWritingFormat] = useState<string | null>(null);
 
-  // const [model, setModel] = useState<string | null>(null);
+  const [model, setModel] = useState<string>('default');
 
   const [value, setValue] = useState("");
   useEffect(() => {
     setValue(chat?.description ?? "");
 
+    if (chat.model) setModel(chat.model)
     if (chat.prompt) {
       setPromptKey(chat.prompt)
     } else {
@@ -89,7 +90,8 @@ export function EditChatModal({
                 writingCharacter,
                 writingFormat,
                 writingStyle,
-                writingTone
+                writingTone,
+                model: model === 'default' ? null : model,
               }
 
               await detaDB.chats.update(updates, chat.key);
@@ -145,6 +147,14 @@ export function EditChatModal({
               autoComplete="off"
               data-lpignore="true"
               data-form-type="other"
+            />
+            <SegmentedControl
+              value={model}
+              onChange={setModel}
+              data={[
+                { label: 'Default Model', value: 'default' },
+                ...config.simplifiedModels,
+              ]}
             />
             <Select
               value={promptKey}
@@ -212,13 +222,6 @@ export function EditChatModal({
               value={writingInstructions || ''}
               onChange={(event) => setWritingInstructions(event.currentTarget.value)}
             />
-            {/* <Select
-              label="OpenAI Model"
-              value={model}
-              onChange={setModel}
-              withinPortal
-              data={config.availableModels}
-            /> */}
             <Button type="submit" loading={submitting}>
               Save
             </Button>

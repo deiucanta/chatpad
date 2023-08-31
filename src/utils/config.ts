@@ -6,6 +6,7 @@ interface Config {
     defaultVersion: string;
     defaultKey: string;
     availableModels: AvailableModel[];
+    simplifiedModels: AvailableModel[];
     writingCharacters: WritingCharacter[];
     writingTones: string[];
     writingStyles: string[];

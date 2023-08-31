@@ -23,6 +23,7 @@ import {
 } from "../utils/openai";
 import { useChat, useChats, usePrompts, useSettings } from "../hooks/contexts";
 import { CreatePromptModal } from "../components/CreatePromptModal";
+import { config } from "../utils/config";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -57,6 +58,7 @@ export function ChatRoute() {
   const [submitting, setSubmitting] = useState(false);
   const [promptKey, setPromptKey] = useState<string | null>(null);
   const [newPromptTitle, setNewPromptTitle] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState<string | null>(null);
 
   const { setChats } = useChats()
   const { chat, setChat } = useChat()
@@ -123,6 +125,13 @@ export function ChatRoute() {
         }
       }
 
+      let model = settings?.openAiModel
+      if (selectedModel && selectedModel !== 'default') {
+        model = selectedModel
+      } else if (chat?.model) {
+        model = chat.model
+      }
+
       if (!systemMessageValue) {
         systemMessageValue = getSystemMessage({
           content: chat?.writingInstructions ?? undefined,
@@ -141,14 +150,6 @@ export function ChatRoute() {
       }, generateKey())
 
       setMessages(current => [...current, userMessage as unknown as Message])
-
-      // await db.messages.add({
-      //   id: nanoid(),
-      //   chatId,
-      //   content,
-      //   role: "user",
-      //   createdAt: new Date(),
-      // });
       setContent("");
       setPromptKey(null);
 
@@ -162,17 +163,8 @@ export function ChatRoute() {
       setMessages(current => [...current, systemMessage as unknown as Message])
 
       const messageId = systemMessage!.key as string
-
-      // await db.messages.add({
-      //   id: messageId,
-      //   chatId,
-      //   content: "█",
-      //   role: "assistant",
-      //   createdAt: new Date(),
-      // });
-
       await createStreamChatCompletion(
-        settings,
+        { ...settings, openAiModel: model },
         [
           {
             role: "system",
@@ -205,21 +197,24 @@ export function ChatRoute() {
         // const messages = await db.messages
         //   .where({ chatId })
         //   .sortBy("createdAt");
-        const createChatDescription = await createChatCompletion(settings, [
-          {
-            role: "system",
-            content: systemMessageValue,
-          },
-          ...(messages ?? []).map((message) => ({
-            role: message.role,
-            content: message.content,
-          })),
-          {
-            role: "user",
-            content:
-              "What would be a short and relevant title for this chat ? You must strictly answer with only the title, no other text is allowed. Don't use quotation marks",
-          },
-        ]);
+        const createChatDescription = await createChatCompletion(
+          { ...settings, openAiModel: model },
+          [
+            {
+              role: "system",
+              content: systemMessageValue,
+            },
+            ...(messages ?? []).map((message) => ({
+              role: message.role,
+              content: message.content,
+            })),
+            {
+              role: "user",
+              content:
+                "What would be a short and relevant title for this chat ? You must strictly answer with only the title, no other text is allowed. Don't use quotation marks",
+            },
+          ]
+        );
         const chatDescription =
           createChatDescription.data.choices[0].message?.content;
 
@@ -351,12 +346,30 @@ export function ChatRoute() {
               style={{
                 display: "flex",
                 justifyContent: "flex-end",
+                alignItems: "center",
+                gap: 10,
               }}
             >
               <Select
+                value={selectedModel}
+                onChange={setSelectedModel}
+                data={[
+                  { label: 'Chats use the model set in settings by default. Use this to overwrite it.', value: 'default', disabled: true },
+                  ...config.simplifiedModels,
+                ]}
+                placeholder="Pin chat to model"
+                variant="filled"
+                searchable
+                clearable
+              />
+
+              <Select
                 value={promptKey}
                 onChange={setPromptKey}
-                data={prompts.map(prompt => ({ value: prompt.key, label: prompt.title }))}
+                data={[
+                  { label: 'Select a prompt to use', value: 'default', disabled: true },
+                  ...prompts.map(prompt => ({ value: prompt.key, label: prompt.title }))
+                ]}
                 placeholder="Select Prompt"
                 variant="filled"
                 searchable

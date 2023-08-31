@@ -12,6 +12,7 @@ export interface Chat {
   writingTone?: string | null;
   writingStyle?: string | null;
   writingFormat?: string | null;
+  model?: string | null;
   createdAt: string;
 }
 
