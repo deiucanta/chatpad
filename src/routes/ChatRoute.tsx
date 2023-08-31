@@ -316,6 +316,10 @@ export function ChatRoute() {
     setMessages(current => current.filter(message => message.key !== key))
   }
 
+  const handleUseMessage = (message: string) => {
+    setContent(message)
+  }
+
   if (!chatId) return null;
 
   return (
@@ -323,7 +327,7 @@ export function ChatRoute() {
       <Container pt="xl" pb={100}>
         <Stack spacing="xs">
           {messages?.map((message) => (
-            <MessageItem key={message.key} message={message} onDeleted={handleMessageDelete} />
+            <MessageItem key={message.key} message={message} onDeleted={handleMessageDelete} handleUseMessage={handleUseMessage} />
           ))}
         </Stack>
         {submitting && (

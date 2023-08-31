@@ -13,7 +13,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
-import { IconCopy, IconTrash, IconUser } from "@tabler/icons-react";
+import { IconArrowForward, IconCopy, IconTrash, IconUser } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -24,7 +24,7 @@ import { LogoIcon } from "./Logo";
 import { ScrollIntoView } from "./ScrollIntoView";
 import { notifications } from "@mantine/notifications";
 
-export function MessageItem({ message, onDeleted }: { message: Message, onDeleted: (key: string) => void }) {
+export function MessageItem({ message, onDeleted, handleUseMessage }: { message: Message, onDeleted: (key: string) => void, handleUseMessage: (key: string) => void }) {
   const wordCount = useMemo(() => {
     var matches = message.content.match(/[\w\d\’\'-\(\)]+/gi);
     return matches ? matches.length : 0;
@@ -32,10 +32,7 @@ export function MessageItem({ message, onDeleted }: { message: Message, onDelete
 
   const [isExpanded, setExpanded] = useState(false);
   const ref = useClickOutside(() => setExpanded(false));
-
   const theme = useMantineTheme();
-
-  const [isHovered, setHovered] = useState(false);
 
   const handleDelete = async () => {
     await detaDB.messages.delete(message.key);
@@ -57,9 +54,12 @@ export function MessageItem({ message, onDeleted }: { message: Message, onDelete
         ref={ref}
         withBorder
         onClick={() => setExpanded(true)}
-        onMouseOver={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        style={{ cursor: 'pointer', border: isHovered ? '1px solid #acacac' : '' }}
+        style={{ cursor: 'pointer' }}
+        sx={{
+          '&:hover': {
+            border: '1px solid #acacac'
+          }
+        }}
       >
         <Flex gap="sm">
           {message.role === "user" && (
@@ -113,10 +113,15 @@ export function MessageItem({ message, onDeleted }: { message: Message, onDelete
             </Box>
 
             <Box style={{ display: 'flex' }}>
-              <CreatePromptModal content={message.content} />
+              <CreatePromptModal content={message.content || ''} />
+              <Tooltip label="Re-use Message" position="top">
+                <ActionIcon onClick={() => handleUseMessage(message.content)}>
+                  <IconArrowForward opacity={0.5} size={20} />
+                </ActionIcon>
+              </Tooltip>
               <CopyButton value={message.content}>
                 {({ copied, copy }) => (
-                  <Tooltip label={copied ? "Copied" : "Copy"} position="top">
+                  <Tooltip label={copied ? "Copied Message" : "Copy Message"} position="top">
                     <ActionIcon onClick={copy}>
                       <IconCopy opacity={0.5} size={20} />
                     </ActionIcon>
@@ -124,10 +129,10 @@ export function MessageItem({ message, onDeleted }: { message: Message, onDelete
                 )}
               </CopyButton>
               <Tooltip label="Delete Message" position="top">
-                  <ActionIcon onClick={handleDelete}>
-                    <IconTrash opacity={0.5} size={20} />
-                  </ActionIcon>
-                </Tooltip>
+                <ActionIcon onClick={handleDelete}>
+                  <IconTrash opacity={0.5} size={20} />
+                </ActionIcon>
+              </Tooltip>
             </Box>
             </Box>
           </Collapse>

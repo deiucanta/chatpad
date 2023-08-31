@@ -43,7 +43,7 @@ export function CreatePromptModal({ content, title: titleProp, open: openProp }:
       {!openProp && (
         <>
           {content ? (
-            <Tooltip label="Save Prompt" position="top">
+            <Tooltip label="Save as Prompt" position="top">
               <ActionIcon onClick={open}>
                 <IconPlaylistAdd opacity={0.5} size={20} />
               </ActionIcon>
