@@ -89,6 +89,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 // });
                 notifications.show({
                   title: "Saved",
+                  color: "green",
                   message: "Your OpenAI Key has been saved.",
                 });
               } catch (error: any) {
@@ -159,6 +160,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
 
                 notifications.show({
                   title: "Saved",
+                  color: "green",
                   message: "Your OpenAI Type has been saved.",
                 });
               } catch (error: any) {
@@ -198,6 +200,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
 
                 notifications.show({
                   title: "Saved",
+                  color: "green",
                   message: "Your OpenAI Model has been saved.",
                 });
               } catch (error: any) {
@@ -241,6 +244,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
 
                 notifications.show({
                   title: "Saved",
+                  color: "green",
                   message: "Your OpenAI Auth has been saved.",
                 });
               } catch (error: any) {
@@ -280,6 +284,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
 
                 notifications.show({
                   title: "Saved",
+                  color: "green",
                   message: "Your OpenAI Base has been saved.",
                 });
               } catch (error: any) {
@@ -331,6 +336,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
 
                 notifications.show({
                   title: "Saved",
+                  color: "green",
                   message: "Your OpenAI Version has been saved.",
                 });
               } catch (error: any) {

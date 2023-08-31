@@ -46,6 +46,7 @@ export function MessageItem({ message, onDeleted }: { message: Message, onDelete
 
     notifications.show({
       title: "Deleted",
+      color: "green",
       message: "Message deleted.",
     });
   }

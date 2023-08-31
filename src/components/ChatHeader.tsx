@@ -33,6 +33,7 @@ export function ChatHeader() {
 
             notifications.show({
                 title: "Saved",
+                color: "green",
                 message: "Chat name updated.",
             });
         }

@@ -58,6 +58,7 @@ export function DeleteChatModal({
 
               notifications.show({
                 title: "Deleted",
+                color: "green",
                 message: "Chat deleted.",
               });
             } catch (error: any) {

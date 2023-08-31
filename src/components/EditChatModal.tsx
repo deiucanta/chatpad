@@ -110,7 +110,8 @@ export function EditChatModal({
 
               notifications.show({
                 title: "Saved",
-                message: "",
+                color: "green",
+                message: "Chat updated.",
               });
               close();
             } catch (error: any) {

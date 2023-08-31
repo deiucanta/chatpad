@@ -77,6 +77,7 @@ export function CreatePromptModal({ content, title: titleProp, open: openProp }:
               
               notifications.show({
                 title: "Saved",
+                color: "green",
                 message: "Prompt created",
               });
 

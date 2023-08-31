@@ -14,7 +14,7 @@ import { notifications } from "@mantine/notifications";
 import { KeyboardEvent, useState, type ChangeEvent, useEffect } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import { MessageItem } from "../components/MessageItem";
-import { Chat, Message, Prompt, detaDB, generateKey } from "../db";
+import { Message, Prompt, detaDB, generateKey } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import {
   createChatCompletion,
@@ -28,7 +28,6 @@ export function ChatRoute() {
   const chatId = useChatId();
 
   const { settings } = useSettings()
-
   const { prompts } = usePrompts()
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -63,21 +62,10 @@ export function ChatRoute() {
   const { chat, setChat } = useChat()
 
   useEffect(() => {
-    const dataFetch = async () => {
-      const item = await detaDB.chats.get(chatId!);
-      const fetchedChat = item as unknown as Chat
-
-      setChat(fetchedChat);
-
-      if (fetchedChat.prompt) {
-        setPromptKey(fetchedChat.prompt)
-      }
-    };
-
-    if (!chat) {
-      dataFetch();
+    if (chat?.prompt) {
+      setPromptKey(chat.prompt)
     }
-  }, [chatId]);
+  }, [chat]);
 
   // const chat = useLiveQuery(async () => {
   //   if (!chatId) return null;

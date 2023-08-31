@@ -36,6 +36,7 @@ export function DeletePromptModal({ prompt }: { prompt: Prompt }) {
 
               notifications.show({
                 title: "Deleted",
+                color: "green",
                 message: "Prompt deleted.",
               });
             } catch (error: any) {

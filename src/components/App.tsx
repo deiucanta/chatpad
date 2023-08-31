@@ -49,7 +49,7 @@ export function App() {
           withCSSVariables
           theme={{
             colorScheme,
-            primaryColor: "teal",
+            primaryColor: "orange",
             defaultRadius: "md",
             globalStyles: (theme) => ({
               body: {

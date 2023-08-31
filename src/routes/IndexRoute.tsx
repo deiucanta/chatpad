@@ -7,6 +7,7 @@ import {
   SimpleGrid,
   Text,
   ThemeIcon,
+  useMantineTheme,
 } from "@mantine/core";
 import {
   IconCloudDownload,
@@ -22,6 +23,7 @@ import { useSettings } from "../hooks/contexts";
 
 export function IndexRoute() {
   const { settings } = useSettings()
+  const theme = useMantineTheme()
 
   return (
     <>
@@ -29,7 +31,7 @@ export function IndexRoute() {
         <Container size="sm">
           <Badge mb="lg">GPT-4 Ready</Badge>
           <Text>
-            <Logo style={{ maxWidth: 240 }} />
+            <Logo style={{ maxWidth: 240 }} color1={theme.colors[theme.primaryColor][3]} color2={theme.colors[theme.primaryColor][7]} />
           </Text>
           <Text mt={4} size="xl">
             Not just another ChatGPT user-interface!

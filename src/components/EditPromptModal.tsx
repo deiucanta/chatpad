@@ -70,6 +70,7 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
 
               notifications.show({
                 title: "Saved",
+                color: "green",
                 message: "Prompt updated",
               });
 
