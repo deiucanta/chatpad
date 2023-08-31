@@ -153,29 +153,20 @@ export function Layout() {
                           }}
                         />
                       </Link>
-                      <Box
-                        style={{
-                          display: "flex",
-                          alignItems: "center"
-                        }}
-                      >
-                        <SettingsModal>
-                            <Tooltip label="Settings">
-                              <ActionIcon size="xl">
-                                <IconSettings size={20} />
-                              </ActionIcon>
-                            </Tooltip>
-                        </SettingsModal>
-                        <MediaQuery largerThan="md" styles={{ display: "none" }}>
-                          <Burger
-                            opened={opened}
-                            onClick={() => setOpened((o) => !o)}
-                            size="sm"
-                            color={theme.colors.gray[6]}
-                            className="app-region-no-drag"
-                          />
-                        </MediaQuery>
-                      </Box>
+                      <SettingsModal>
+                        <Tooltip label="Settings">
+                          <ActionIcon
+                            size="xl"
+                            sx={(theme) => ({
+                              [theme.fn.smallerThan('md')]: {
+                                marginRight: '2.5rem',
+                              },
+                            })}
+                          >
+                            <IconSettings size={20} />
+                          </ActionIcon>
+                        </Tooltip>
+                      </SettingsModal>
                     </Box>
                   </Navbar.Section>
                   <Navbar.Section
@@ -271,83 +262,6 @@ export function Layout() {
                       {tab === "Prompts" && <CreatePromptModal />}
                     </Box>
                   </Navbar.Section>
-                  {/* <Navbar.Section sx={{ borderTop: border }} p="xs">
-                    <Center>
-                      {config.allowDarkModeToggle && (
-                        <Tooltip
-                          label={colorScheme === "dark" ? "Light Mode" : "Dark Mode"}
-                        >
-                          <ActionIcon
-                            sx={{ flex: 1 }}
-                            size="xl"
-                            onClick={() => toggleColorScheme()}
-                          >
-                            {colorScheme === "dark" ? (
-                              <IconSunHigh size={20} />
-                            ) : (
-                              <IconMoonStars size={20} />
-                            )}
-                          </ActionIcon>
-                        </Tooltip>
-                      )}
-                      {config.allowSettingsModal && (
-                        <SettingsModal>
-                          <Tooltip label="Settings">
-                            <ActionIcon sx={{ flex: 1 }} size="xl">
-                              <IconSettings size={20} />
-                            </ActionIcon>
-                          </Tooltip>
-                        </SettingsModal>
-                      )}
-                      {config.githubUrl && (
-                        <Tooltip label="Source Code">
-                          <ActionIcon
-                            component="a"
-                            href={config.githubUrl}
-                            target="_blank"
-                            sx={{ flex: 1 }}
-                            size="xl"
-                          >
-                            <IconBrandGithub size={20} />
-                          </ActionIcon>
-                        </Tooltip>
-                      )}
-                      {config.showTwitterLink && (
-                        <Tooltip label="Follow on Twitter">
-                          <ActionIcon
-                            component="a"
-                            href="https://twitter.com/deiucanta"
-                            target="_blank"
-                            sx={{ flex: 1 }}
-                            size="xl"
-                          >
-                            <IconBrandTwitter size={20} />
-                          </ActionIcon>
-                        </Tooltip>
-                      )}
-                      {config.showFeedbackLink && (
-                        <Tooltip label="Give Feedback">
-                          <ActionIcon
-                            component="a"
-                            href="https://feedback.chatpad.ai"
-                            onClick={(event) => {
-                              if (window.todesktop) {
-                                event.preventDefault();
-                                window.todesktop.contents.openUrlInBrowser(
-                                  "https://feedback.chatpad.ai"
-                                );
-                              }
-                            }}
-                            target="_blank"
-                            sx={{ flex: 1 }}
-                            size="xl"
-                          >
-                            <IconMessage size={20} />
-                          </ActionIcon>
-                        </Tooltip>
-                      )}
-                    </Center>
-                  </Navbar.Section> */}
                 </Navbar>
               }
               header={

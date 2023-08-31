@@ -68,11 +68,19 @@ export function ChatHeader() {
             />
 
             <EditChatModal chat={chat!}>
-            <Tooltip label="Chat Settings">
-                <ActionIcon size="xl">
-                <IconAdjustments size={20} />
-                </ActionIcon>
-            </Tooltip>
+                <Tooltip label="Chat Settings">
+                    <ActionIcon
+                        size="xl"
+                        sx={(theme) => ({
+                            [theme.fn.smallerThan('md')]: {
+                                marginRight: '2.5rem',
+                                paddingBottom: 3,
+                            },
+                        })}
+                    >
+                        <IconAdjustments size={20} />
+                    </ActionIcon>
+                </Tooltip>
             </EditChatModal>
         </Box>
     </Header>

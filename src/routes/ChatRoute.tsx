@@ -4,7 +4,6 @@ import {
   Card,
   Container,
   Flex,
-  MediaQuery,
   Select,
   Skeleton,
   Stack,
@@ -12,7 +11,7 @@ import {
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { KeyboardEvent, useState, type ChangeEvent, useEffect } from "react";
-import { AiOutlineSend } from "react-icons/ai";
+import { IconSend, IconPlayerStop } from "@tabler/icons-react";
 import { MessageItem } from "../components/MessageItem";
 import { Message, Prompt, detaDB, generateKey } from "../db";
 import { useChatId } from "../hooks/useChatId";
@@ -56,6 +55,9 @@ export function ChatRoute() {
   const [content, setContent] = useState("");
   const [contentDraft, setContentDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [coolDown, setCoolDown] = useState(false);
+  const [chatStream, setChatStream] = useState<any>(null);
   const [promptKey, setPromptKey] = useState<string | null>(null);
   const [newPromptTitle, setNewPromptTitle] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
@@ -69,13 +71,8 @@ export function ChatRoute() {
     }
   }, [chat]);
 
-  // const chat = useLiveQuery(async () => {
-  //   if (!chatId) return null;
-  //   return db.chats.get(chatId);
-  // }, [chatId]);
-
   const submit = async () => {
-    if (submitting) return;
+    if (submitting || coolDown) return;
 
     if (!chatId) {
       notifications.show({
@@ -161,9 +158,10 @@ export function ChatRoute() {
       }, generateKey())
 
       setMessages(current => [...current, systemMessage as unknown as Message])
+      setGenerating(true)
 
       const messageId = systemMessage!.key as string
-      await createStreamChatCompletion(
+      const chatCompletionStream = createStreamChatCompletion(
         { ...settings, openAiModel: model },
         [
           {
@@ -186,9 +184,16 @@ export function ChatRoute() {
       
             return message;
           }));
-        }
+        },
+        () => {
+          setGenerating(false)
+          setChatStream(null)
+          setCoolDown(true);
+          setTimeout(() => setCoolDown(false), 500);
+        },
       );
 
+      setChatStream(chatCompletionStream)
       setSubmitting(false);
 
       if (chat?.description === "New Chat") {
@@ -247,6 +252,7 @@ export function ChatRoute() {
         }
       }
     } catch (error: any) {
+      setGenerating(false)
       if (error.toJSON().message === "Network Error") {
         notifications.show({
           title: "Error",
@@ -266,6 +272,13 @@ export function ChatRoute() {
       setSubmitting(false);
     }
   };
+
+  const stopGeneration = async () => {
+    if (chatStream) {
+      chatStream.abort()
+      setChatStream(null)
+    }
+  }
 
   const onUserMsgToggle = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     const { selectionStart, selectionEnd } = event.currentTarget;
@@ -345,7 +358,7 @@ export function ChatRoute() {
               mb="sm"
               style={{
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "flex-start",
                 alignItems: "center",
                 gap: 10,
               }}
@@ -384,66 +397,18 @@ export function ChatRoute() {
 
               {newPromptTitle && <CreatePromptModal title={newPromptTitle} open={true} />}
             </Box>
-            // <SimpleGrid
-            //   mb="sm"
-            //   spacing="xs"
-            //   breakpoints={[
-            //     { minWidth: "sm", cols: 4 },
-            //     { maxWidth: "sm", cols: 2 },
-            //   ]}
-            // >
-            //   <Select
-            //     value={writingCharacter}
-            //     onChange={setWritingCharacter}
-            //     data={config.writingCharacters}
-            //     placeholder="Character"
-            //     variant="filled"
-            //     searchable
-            //     clearable
-            //     sx={{ flex: 1 }}
-            //   />
-            //   <Select
-            //     value={writingTone}
-            //     onChange={setWritingTone}
-            //     data={config.writingTones}
-            //     placeholder="Tone"
-            //     variant="filled"
-            //     searchable
-            //     clearable
-            //     sx={{ flex: 1 }}
-            //   />
-            //   <Select
-            //     value={writingStyle}
-            //     onChange={setWritingStyle}
-            //     data={config.writingStyles}
-            //     placeholder="Style"
-            //     variant="filled"
-            //     searchable
-            //     clearable
-            //     sx={{ flex: 1 }}
-            //   />
-            //   <Select
-            //     value={writingFormat}
-            //     onChange={setWritingFormat}
-            //     data={config.writingFormats}
-            //     placeholder="Format"
-            //     variant="filled"
-            //     searchable
-            //     clearable
-            //     sx={{ flex: 1 }}
-            //   />
-            // </SimpleGrid>
           )}
-          <Flex gap="sm">
+          <Flex gap="sm" style={{ position: 'relative' }}>
             <Textarea
               key={chatId}
               sx={{ flex: 1 }}
+              styles={{ input: { paddingRight: 60, paddingTop: '0.7rem !important', paddingBottom: '0.7rem !important' } }}
               placeholder="Your message here..."
               autosize
               autoFocus
               disabled={submitting}
               minRows={1}
-              maxRows={5}
+              maxRows={8}
               value={content}
               onChange={onContentChange}
               onKeyDown={async (event) => {
@@ -460,16 +425,29 @@ export function ChatRoute() {
                 }
               }}
             />
-            <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-              <Button
-                h="auto"
-                onClick={() => {
+            <Button
+              w="auto"
+              h="auto"
+              px={8}
+              py={5}
+              onClick={() => {
+                if (generating) {
+                  stopGeneration();
+
+                  notifications.show({
+                    title: "Stopped",
+                    color: "green",
+                    message: "Generation stopped.",
+                  });
+                } else {
                   submit();
-                }}
-              >
-                <AiOutlineSend />
-              </Button>
-            </MediaQuery>
+                }
+              }}
+              style={{ position: 'absolute', right: 5, bottom: 5 }}
+              disabled={!generating && !content}
+            >
+              {generating ? (<IconPlayerStop />) : (<IconSend />)}
+            </Button>
           </Flex>
         </Container>
       </Box>

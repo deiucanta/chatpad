@@ -21,12 +21,13 @@ function getClient(
   return new OpenAIApi(configuration);
 }
 
-export async function createStreamChatCompletion(
+export function createStreamChatCompletion(
   settings: Settings,
   messages: ChatCompletionRequestMessage[],
   chatId: string,
   messageId: string,
-  onContent: (content: string, isFinal: boolean) => void
+  onContent: (content: string, isFinal: boolean) => void,
+  onDone: () => void
 ) {
   const model = settings?.openAiModel ?? config.defaultModel;
 
@@ -47,9 +48,11 @@ export async function createStreamChatCompletion(
           }
           onContent(content, isFinal);
         },
-        onDone() {},
+        onDone() {
+          onDone()
+        },
         onError(error) {
-          console.error(error);
+          throw error;
         },
       },
     }

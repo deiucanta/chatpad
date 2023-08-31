@@ -109,7 +109,7 @@ export function App() {
           }}
         >
           <Layout />
-          <Notifications />
+          <Notifications position="bottom-right" style={{ marginBottom: '4rem' }} />
         </MantineProvider>
       </ColorSchemeProvider>
     </Router>
