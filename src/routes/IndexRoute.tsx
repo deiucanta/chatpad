@@ -3,14 +3,13 @@ import {
   Button,
   Center,
   Container,
-  Group,
+  Flex,
   SimpleGrid,
   Text,
   ThemeIcon,
   useMantineTheme,
 } from "@mantine/core";
 import {
-  IconCloudDownload,
   IconCurrencyDollar,
   IconKey,
   IconLock,
@@ -18,8 +17,8 @@ import {
 } from "@tabler/icons-react";
 import { Logo } from "../components/Logo";
 import { SettingsModal } from "../components/SettingsModal";
-import { config } from "../utils/config";
 import { useSettings } from "../hooks/contexts";
+import { CreateChatButton } from "../components/CreateChatButton";
 
 export function IndexRoute() {
   const { settings } = useSettings()
@@ -56,8 +55,12 @@ export function IndexRoute() {
               </div>
             ))}
           </SimpleGrid>
-          <Group mt={50}>
-            {config.allowSettingsModal && (
+          <Flex mt={50} align='center' gap='md'>
+              {settings?.openAiApiKey && (
+                <CreateChatButton size="md">
+                  Create a New Chat
+                </CreateChatButton>
+              )}
               <SettingsModal>
                 <Button
                   size="md"
@@ -67,20 +70,7 @@ export function IndexRoute() {
                   {settings?.openAiApiKey ? "Change OpenAI Key" : "Enter OpenAI Key"}
                 </Button>
               </SettingsModal>
-            )}
-            {config.showDownloadLink && !window.todesktop && (
-              <Button
-                component="a"
-                href="https://dl.todesktop.com/230313oyppkw40a"
-                // href="https://download.chatpad.ai/"
-                size="md"
-                variant="outline"
-                leftIcon={<IconCloudDownload size={20} />}
-              >
-                Download Desktop App
-              </Button>
-            )}
-          </Group>
+          </Flex>
         </Container>
       </Center>
     </>

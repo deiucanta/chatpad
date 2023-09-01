@@ -3,7 +3,6 @@ import {
   AppShell,
   Box,
   Burger,
-  Button,
   MediaQuery,
   Navbar,
   rem,
@@ -15,16 +14,15 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import {
-  IconPlus,
   IconSearch,
   IconSettings,
   IconSpy,
   IconSpyOff,
   IconX,
 } from "@tabler/icons-react";
-import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
+import { Link, Outlet, useRouter } from "@tanstack/react-location";
 import { useEffect, useState } from "react";
-import { Chat, detaDB, generateKey, Prompt, Settings } from "../db";
+import { Chat, detaDB, Prompt, Settings } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { Chats } from "./Chats";
 import { CreatePromptModal } from "./CreatePromptModal";
@@ -34,8 +32,8 @@ import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
 import { ChatContext, ChatsContext, IncognitoModeContext, PromptsContext, SettingsContext } from "../hooks/contexts";
 import { ChatHeader } from "./ChatHeader";
-import { notifications } from "@mantine/notifications";
 import { useLocalStorage } from "@mantine/hooks";
+import { CreateChatButton } from "./CreateChatButton";
 
 declare global {
   interface Window {
@@ -48,7 +46,6 @@ export function Layout() {
   const [opened, setOpened] = useState(false);
   const [tab, setTab] = useState<"Chats" | "Prompts">("Chats");
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const navigate = useNavigate();
   const router = useRouter();
 
   const [search, setSearch] = useState("");
@@ -267,41 +264,9 @@ export function Layout() {
                     <Navbar.Section>
                     <Box sx={{ padding: 10 }}>
                         {tab === "Chats" && (
-                          <Button
-                            fullWidth
-                            leftIcon={<IconPlus size={20} />}
-                            onClick={async () => {
-                              if (!settings?.openAiApiKey) {
-                                notifications.show({
-                                  title: "Error",
-                                  color: "red",
-                                  message: "OpenAI API Key is not defined. Please set your API Key",
-                                });
-                                return;
-                              };
-                              
-                              const item = await detaDB.chats.put({
-                                description: "New Chat",
-                                prompt: null,
-                                totalTokens: 0,
-                                createdAt: new Date().toISOString(),
-                              }, generateKey())
-
-                              setChats(chats => ([...(chats || []), item as unknown as Chat]))
-
-                              const id = item!.key as string
-                              // const id = nanoid();
-                              // db.chats.add({
-                              //   id,
-                              //   description: "New Chat",
-                              //   totalTokens: 0,
-                              //   createdAt: new Date(),
-                              // });
-                              navigate({ to: `/chats/${id}`, replace: true });
-                            }}
-                          >
+                          <CreateChatButton fullWidth>
                             {incognitoMode ? "New Incognito Chat" : "New Chat"}
-                          </Button>
+                          </CreateChatButton>
                         )}
                         {tab === "Prompts" && <CreatePromptModal />}
                       </Box>
