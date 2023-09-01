@@ -8,10 +8,11 @@ import {
   Skeleton,
   Stack,
   Textarea,
+  Tooltip,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { KeyboardEvent, useState, type ChangeEvent, useEffect } from "react";
-import { IconSend, IconPlayerStop } from "@tabler/icons-react";
+import { IconSend, IconPlayerStop, IconArrowBackUp } from "@tabler/icons-react";
 import { MessageItem } from "../components/MessageItem";
 import { Message, Prompt, detaDB, generateKey } from "../db";
 import { useChatId } from "../hooks/useChatId";
@@ -23,6 +24,7 @@ import {
 import { useChat, useChats, usePrompts, useSettings } from "../hooks/contexts";
 import { CreatePromptModal } from "../components/CreatePromptModal";
 import { config } from "../utils/config";
+import { useHotkeys } from "@mantine/hooks";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -273,12 +275,48 @@ export function ChatRoute() {
     }
   };
 
-  const stopGeneration = async () => {
+  const stopGeneration = () => {
+    if (!generating) return
+    if (chatStream) {
+      chatStream.abort()
+      setChatStream(null)
+
+      notifications.show({
+        title: "Stopped",
+        color: "green",
+        message: "Generation stopped.",
+      });
+    }
+  }
+
+  const undoGeneration = async () => {
+    if (!generating) return
     if (chatStream) {
       chatStream.abort()
       setChatStream(null)
     }
+
+    // Delete the last two messages
+    const lastTwoMessages = messages?.slice(-2)
+    if (lastTwoMessages) {
+      await detaDB.messages.delete(lastTwoMessages[0].key)
+      await detaDB.messages.delete(lastTwoMessages[1].key)
+      setMessages(current => current.slice(0, -2))
+    }
+
+    setContent(lastTwoMessages?.[0].content ?? "")
+
+    notifications.show({
+      title: "Undone",
+      color: "green",
+      message: "Generation undone.",
+    });
   }
+
+  useHotkeys([
+    ['mod+Z', undoGeneration, { preventDefault: false }],
+    ['mod+C', stopGeneration, { preventDefault: false }]
+  ], ['input', 'textarea'], false);
 
   const onUserMsgToggle = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     const { selectionStart, selectionEnd } = event.currentTarget;
@@ -429,29 +467,44 @@ export function ChatRoute() {
                 }
               }}
             />
-            <Button
-              w="auto"
-              h="auto"
-              px={8}
-              py={5}
-              onClick={() => {
-                if (generating) {
-                  stopGeneration();
-
-                  notifications.show({
-                    title: "Stopped",
-                    color: "green",
-                    message: "Generation stopped.",
-                  });
-                } else {
-                  submit();
-                }
-              }}
-              style={{ position: 'absolute', right: 5, bottom: 5 }}
-              disabled={!generating && !content}
-            >
-              {generating ? (<IconPlayerStop />) : (<IconSend />)}
-            </Button>
+            { generating ? (
+              <Flex align='center' gap='xs' style={{ position: 'absolute', right: 5, bottom: 5 }}>
+                <Tooltip label="Undo Generation">
+                  <Button
+                    w="auto"
+                    h="auto"
+                    px={8}
+                    py={5}
+                    onClick={undoGeneration}
+                  >
+                    <IconArrowBackUp />
+                  </Button>
+                </Tooltip>
+                <Tooltip label="Stop Generation">
+                  <Button
+                    w="auto"
+                    h="auto"
+                    px={8}
+                    py={5}
+                    onClick={stopGeneration}
+                  >
+                    <IconPlayerStop />
+                  </Button>
+                </Tooltip>
+              </Flex>
+            ) : (
+              <Button
+                w="auto"
+                h="auto"
+                px={8}
+                py={5}
+                onClick={submit}
+                style={{ position: 'absolute', right: 5, bottom: 5 }}
+                disabled={!content}
+              >
+                <IconSend />
+              </Button>
+            )}
           </Flex>
         </Container>
       </Box>
