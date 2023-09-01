@@ -13,6 +13,7 @@ export interface Chat {
   writingStyle?: string | null;
   writingFormat?: string | null;
   model?: string | null;
+  private?: boolean;
   createdAt: string;
 }
 

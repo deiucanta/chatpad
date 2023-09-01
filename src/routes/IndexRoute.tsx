@@ -17,12 +17,13 @@ import {
 } from "@tabler/icons-react";
 import { Logo } from "../components/Logo";
 import { SettingsModal } from "../components/SettingsModal";
-import { useSettings } from "../hooks/contexts";
+import { useIncognitoMode, useSettings } from "../hooks/contexts";
 import { CreateChatButton } from "../components/CreateChatButton";
 
 export function IndexRoute() {
   const { settings } = useSettings()
   const theme = useMantineTheme()
+  const { incognitoMode } = useIncognitoMode()
 
   return (
     <>
@@ -58,7 +59,7 @@ export function IndexRoute() {
           <Flex mt={50} align='center' gap='md'>
               {settings?.openAiApiKey && (
                 <CreateChatButton size="md">
-                  Create a New Chat
+                  {incognitoMode ? "Create a New Private Chat" : "Create a New Chat"}
                 </CreateChatButton>
               )}
               <SettingsModal>

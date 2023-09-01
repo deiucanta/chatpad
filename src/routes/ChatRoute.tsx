@@ -198,7 +198,7 @@ export function ChatRoute() {
       setChatStream(chatCompletionStream)
       setSubmitting(false);
 
-      if (chat?.description === "New Chat") {
+      if (chat?.description === "New Chat" || chat?.description === "New Private Chat") {
         const res = await detaDB.messages.fetch({ chatId })
         const messages = res.items as unknown as Message[]
         // const messages = await db.messages

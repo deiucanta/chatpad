@@ -3,6 +3,7 @@ import {
   AppShell,
   Box,
   Burger,
+  Flex,
   MediaQuery,
   Navbar,
   rem,
@@ -20,7 +21,7 @@ import {
   IconSpyOff,
   IconX,
 } from "@tabler/icons-react";
-import { Link, Outlet, useRouter } from "@tanstack/react-location";
+import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
 import { useEffect, useState } from "react";
 import { Chat, detaDB, Prompt, Settings } from "../db";
 import { useChatId } from "../hooks/useChatId";
@@ -34,25 +35,22 @@ import { ChatContext, ChatsContext, IncognitoModeContext, PromptsContext, Settin
 import { ChatHeader } from "./ChatHeader";
 import { useLocalStorage } from "@mantine/hooks";
 import { CreateChatButton } from "./CreateChatButton";
-
-declare global {
-  interface Window {
-    todesktop?: any;
-  }
-}
+import { DeleteChatsModal } from "./DeleteChatsModal";
 
 export function Layout() {
   const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
-  const [tab, setTab] = useState<"Chats" | "Prompts">("Chats");
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const navigate = useNavigate();
   const router = useRouter();
 
-  const [search, setSearch] = useState("");
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const chatId = useChatId();
 
+  const [opened, setOpened] = useState(false);
+  const [tab, setTab] = useState<"Chats" | "Prompts">("Chats");
+  const [search, setSearch] = useState("");
+
   const [incognitoMode, setIncognitoMode] = useLocalStorage({
-    key: 'incognito-mode', defaultValue: false
+    key: 'incognito-mode', defaultValue: false, getInitialValueInEffect: false
   });
 
   const [settings, setSettings] = useState<Settings | null>(null);
@@ -93,19 +91,17 @@ export function Layout() {
 
   const [chats, setChats] = useState<Chat[]>([]);
   useEffect(() => {
-    // fetch data
     const dataFetch = async () => {
-      const { items } = await detaDB.chats.fetch();
+      const { items } = await detaDB.chats.fetch(incognitoMode ? { private: true } : { 'private?ne': true });
 
       setChats(items as unknown as Chat[]);
     };
 
     dataFetch();
-  }, []);
+  }, [incognitoMode]);
 
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   useEffect(() => {
-    // fetch data
     const dataFetch = async () => {
       const { items } = await detaDB.prompts.fetch();
 
@@ -124,16 +120,21 @@ export function Layout() {
   }, [router.state.location]);
 
   const handleIncognito = () => {
-    if (incognitoMode) {
-      setIncognitoMode(false)
-      if (colorScheme === 'dark') {
-        toggleColorScheme()
-      }
-    } else {
-      setIncognitoMode(true)
-      if (colorScheme !== 'dark') {
-        toggleColorScheme()
-      }
+    const newValue = !incognitoMode
+
+    // if we are in a chat that doesn't match the mode, navigate to home view
+    if (chat && (chat?.private ?? false) !== newValue) {
+      setChat(null)
+      navigate({ to: `/`, replace: true });
+    }
+
+    setIncognitoMode(newValue)
+
+    const isDark = colorScheme === 'dark'
+    if (newValue && !isDark) {
+      toggleColorScheme()
+    } else if (!newValue && isDark) {
+      toggleColorScheme()
     }
   }
 
@@ -255,21 +256,26 @@ export function Layout() {
                         }
                       />
                     </Navbar.Section>
-                    <Navbar.Section grow component={ScrollArea}>
+                    <Navbar.Section grow component={ScrollArea} id="chats">
                       {tab === "Chats" && <Chats search={search} />}
                       {tab === "Prompts" && (
                         <Prompts search={search} onPlay={() => setTab("Chats")} />
                       )}
                     </Navbar.Section>
                     <Navbar.Section>
-                    <Box sx={{ padding: 10 }}>
+                      <Flex direction="column" p={10} gap="xs">
                         {tab === "Chats" && (
-                          <CreateChatButton fullWidth>
-                            {incognitoMode ? "New Incognito Chat" : "New Chat"}
-                          </CreateChatButton>
+                          <>
+                            { incognitoMode && (
+                              <DeleteChatsModal />
+                            )}
+                            <CreateChatButton fullWidth>
+                              {incognitoMode ? "New Private Chat" : "New Chat"}
+                            </CreateChatButton>
+                          </>
                         )}
                         {tab === "Prompts" && <CreatePromptModal />}
-                      </Box>
+                      </Flex>
                     </Navbar.Section>
                   </Navbar>
                 }
