@@ -80,8 +80,21 @@ export function Layout() {
   useEffect(() => {
     const dataFetch = async () => {
       const item = await detaDB.chats.get(chatId!);
+      const fetchedChat = item as unknown as Chat
 
-      setChat(item as unknown as Chat);
+      setChat(fetchedChat);
+
+      if (fetchedChat.private && !incognitoMode) {
+        setIncognitoMode(true)
+        if (colorScheme === 'light') {
+          toggleColorScheme()
+        }
+      } else if (!(fetchedChat.private ?? false) && incognitoMode) {
+        setIncognitoMode(false)
+        if (colorScheme === 'dark') {
+          toggleColorScheme()
+        }
+      }
     };
 
     if (chatId) {
