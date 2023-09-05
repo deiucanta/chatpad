@@ -1,11 +1,7 @@
 import {
   AppShell,
-  Burger,
-  MediaQuery,
   useMantineColorScheme,
-  useMantineTheme,
 } from "@mantine/core";
-import { useRouter } from "@tanstack/react-location";
 import { useEffect, useState } from "react";
 import { Chat } from "../db";
 import { usePublicChatId } from "../hooks/useChatId";
@@ -14,13 +10,8 @@ import { ChatHeader } from "../components/ChatHeader";
 import { useLocalStorage } from "@mantine/hooks";
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
-  const theme = useMantineTheme();
-  const router = useRouter();
-
   const { colorScheme } = useMantineColorScheme();
   const chatId = usePublicChatId();
-
-  const [opened, setOpened] = useState(false);
 
   const [incognitoMode, setIncognitoMode] = useLocalStorage({
     key: 'incognito-mode', defaultValue: false, getInitialValueInEffect: false
@@ -48,10 +39,6 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
       setChat(null);
     }
   }, [chatId]);
-
-  useEffect(() => {
-    setOpened(false);
-  }, [router.state.location]);
 
   return (
     <ChatContext.Provider value={{ chat: chat, setChat: setChat }}>

@@ -1,5 +1,5 @@
 import { ActionIcon, Flex, Menu, useMantineTheme } from "@mantine/core";
-import { IconDotsVertical, IconMessages } from "@tabler/icons-react";
+import { IconDotsVertical, IconMessages, IconWorld } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-location";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
@@ -7,6 +7,7 @@ import { MainLink } from "./MainLink";
 import { useHover } from "@mantine/hooks";
 import { Chat } from "../db";
 import { useIncognitoMode } from "../hooks/contexts";
+import { ShareChatModal } from "./ShareChatModal";
 
 export function ChatItem({ chat, active = false }: { chat: Chat, active?: boolean }) {
   const { hovered, ref } = useHover();
@@ -18,6 +19,7 @@ export function ChatItem({ chat, active = false }: { chat: Chat, active?: boolea
       ref={ref}
       key={chat.key}
       className={active ? "active" : undefined}
+      align='center'
       sx={(theme) => ({
         marginTop: 1,
         "&:hover, &.active": {
@@ -42,6 +44,12 @@ export function ChatItem({ chat, active = false }: { chat: Chat, active?: boolea
           label={chat.description}
         />
       </Link>
+
+      {chat.shared && !hovered && (
+        <ActionIcon mr={5}>
+          <IconWorld size={18} />
+        </ActionIcon>
+      )} 
         
       <Menu shadow="md" width={200} keepMounted>
         {hovered && (
@@ -52,6 +60,11 @@ export function ChatItem({ chat, active = false }: { chat: Chat, active?: boolea
           </Menu.Target>
         )}
         <Menu.Dropdown>
+          {chat.shared && (
+            <ShareChatModal chat={chat}>
+              <Menu.Item>Share</Menu.Item>
+            </ShareChatModal>
+          )}
           <EditChatModal chat={chat}>
             <Menu.Item>Edit</Menu.Item>
           </EditChatModal>

@@ -1,24 +1,28 @@
-import { ActionIcon, Button, Input, Modal, Stack, Text, Tooltip } from "@mantine/core";
+import { Button, Input, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconShare2 } from "@tabler/icons-react";
-import { useState } from "react";
+import { ReactElement, cloneElement, useState } from "react";
 import { Chat, detaDB } from "../db";
-import { useChat } from "../hooks/contexts";
+import { useChat, useChats } from "../hooks/contexts";
 
-export function ShareChatModal({ chat }: { chat: Chat }) {
+export function ShareChatModal({ children, chat, readOnly }: { children: ReactElement, chat: Chat, readOnly?: boolean }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const [submitting, setSubmitting] = useState(false);
   const [url, setUrl] = useState<string | null>(null);
 
   const { setChat } = useChat()
+  const { setChats } = useChats()
 
   const handleClick = async () => {
     if (!chat.shared) {
-      setSubmitting(true)
       await detaDB.chats.update({ shared: true }, chat.key)
       setChat(current => ({ ...(current as unknown as Chat), shared: true }))
-      setSubmitting(false)
+      setChats(current => (current || []).map(item => {
+        if (item.key === chat.key) {
+          return { ...item, shared: true };
+        }
+
+        return item;
+      }))
 
       notifications.show({
         title: "Shared!",
@@ -43,23 +47,45 @@ export function ShareChatModal({ chat }: { chat: Chat }) {
     close()
   }
 
+  const handleDisable = async () => {
+    await detaDB.chats.update({ shared: false }, chat.key)
+    setChat(current => ({ ...(current as unknown as Chat), shared: false }))
+    setChats(current => (current || []).map(item => {
+      if (item.key === chat.key) {
+        return { ...item, shared: false };
+      }
+
+      return item;
+    }))
+
+    notifications.show({
+      title: "Disabled!",
+      color: "green",
+      message: "Chat is now private.",
+    })
+
+    close()
+  }
+
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Share Chat" size="md">
+      {cloneElement(children, { onClick: handleClick })}
+      <Modal opened={opened} onClose={close} title={chat.shared && !readOnly ? "Shared Chat" : "Share Chat"} size="md">
         <Stack>
           <Text size="sm">Use this URL to share this chat with others:</Text>
           <Input readOnly value={url ?? ''} />
-          <Button type="submit" onClick={handleCopy}>
-            Copy URL
-          </Button>
+          <Stack spacing="xs">
+            <Button type="submit" onClick={handleCopy}>
+              Copy URL
+            </Button>
+            {!readOnly && (
+              <Button variant="light" color="red" onClick={handleDisable}>
+                Disable Sharing
+              </Button>
+            )}
+          </Stack>
         </Stack>
       </Modal>
-
-      <Tooltip label="Share Chat">
-          <ActionIcon size="xl" onClick={handleClick} loading={submitting} loaderProps={{ size: 20 }}>
-              <IconShare2 size={20} />
-          </ActionIcon>
-      </Tooltip>
     </>
   );
 }

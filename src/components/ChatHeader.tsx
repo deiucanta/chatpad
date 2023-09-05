@@ -1,5 +1,5 @@
 import { ActionIcon, Box, Flex, Header, TextInput, Tooltip, useMantineTheme } from "@mantine/core";
-import { IconAdjustments, IconInfoCircle } from "@tabler/icons-react";
+import { IconAdjustments, IconInfoCircle, IconShare2, IconWorld } from "@tabler/icons-react";
 import { EditChatModal } from "./EditChatModal";
 import { Chat, detaDB } from "../db";
 import { useEffect, useRef, useState } from "react";
@@ -93,7 +93,20 @@ export function ChatHeader({ readOnly = false }: { readOnly?: boolean}) {
                     },
                 })}
             >
-                <ShareChatModal chat={chat!} />
+                <ShareChatModal chat={chat!} readOnly={readOnly}>
+                    <Tooltip label={chat!.shared && !readOnly ? "Shared Chat" : "Share Chat"}>
+                        <ActionIcon size="xl" loaderProps={{ size: 20 }} pos="relative">
+                            {chat!.shared && !readOnly ? (
+                                <>
+                                    <IconWorld size={20} />
+                                    <Box w={10} h={10} sx={(theme) => ({ background: theme.colors.blue[6], borderRadius: '100%' })} pos="absolute" top={8} right={8}></Box>
+                                </>
+                            ) : (
+                                <IconShare2 size={20} />
+                            )}
+                        </ActionIcon>
+                    </Tooltip>
+                </ShareChatModal>
 
                 {!readOnly ? (
                     <>
