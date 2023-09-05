@@ -1,7 +1,7 @@
 import { Container, SimpleGrid, Flex, Button, Text, useMantineTheme, Center, Box, Tooltip, ActionIcon, Card } from "@mantine/core";
 import { useChats, useIncognitoMode, usePrompts, useSettings } from "../hooks/contexts";
 import { Welcome } from "../components/Welcome";
-import { Logo } from "../components/Logo";
+import { LogoIcon } from "../components/Logo";
 import { CreateChatButton } from "../components/CreateChatButton";
 import { SettingsModal } from "../components/SettingsModal";
 import { IconKey, IconPlayerPlay } from "@tabler/icons-react";
@@ -24,11 +24,14 @@ export function IndexRoute() {
       <Center py="xl" sx={{ height: "100%" }}>
         {prompts && prompts.length > 0 ? (
           <Container size="md" fluid>
-            <Text>
-              <Logo style={{ maxWidth: 240 }} color1={theme.colors[theme.primaryColor][3]} color2={theme.colors[theme.primaryColor][7]} />
-            </Text>
+            <Flex align="center" gap={10}>
+              <LogoIcon style={{ maxWidth: 45 }} color1={theme.colors[theme.primaryColor][3]} color2={theme.colors[theme.primaryColor][7]} />
+              <Text size='2.25rem' weight={700}>
+                Dialogue AI
+              </Text>
+            </Flex>
             <Text mt={4} size="xl">
-              Not just another ChatGPT user-interface!
+              An open-source ChatGPT UI alternative
             </Text>
             <SimpleGrid
               mt={50}

@@ -1,5 +1,5 @@
 {
-  "name": "chatpad",
+  "name": "dialogue",
   "private": true,
   "source": "src/main.tsx",
   "browserslist": "> 0.5%, last 2 versions, not dead",

@@ -27,7 +27,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
         const fetchedChat = item as unknown as Chat
         setChat(fetchedChat);
 
-        document.title = fetchedChat.description ? `${fetchedChat.description} | Chatpad AI` : 'Chatpad AI'
+        document.title = fetchedChat.description ? `${fetchedChat.description} | Dialogue AI` : 'Dialogue AI'
       } catch (e) {
         console.error(e)
       }

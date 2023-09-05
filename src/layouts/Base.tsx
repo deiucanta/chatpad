@@ -11,6 +11,7 @@ import {
   SegmentedControl,
   TextInput,
   Tooltip,
+  Text,
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
@@ -27,7 +28,7 @@ import { Chat, detaDB, Prompt, Settings } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { Chats } from "../components/Chats";
 import { CreatePromptModal } from "../components/CreatePromptModal";
-import { LogoText } from "../components/Logo";
+import { LogoIcon } from "../components/Logo";
 import { Prompts } from "../components/Prompts";
 import { SettingsModal } from "../components/SettingsModal";
 import { config } from "../utils/config";
@@ -180,15 +181,12 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
                         <Link
                           to="/"
                           className="app-region-no-drag"
-                          style={{ marginTop: 10, padding: 4 }}
+                          style={{ padding: 4, textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: 8 }}
                         >
-                          <LogoText
-                            style={{
-                              height: 22,
-                              color: theme.colors[theme.primaryColor][6],
-                              display: "block",
-                            }}
-                          />
+                          <LogoIcon style={{ height: 22, display: "block", }} color1={theme.colors[theme.primaryColor][3]} color2={theme.colors[theme.primaryColor][7]} />
+                          <Text size='1.25rem' weight={600}>
+                            Dialogue AI
+                          </Text>
                         </Link>
                         <Box style={{ display: 'flex', alignItems: 'center' }}>
                           {incognitoMode ? (

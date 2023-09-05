@@ -72,7 +72,7 @@ export const generateKey = (ascending: boolean = true): string => {
 //   settings!: Table<Settings>;
 
 //   constructor() {
-//     super("chatpad");
+//     super("dialogue");
 //     this.version(2).stores({
 //       chats: "id, createdAt",
 //       messages: "id, chatId, createdAt",
