@@ -43,8 +43,6 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const router = useRouter();
 
-  console.log('route', router)
-
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const chatId = useChatId();
 
