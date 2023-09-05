@@ -6,7 +6,13 @@
 
 An open-source ChatGPT UI alternative. Fork of [Chatpad AI](https://github.com/deiucanta/chatpad)
 
-[🚀 Install on Space](https://deta.space/discovery/@deta/dialogue-ai)
+<div align="center">
+<a href="https://deta.space/discovery/@deta/dialogue" _target="blank">
+<img src="https://raw.githubusercontent.com/deta/community-content/main/Install-Button/dark.svg#gh-light-mode-only" width="300" />
+<img src="https://raw.githubusercontent.com/deta/community-content/main/Install-Button/light.svg#gh-dark-mode-only" width="300" />
+
+</a>
+</div>
 
 <br/>
 
