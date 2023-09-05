@@ -23,7 +23,7 @@ export function IndexRoute() {
     <>
       <Center py="xl" sx={{ height: "100%" }}>
         {prompts && prompts.length > 0 ? (
-          <Container size="md">
+          <Container size="md" fluid>
             <Text>
               <Logo style={{ maxWidth: 240 }} color1={theme.colors[theme.primaryColor][3]} color2={theme.colors[theme.primaryColor][7]} />
             </Text>
@@ -36,7 +36,7 @@ export function IndexRoute() {
               spacing={10}
               breakpoints={[{ maxWidth: "lg", cols: 1 }]}
             >
-              {prompts.map((prompt) => (
+              {prompts.slice(-9).reverse().map((prompt) => (
                 <Card key={prompt.key} display="flex" padding="sm" radius="md" withBorder style={{ overflow: 'unset', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Box maw="180px">
                     <Text
@@ -99,7 +99,7 @@ export function IndexRoute() {
               ))}
             </SimpleGrid>
             
-            <Flex mt={50} align='center' gap='md'>
+            <Flex mt={50} align='center' gap='md' wrap="wrap">
                 {settings?.openAiApiKey && (
                   <CreateChatButton size="md">
                     {incognitoMode ? "Create a New Private Chat" : "Create a New Chat"}

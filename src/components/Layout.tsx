@@ -99,6 +99,8 @@ export function Layout() {
 
     if (chatId) {
       dataFetch();
+    } else {
+      setChat(null);
     }
   }, [chatId]);
 
