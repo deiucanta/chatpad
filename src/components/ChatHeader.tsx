@@ -106,7 +106,7 @@ export function ChatHeader({ readOnly = false }: { readOnly?: boolean}) {
                         </EditChatModal>
                     </>
                 ) : (
-                    <Tooltip label="Chat Settings">
+                    <Tooltip label="What is this?">
                         <a href="https://deta.space/discovery" target="_blank">
                             <ActionIcon size="xl">
                                 <IconInfoCircle size={20} />
