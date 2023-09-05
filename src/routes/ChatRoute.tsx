@@ -25,6 +25,7 @@ import { useChat, useChats, usePrompts, useSettings } from "../hooks/contexts";
 import { CreatePromptModal } from "../components/CreatePromptModal";
 import { config } from "../utils/config";
 import { useHotkeys } from "@mantine/hooks";
+import { useChatScroll } from "../hooks/useChatScroll";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -44,11 +45,8 @@ export function ChatRoute() {
 
     dataFetch();
   }, [chatId]);
+  
 
-  // const messages = useLiveQuery(() => {
-  //   if (!chatId) return [];
-  //   return db.messages.where("chatId").equals(chatId).sortBy("createdAt");
-  // }, [chatId]);
   const userMessages =
     messages
       ?.filter((message) => message.role === "user")
@@ -59,10 +57,13 @@ export function ChatRoute() {
   const [submitting, setSubmitting] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [coolDown, setCoolDown] = useState(false);
+  const [hasGenerated, setHasGenerated] = useState(false);
   const [chatStream, setChatStream] = useState<any>(null);
   const [promptKey, setPromptKey] = useState<string | null>(null);
   const [newPromptTitle, setNewPromptTitle] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
+
+  const { setAutoScroll } = useChatScroll(messages)
 
   const { setChats } = useChats()
   const { chat, setChat } = useChat()
@@ -151,6 +152,7 @@ export function ChatRoute() {
       setMessages(current => [...current, userMessage as unknown as Message])
       setContent("");
       setPromptKey(null);
+      setHasGenerated(true)
 
       const systemMessage = await detaDB.messages.put({
         chatId,
@@ -161,6 +163,7 @@ export function ChatRoute() {
 
       setMessages(current => [...current, systemMessage as unknown as Message])
       setGenerating(true)
+      setAutoScroll(true)
 
       const messageId = systemMessage!.key as string
       const chatCompletionStream = createStreamChatCompletion(
@@ -290,7 +293,7 @@ export function ChatRoute() {
   }
 
   const undoGeneration = async () => {
-    if (!generating) return
+    if (!generating && !hasGenerated) return
     if (chatStream) {
       chatStream.abort()
       setChatStream(null)
@@ -363,7 +366,7 @@ export function ChatRoute() {
   return (
     <>
       <Container pt="xl" pb={100}>
-        <Stack spacing="xs">
+        <Stack spacing="xs" id="test">
           {messages?.map((message) => (
             <MessageItem key={message.key} message={message} onDeleted={handleMessageDelete} handleUseMessage={handleUseMessage} />
           ))}
