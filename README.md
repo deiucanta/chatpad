@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="https://github.com/deta/dialogue/blob/main/public/assets/favicon.png?raw=true" title="icon" alt="icon" width="128">
+<img src="https://github.com/deta/dialogue-ai/blob/main/public/assets/favicon.png?raw=true" title="icon" alt="icon" width="128">
 
 # Dialogue AI
 
 An open-source ChatGPT UI alternative. Fork of [Chatpad AI](https://github.com/deiucanta/chatpad)
 
-[🚀 Install on Space](https://deta.space/discovery/@deta/dialogue)
+[🚀 Install on Space](https://deta.space/discovery/@deta/dialogue-ai)
 
 <br/>
 
