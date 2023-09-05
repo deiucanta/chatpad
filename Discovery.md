@@ -1,7 +1,7 @@
 ---
 app_name: "Dialogue AI"
 tagline: "An open-source ChatGPT UI alternative"
-git: "https://github.com/deta/dialogue-ai"
+git: "https://github.com/deta/dialogue"
 theme_color: "#F76705"
 ported_from: "https://github.com/deiucanta/chatpad"
 ---

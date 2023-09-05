@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/deta/dialogue-ai/blob/main/public/assets/favicon.png?raw=true" title="icon" alt="icon" width="128">
+<img src="https://github.com/deta/dialogue/blob/main/public/assets/favicon.png?raw=true" title="icon" alt="icon" width="128">
 
 # Dialogue AI
 
