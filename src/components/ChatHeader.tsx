@@ -120,7 +120,7 @@ export function ChatHeader({ readOnly = false }: { readOnly?: boolean}) {
                     </>
                 ) : (
                     <Tooltip label="What is this?">
-                        <a href="https://deta.space/discovery" target="_blank">
+                        <a href="https://deta.space/discovery/@deta/dialogue" target="_blank">
                             <ActionIcon size="xl">
                                 <IconInfoCircle size={20} />
                             </ActionIcon>
