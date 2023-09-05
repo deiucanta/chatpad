@@ -8,9 +8,11 @@ An open-source ChatGPT UI alternative. Fork of [Chatpad AI](https://github.com/d
 
 <div align="center">
 <a href="https://deta.space/discovery/@deta/dialogue" _target="blank">
-<img src="https://raw.githubusercontent.com/deta/community-content/main/Install-Button/dark.svg#gh-light-mode-only" width="300" />
-<img src="https://raw.githubusercontent.com/deta/community-content/main/Install-Button/light.svg#gh-dark-mode-only" width="300" />
-
+    <picture>
+        <source width="300" media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/deta/community-content/main/Install-Button/light.svg">
+        <source width="300" media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/deta/community-content/main/Install-Button/dark.svg">
+        <img width="300" alt="install on space" src="https://raw.githubusercontent.com/deta/community-content/main/Install-Button/dark.svg">
+    </picture>
 </a>
 </div>
 
