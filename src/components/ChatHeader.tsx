@@ -1,15 +1,19 @@
-import { ActionIcon, Box, Header, TextInput, Tooltip } from "@mantine/core";
-import { IconAdjustments } from "@tabler/icons-react";
+import { ActionIcon, Box, Flex, Header, TextInput, Tooltip, useMantineTheme } from "@mantine/core";
+import { IconAdjustments, IconInfoCircle } from "@tabler/icons-react";
 import { EditChatModal } from "./EditChatModal";
 import { Chat, detaDB } from "../db";
 import { useEffect, useRef, useState } from "react";
 import { useChat, useChats } from "../hooks/contexts";
 import { useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
+import { ShareChatModal } from "./ShareChatModal";
+import { LogoText } from "./Logo";
+import { Link } from "@tanstack/react-location";
 
-export function ChatHeader() {
+export function ChatHeader({ readOnly = false }: { readOnly?: boolean}) {
     const [title, setTitle] = useState('')
     const [debounced] = useDebouncedValue(title, 800);
+    const theme = useMantineTheme()
 
     const { chat, setChat } = useChat()
     const { setChats } = useChats()
@@ -52,7 +56,19 @@ export function ChatHeader() {
     return (
         <Header height={60} p="xs" className="app-region-drag">
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div></div>
+            <div>
+                {readOnly && (
+                    <Link to="/" style={{ display: 'block' }}>
+                        <LogoText
+                            style={{
+                                height: 22,
+                                color: theme.colors[theme.primaryColor][6],
+                                display: "block",
+                            }}
+                        />
+                    </Link>
+                )}
+            </div>
 
             <TextInput
                 id="chat-name"
@@ -65,23 +81,40 @@ export function ChatHeader() {
                 autoComplete="off"
                 data-lpignore="true"
                 data-form-type="other"
+                readOnly={readOnly}
             />
 
-            <EditChatModal chat={chat!}>
-                <Tooltip label="Chat Settings">
-                    <ActionIcon
-                        size="xl"
-                        sx={(theme) => ({
-                            [theme.fn.smallerThan('md')]: {
-                                marginRight: '2.5rem',
-                                paddingBottom: 3,
-                            },
-                        })}
-                    >
-                        <IconAdjustments size={20} />
-                    </ActionIcon>
-                </Tooltip>
-            </EditChatModal>
+            <Flex
+                align="center"
+                sx={(theme) => ({
+                    [theme.fn.smallerThan('md')]: {
+                        marginRight: readOnly ? '' : '2.5rem',
+                        paddingBottom: 3,
+                    },
+                })}
+            >
+                <ShareChatModal chat={chat!} />
+
+                {!readOnly ? (
+                    <>
+                        <EditChatModal chat={chat!}>
+                            <Tooltip label="Chat Settings">
+                                <ActionIcon size="xl">
+                                    <IconAdjustments size={20} />
+                                </ActionIcon>
+                            </Tooltip>
+                        </EditChatModal>
+                    </>
+                ) : (
+                    <Tooltip label="Chat Settings">
+                        <a href="https://deta.space/discovery" target="_blank">
+                            <ActionIcon size="xl">
+                                <IconInfoCircle size={20} />
+                            </ActionIcon>
+                        </a>
+                    </Tooltip>
+                )}
+            </Flex>
         </Box>
     </Header>
     )

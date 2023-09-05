@@ -21,26 +21,28 @@ import {
   IconSpyOff,
   IconX,
 } from "@tabler/icons-react";
-import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
+import { Link, useNavigate, useRouter } from "@tanstack/react-location";
 import { useEffect, useState } from "react";
 import { Chat, detaDB, Prompt, Settings } from "../db";
 import { useChatId } from "../hooks/useChatId";
-import { Chats } from "./Chats";
-import { CreatePromptModal } from "./CreatePromptModal";
-import { LogoText } from "./Logo";
-import { Prompts } from "./Prompts";
-import { SettingsModal } from "./SettingsModal";
+import { Chats } from "../components/Chats";
+import { CreatePromptModal } from "../components/CreatePromptModal";
+import { LogoText } from "../components/Logo";
+import { Prompts } from "../components/Prompts";
+import { SettingsModal } from "../components/SettingsModal";
 import { config } from "../utils/config";
 import { ChatContext, ChatsContext, IncognitoModeContext, PromptsContext, SettingsContext } from "../hooks/contexts";
-import { ChatHeader } from "./ChatHeader";
+import { ChatHeader } from "../components/ChatHeader";
 import { useLocalStorage } from "@mantine/hooks";
-import { CreateChatButton } from "./CreateChatButton";
-import { DeleteChatsModal } from "./DeleteChatsModal";
+import { CreateChatButton } from "../components/CreateChatButton";
+import { DeleteChatsModal } from "../components/DeleteChatsModal";
 
-export function Layout() {
+export function BaseLayout({ children }: { children: React.ReactNode }) {
   const theme = useMantineTheme();
   const navigate = useNavigate();
   const router = useRouter();
+
+  console.log('route', router)
 
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const chatId = useChatId();
@@ -312,7 +314,7 @@ export function Layout() {
                     sx={{ position: "fixed", top: 16, right: 16, zIndex: 100 }}
                   />
                 </MediaQuery>
-                <Outlet />
+                {children}
               </AppShell>
             </IncognitoModeContext.Provider>
           </PromptsContext.Provider>

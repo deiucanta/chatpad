@@ -10,3 +10,14 @@ micros:
     commands:
       - NODE_OPTIONS="--max-old-space-size=1024" npm run build
     dev: npm run dev
+    public_routes:
+      - "/shared/*"
+      - "/assets/*"
+
+  - name: backend
+    src: ./backend
+    path: /api
+    engine: nodejs16
+    dev: npm run dev
+    public_routes:
+      - "/public/*"

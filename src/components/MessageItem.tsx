@@ -23,7 +23,7 @@ import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 import { notifications } from "@mantine/notifications";
 
-export function MessageItem({ message, onDeleted, handleUseMessage }: { message: Message, onDeleted: (key: string) => void, handleUseMessage: (key: string) => void }) {
+export function MessageItem({ message, readOnly = false, onDeleted, handleUseMessage }: { message: Message, readOnly?: boolean, onDeleted?: (key: string) => void, handleUseMessage?: (key: string) => void }) {
   const wordCount = useMemo(() => {
     var matches = message.content.match(/[\w\d\’\'-\(\)]+/gi);
     return matches ? matches.length : 0;
@@ -36,7 +36,7 @@ export function MessageItem({ message, onDeleted, handleUseMessage }: { message:
   const handleDelete = async () => {
     await detaDB.messages.delete(message.key);
 
-    onDeleted(message.key)
+    if (onDeleted) onDeleted(message.key)
 
     setExpanded(false);
 
@@ -101,7 +101,7 @@ export function MessageItem({ message, onDeleted, handleUseMessage }: { message:
           />
         </Box>
       </Flex>
-
+      
       <Collapse in={isExpanded}>
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
           <Box>
@@ -111,12 +111,17 @@ export function MessageItem({ message, onDeleted, handleUseMessage }: { message:
           </Box>
 
           <Box style={{ display: 'flex' }}>
-            <CreatePromptModal content={message.content || ''} />
-            <Tooltip label="Re-use Message" position="top">
-              <ActionIcon onClick={() => handleUseMessage(message.content)}>
-                <IconArrowForward opacity={0.5} size={20} />
-              </ActionIcon>
-            </Tooltip>
+            {!readOnly && handleUseMessage && (
+              <>
+                <CreatePromptModal content={message.content || ''} />
+                <Tooltip label="Re-use Message" position="top">
+                  <ActionIcon onClick={() => handleUseMessage(message.content)}>
+                    <IconArrowForward opacity={0.5} size={20} />
+                  </ActionIcon>
+                </Tooltip>
+              </>
+            )}
+
             <CopyButton value={message.content}>
               {({ copied, copy }) => (
                 <Tooltip label={copied ? "Copied Message" : "Copy Message"} position="top">
@@ -126,11 +131,14 @@ export function MessageItem({ message, onDeleted, handleUseMessage }: { message:
                 </Tooltip>
               )}
             </CopyButton>
-            <Tooltip label="Delete Message" position="top">
-              <ActionIcon onClick={handleDelete}>
-                <IconTrash opacity={0.5} size={20} />
-              </ActionIcon>
-            </Tooltip>
+
+            {!readOnly && (
+              <Tooltip label="Delete Message" position="top">
+                <ActionIcon onClick={handleDelete}>
+                  <IconTrash opacity={0.5} size={20} />
+                </ActionIcon>
+              </Tooltip>
+            )}
           </Box>
         </Box>
       </Collapse>

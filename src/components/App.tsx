@@ -7,12 +7,15 @@ import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import {
   createBrowserHistory,
+  Outlet,
   ReactLocation,
   Router,
 } from "@tanstack/react-location";
 import { ChatRoute } from "../routes/ChatRoute";
+import { PublicChatRoute } from "../routes/PublicChatRoute";
 import { IndexRoute } from "../routes/IndexRoute";
-import { Layout } from "./Layout";
+import { BaseLayout } from "../layouts/Base";
+import { PublicLayout } from "../layouts/Public";
 
 const history = createBrowserHistory();
 const location = new ReactLocation({ history });
@@ -35,8 +38,9 @@ export function App() {
     <Router
       location={location}
       routes={[
-        { path: "/", element: <IndexRoute /> },
-        { path: "/chats/:chatId", element: <ChatRoute /> },
+        { id: "root", path: "/", element: <BaseLayout><IndexRoute /></BaseLayout>},
+        { id: "chat", path: "/chats/:chatId", element: <BaseLayout><ChatRoute /></BaseLayout> },
+        { id: "public_chat", path: "/shared/chats/:chatId", element: <PublicLayout><PublicChatRoute /></PublicLayout> },
       ]}
     >
       <ColorSchemeProvider
@@ -108,7 +112,9 @@ export function App() {
             },
           }}
         >
-          <Layout />
+          {/* <BaseLayout /> */}
+          {/* <PublicLayout /> */}
+          <Outlet />
           <Notifications position="bottom-right" style={{ marginBottom: '4rem' }} />
         </MantineProvider>
       </ColorSchemeProvider>

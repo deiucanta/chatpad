@@ -14,6 +14,7 @@ export interface Chat {
   writingFormat?: string | null;
   model?: string | null;
   private?: boolean;
+  shared?: boolean;
   createdAt: string;
 }
 
