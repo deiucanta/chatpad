@@ -11,9 +11,6 @@ import {
   ReactLocation,
   Router,
 } from "@tanstack/react-location";
-import { ChatRoute } from "../routes/ChatRoute";
-import { PublicChatRoute } from "../routes/PublicChatRoute";
-import { IndexRoute } from "../routes/IndexRoute";
 import { BaseLayout } from "../layouts/Base";
 import { PublicLayout } from "../layouts/Public";
 
@@ -38,9 +35,9 @@ export function App() {
     <Router
       location={location}
       routes={[
-        { id: "root", path: "/", element: <BaseLayout><IndexRoute /></BaseLayout>},
-        { id: "chat", path: "/chats/:chatId", element: <BaseLayout><ChatRoute /></BaseLayout> },
-        { id: "public_chat", path: "/shared/chats/:chatId", element: <PublicLayout><PublicChatRoute /></PublicLayout> },
+        { id: "root", path: "/", element: () => import('../routes/IndexRoute').then((mod) => <BaseLayout><mod.IndexRoute /></BaseLayout>)},
+        { id: "chat", path: "/chats/:chatId", element: () => import('../routes/ChatRoute').then((mod) => <BaseLayout><mod.ChatRoute /></BaseLayout>) },
+        { id: "public_chat", path: "/shared/chats/:chatId", element: () => import('../routes/PublicChatRoute').then((mod) => <PublicLayout><mod.PublicChatRoute /></PublicLayout>) },
       ]}
     >
       <ColorSchemeProvider

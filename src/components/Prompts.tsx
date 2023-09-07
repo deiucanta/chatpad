@@ -8,7 +8,7 @@ import { EditPromptModal } from "./EditPromptModal";
 import { useChats, usePrompts, useSettings } from "../hooks/contexts";
 import { notifications } from "@mantine/notifications";
 
-export function Prompts({
+export default function Prompts({
   onPlay,
   search,
 }: {

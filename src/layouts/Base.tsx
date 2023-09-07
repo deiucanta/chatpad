@@ -14,6 +14,8 @@ import {
   Text,
   useMantineColorScheme,
   useMantineTheme,
+  Skeleton,
+  Stack,
 } from "@mantine/core";
 import {
   IconSearch,
@@ -23,13 +25,12 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { Link, useNavigate, useRouter } from "@tanstack/react-location";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Chat, detaDB, Prompt, Settings } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { Chats } from "../components/Chats";
 import { CreatePromptModal } from "../components/CreatePromptModal";
 import { LogoIcon } from "../components/Logo";
-import { Prompts } from "../components/Prompts";
 import { SettingsModal } from "../components/SettingsModal";
 import { config } from "../utils/config";
 import { ChatContext, ChatsContext, IncognitoModeContext, PromptsContext, SettingsContext } from "../hooks/contexts";
@@ -37,6 +38,9 @@ import { ChatHeader } from "../components/ChatHeader";
 import { useLocalStorage } from "@mantine/hooks";
 import { CreateChatButton } from "../components/CreateChatButton";
 import { DeleteChatsModal } from "../components/DeleteChatsModal";
+import React from "react";
+
+const Prompts = React.lazy(() => import('../components/Prompts'));
 
 export function BaseLayout({ children }: { children: React.ReactNode }) {
   const theme = useMantineTheme();
@@ -105,12 +109,15 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
     }
   }, [chatId]);
 
+  const [fetchingChats, setFetchingChats] = useState<boolean>(false);
   const [chats, setChats] = useState<Chat[]>([]);
   useEffect(() => {
     const dataFetch = async () => {
+      setFetchingChats(true);
       const { items } = await detaDB.chats.fetch(incognitoMode ? { private: true } : { 'private?ne': true });
 
       setChats(items as unknown as Chat[]);
+      setFetchingChats(false);
     };
 
     dataFetch();
@@ -270,9 +277,23 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
                       />
                     </Navbar.Section>
                     <Navbar.Section grow component={ScrollArea} id="chats">
-                      {tab === "Chats" && <Chats search={search} />}
+                      {tab === "Chats" && (fetchingChats ? (
+                        <Stack spacing="xs" mt={8} px={10}>
+                          <Skeleton height="2rem" />
+                          <Skeleton height="2rem" />
+                          <Skeleton height="2rem" />
+                        </Stack>
+                      ) : (<Chats search={search} />))}
                       {tab === "Prompts" && (
-                        <Prompts search={search} onPlay={() => setTab("Chats")} />
+                        <Suspense fallback={
+                          <Stack spacing="xs" mt={8} px={10}>
+                            <Skeleton height="2rem" />
+                            <Skeleton height="2rem" />
+                            <Skeleton height="2rem" />
+                          </Stack>
+                        }>
+                          <Prompts search={search} onPlay={() => setTab("Chats")} />
+                        </Suspense>
                       )}
                     </Navbar.Section>
                     <Navbar.Section>
