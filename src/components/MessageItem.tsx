@@ -42,7 +42,7 @@ export function MessageItem({ message, readOnly = false, onDeleted, handleUseMes
 
   useEffect(() => {
     setHtml(markdownRef.current?.innerHTML || '')
-  }, [ref])
+  }, [ref, message])
 
   const handleDelete = async () => {
     await detaDB.messages.delete(message.key);
