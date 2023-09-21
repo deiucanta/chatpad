@@ -19,6 +19,13 @@ micros:
     path: /api
     engine: nodejs16
     dev: npm run dev
+    commands:
+      - npm run build
+    run: node lib/index.js
+    include:
+      - lib
+      - node_modules
+      - package.json
     public_routes:
       - "/public/*"
     provide_actions: true

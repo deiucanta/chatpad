@@ -1,7 +1,68 @@
-import { chats, messages, prompts, generateKey } from './db.js'
+import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
+import { chats, messages, generateKey } from './db.js'
 import type { Prompt, Message, Chat, Settings } from './types.js'
 
-import { getSystemMessage, createChatCompletion } from '../../src/utils/openai.js'
+import config from "./config.js";
+
+function getClient(
+  apiKey: string,
+  apiType: string,
+  apiAuth: string,
+  basePath: string
+) {
+  const configuration = new Configuration({
+    ...((apiType === "openai" ||
+      (apiType === "custom" && apiAuth === "bearer-token")) && {
+      apiKey: apiKey,
+    }),
+    ...(apiType === "custom" && { basePath: basePath }),
+  });
+  return new OpenAIApi(configuration);
+}
+
+export async function createChatCompletion(
+  settings: Settings,
+  messages: ChatCompletionRequestMessage[]
+) {
+  const model = settings?.openAiModel ?? config.defaultModel;
+  const type = settings?.openAiApiType ?? config.defaultType;
+  const auth = settings?.openAiApiAuth ?? config.defaultAuth;
+  const base = settings?.openAiApiBase ?? config.defaultBase;
+  const version = settings?.openAiApiVersion ?? config.defaultVersion;
+  const apiKey = settings.openAiApiKey!;
+
+  const client = getClient(apiKey, type, auth, base);
+  return client.createChatCompletion(
+    {
+      model,
+      stream: false,
+      messages,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        ...(type === "custom" && auth === "api-key" && { "api-key": apiKey }),
+      },
+      params: {
+        ...(type === "custom" && { "api-version": version }),
+      },
+    }
+  );
+}
+
+export function getSystemMessage(prompt: { content?: string, character?: string, tone?: string, style?: string, format?: string }) {
+  const message: string[] = [];
+  if (prompt.character) message.push(`You are ${prompt.character}`);
+  if (prompt.tone) message.push(`Respond in ${prompt.tone.toLowerCase()} tone.`);
+  if (prompt.style) message.push(`Respond in ${prompt.style.toLowerCase()} style.`);
+  if (prompt.format) message.push(`${prompt.format.toLowerCase()}.`);
+  if (message.length === 0)
+    message.push(
+      "You are ChatGPT, a large language model trained by OpenAI."
+    );
+  if (prompt.content) message.push(prompt.content);
+  return message.join(" ");
+};
 
 export const createChatWithMessage = async (chat: Chat, settings: Settings, content: string, prompt?: Prompt, previousMessages?: Message[]) => {
   let systemMessageValue = ""

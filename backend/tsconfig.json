@@ -12,6 +12,6 @@
     },
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "Recommended",
-    "include": ["src/**/*", "../../src/db", "../../src/utils"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "**/*.spec.ts"]
   }
