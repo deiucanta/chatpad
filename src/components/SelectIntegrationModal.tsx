@@ -32,7 +32,7 @@ export function SelectIntegrationModal({
       const spotlightActionsItems = actions.map(action => ({
         title: action.title,
         description: action.instance_alias,
-        icon: action.icon_url ? <img width={28} style={{ borderRadius: 5 }} src={action.icon_url} alt={action.title} /> : <IconBolt size={28} />,
+        icon: action.icon_url ? <img width={30} style={{ borderRadius: 5 }} src={action.icon_url} alt={action.title} /> : <IconBolt size={28} />,
         onTrigger: async () => {
           try {
             if (action) {
@@ -122,13 +122,21 @@ export function SelectIntegrationModal({
       {open && (
         <SpotlightProvider
           actions={spotlightActions}
-          searchIcon={<IconSearch size="1.2rem" />}
-          searchPlaceholder="Search..."
+          searchIcon={<img src="/assets/integrations/deta.png" height={28} />}
+          searchPlaceholder="Search Space App Actions..."
           shortcut={null}
           nothingFoundMessage="Nothing found..."
           onSpotlightOpen={() => setOpen(true)}
           onSpotlightClose={() => setOpen(false)}
           limit={Infinity}
+          styles={{
+            'content': {
+              border: '4px solid #dbdbdb88'
+            },
+            'searchInput': {
+              'border-bottom': '3px solid #dbdbdb54 !important',
+            }
+          }}
         >
         </SpotlightProvider>
       )}

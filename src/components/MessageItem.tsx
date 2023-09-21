@@ -124,12 +124,12 @@ export function MessageItem({ message, readOnly = false, onDeleted, handleUseMes
           <Box style={{ display: 'flex' }}>
             {spaceAppActions !== null && (
                 <SelectIntegrationModal contentHtml={html} contentText={message.content}>
-              <Tooltip label="Send to Space" position="top">
-                  <ActionIcon >
-                    {/* <IconBolt opacity={0.5} size={20} /> */}
-                    <img src="/assets/integrations/deta.png" height={20} style={{ opacity: 0.75 }} />
-                  </ActionIcon>
-              </Tooltip>
+                  <Tooltip label="Send to Space" position="top">
+                      <ActionIcon >
+                        {/* <IconBolt opacity={0.5} size={20} /> */}
+                        <img src="/assets/integrations/deta.png" height={20} style={{ opacity: 0.75 }} />
+                      </ActionIcon>
+                  </Tooltip>
                 </SelectIntegrationModal>
             )}
 
