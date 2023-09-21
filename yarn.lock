@@ -470,6 +470,13 @@
     "@mantine/utils" "6.0.2"
     "react-transition-group" "4.4.2"
 
+"@mantine/spotlight@^6.0.2":
+  "integrity" "sha512-MdC6qXivhrjiKPyM1WPwcaWIo8thfGpKMv9lNuzSKJRzF5n3Uiexucyrb1B+Ca6JqEWWMMuDJ4iNIijAQRhc/Q=="
+  "resolved" "https://registry.npmjs.org/@mantine/spotlight/-/spotlight-6.0.2.tgz"
+  "version" "6.0.2"
+  dependencies:
+    "@mantine/utils" "6.0.2"
+
 "@mantine/ssr@6.0.2":
   "integrity" "sha512-s7F0LtKVdGflbV/2ofCUcdoEQlCpnspBIOPW2IORk7Ysab/XE/Ea2nphtfStNZcYZXk9haOVp50Yi8yAxzBOVg=="
   "resolved" "https://registry.npmjs.org/@mantine/ssr/-/ssr-6.0.2.tgz"

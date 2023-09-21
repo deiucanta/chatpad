@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
 import { IconArrowForward, IconCopy, IconTrash, IconUser } from "@tabler/icons-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Message, detaDB } from "../db";
@@ -22,6 +22,8 @@ import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 import { notifications } from "@mantine/notifications";
+import { useSpaceAppActions } from "../hooks/contexts";
+import { SelectIntegrationModal } from "./SelectIntegrationModal";
 
 export function MessageItem({ message, readOnly = false, onDeleted, handleUseMessage }: { message: Message, readOnly?: boolean, onDeleted?: (key: string) => void, handleUseMessage?: (key: string) => void }) {
   const wordCount = useMemo(() => {
@@ -29,9 +31,18 @@ export function MessageItem({ message, readOnly = false, onDeleted, handleUseMes
     return matches ? matches.length : 0;
   }, [message.content]);
 
-  const [isExpanded, setExpanded] = useState(false);
   const ref = useClickOutside(() => setExpanded(false));
   const theme = useMantineTheme();
+  const markdownRef = useRef<HTMLDivElement>(null)
+
+  const { spaceAppActions } = useSpaceAppActions()
+  
+  const [isExpanded, setExpanded] = useState(false);
+  const [html, setHtml] = useState('')
+
+  useEffect(() => {
+    setHtml(markdownRef.current?.innerHTML || '')
+  }, [ref])
 
   const handleDelete = async () => {
     await detaDB.messages.delete(message.key);
@@ -66,7 +77,7 @@ export function MessageItem({ message, readOnly = false, onDeleted, handleUseMes
           </ThemeIcon>
         )}
         {message.role === "assistant" && <LogoIcon style={{ height: 32 }} color1={theme.colors[theme.primaryColor][3]} color2={theme.colors[theme.primaryColor][7]} />}
-        <Box sx={{ flex: 1, width: 0 }} className="markdown">
+        <Box sx={{ flex: 1, width: 0 }} className="markdown" ref={markdownRef}>
           <ReactMarkdown
             children={message.content}
             remarkPlugins={[remarkGfm]}
@@ -111,6 +122,17 @@ export function MessageItem({ message, readOnly = false, onDeleted, handleUseMes
           </Box>
 
           <Box style={{ display: 'flex' }}>
+            {spaceAppActions !== null && (
+                <SelectIntegrationModal contentHtml={html} contentText={message.content}>
+              <Tooltip label="Send to Space" position="top">
+                  <ActionIcon >
+                    {/* <IconBolt opacity={0.5} size={20} /> */}
+                    <img src="/assets/integrations/deta.png" height={20} style={{ opacity: 0.75 }} />
+                  </ActionIcon>
+              </Tooltip>
+                </SelectIntegrationModal>
+            )}
+
             {!readOnly && handleUseMessage && (
               <>
                 <CreatePromptModal content={message.content || ''} />

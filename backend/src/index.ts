@@ -1,12 +1,16 @@
 import express from 'express'
 import { CardType, createActions, Inputs } from 'deta-space-actions'
+import dotenv from 'dotenv'
+dotenv.config()
 
 import { chats, messages, prompts, settings, generateKey } from './db.js'
-import type { Chat, Prompt, Settings } from './db.js'
+import type { Chat, Prompt, Settings } from './types.js'
 import { createChatWithMessage } from './openai.js'
+import { useInterop } from './interop.js'
 
 const app = express()
 const actions = createActions()
+const interop = useInterop()
 
 const domain = process.env.DETA_SPACE_APP_HOSTNAME
 
@@ -33,6 +37,36 @@ app.get('/public/chats/:key/messages', async (req, res) => {
 
     const items = await messages.fetch({ chatId: key }, { desc: false })   
     res.json(items)
+})
+
+app.get('/space/actions/config', async (req, res) => {
+    res.json({
+        isSetup: interop.isSetup
+    })
+})
+
+app.get('/space/actions', async (req, res) => {
+    const actions = await interop.listActions()
+
+    console.log(actions)
+
+    const filtered = actions.filter(action => {
+        const inputs = action.input
+        if (!inputs || inputs.length < 1) return false
+
+        const textInputs = inputs.filter(input => input.type === 'string')
+
+        return textInputs.length > 0
+    })
+
+    res.json(filtered)
+})
+
+app.post('/space/actions/invoke', async (req, res) => {
+    const { instanceId, actionName, payload } = req.body
+
+    const invocationRes = await interop.invokeAction(instanceId, actionName, payload)
+    res.json(invocationRes)
 })
 
 actions.add<{ prompt?: string }>({

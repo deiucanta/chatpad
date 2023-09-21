@@ -1,4 +1,5 @@
-import { chats, messages, prompts, generateKey, Prompt, Message, Chat, Settings } from './db.js'
+import { chats, messages, prompts, generateKey } from './db.js'
+import type { Prompt, Message, Chat, Settings } from './types.js'
 
 import { getSystemMessage, createChatCompletion } from '../../src/utils/openai.js'
 

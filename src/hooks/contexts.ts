@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import type { Chat, Prompt, Settings } from "../db";
+import type { AppAction, Chat, Prompt, Settings } from "../db";
 
 export const ChatContext = React.createContext<{
   chat: Chat | null,
@@ -44,4 +44,13 @@ export const IncognitoModeContext = React.createContext<{
 
 export function useIncognitoMode() {
   return useContext(IncognitoModeContext);
+}
+
+export const SpaceAppActionsContext = React.createContext<{
+  spaceAppActions: AppAction[] | null,
+  setSpaceAppActions: React.Dispatch<React.SetStateAction<AppAction[] | null>>
+}>({ spaceAppActions: null, setSpaceAppActions: () => {} });
+
+export function useSpaceAppActions() {
+  return useContext(SpaceAppActionsContext);
 }

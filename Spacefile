@@ -22,3 +22,7 @@ micros:
     public_routes:
       - "/public/*"
     provide_actions: true
+    presets:
+      env:
+        - name: SPACE_ACCESS_TOKEN
+          description: Space Access Token used for optional interoperability features

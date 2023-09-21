@@ -48,3 +48,36 @@ export interface Chat {
     instance: string
     apiKey: string
   }
+
+  export enum ViewType {
+    DETAIL = '@deta/detail',
+    RAW = '@deta/raw',
+    FILE = '@deta/file',
+    LIST = '@deta/list',
+    TABLE = '@deta/table',
+  }
+
+  export type ActionInput = {
+    name: string
+    title?: string
+    type?: string
+    optional: boolean
+  }
+
+export type AppAction = {
+    title: string
+    name: string
+    description: string
+    local?: boolean
+    output: ViewType
+    app_name: string
+    instance_id: string
+    instance_alias: string
+    channel: string
+    version: string
+    input?: ActionInput[]
+    icon_url?: string
+    placeholder_icon_config?: {
+      css_background: string
+    }
+  }

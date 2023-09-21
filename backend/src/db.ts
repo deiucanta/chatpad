@@ -1,8 +1,6 @@
 import { Deta } from 'deta'
 import { nanoid } from "nanoid"
 
-export * from '../../src/db/types.js'
-
 const deta = Deta()
 
 export const chats = deta.Base('chats')
