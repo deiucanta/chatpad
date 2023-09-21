@@ -1,9 +1,9 @@
 import { encode } from "gpt-token-utils";
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { OpenAIExt } from "openai-ext";
-import { Settings, detaDB } from "../db";
-import { config } from "./config";
-import { useDebounce } from "./debounce";
+import { Settings, detaDB } from "../db/index.js";
+import { config } from "./config.js";
+import { useDebounce } from "./debounce.js";
 
 function getClient(
   apiKey: string,

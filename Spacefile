@@ -21,3 +21,4 @@ micros:
     dev: npm run dev
     public_routes:
       - "/public/*"
+    provide_actions: true

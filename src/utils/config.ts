@@ -1,3 +1,5 @@
+import configData from '../config.js'
+
 interface Config {
     defaultModel: AvailableModel["value"];
     defaultType: 'openai' | 'custom';
@@ -35,8 +37,4 @@ interface WritingFormat {
     label: string;
 }
 
-export let config: Config;
-
-export async function loadConfig() {
-    config = await import('../config.json') as Config;
-}
+export let config = configData as Config

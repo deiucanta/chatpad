@@ -2,6 +2,7 @@
   "name": "dialogue",
   "private": true,
   "source": "src/main.tsx",
+  "type": "module",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "dev": "vite",

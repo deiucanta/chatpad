@@ -1,4 +1,4 @@
-{
+export default {
     "defaultModel": "gpt-3.5-turbo",
     "defaultType": "openai",
     "defaultAuth": "api-key",

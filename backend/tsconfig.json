@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",
+      "outDir": "lib",
+      "module": "ES2020",
+      "moduleResolution": "node",
+      "strict": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowSyntheticDefaultImports": true,
+      "resolveJsonModule": true
+    },
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Recommended",
+    "include": ["src/**/*", "../../src/db", "../../src/utils"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
+  }
