@@ -1,5 +1,5 @@
 ---
-app_name: "Dialogue AI"
+app_name: "Dialogue"
 tagline: "An open-source ChatGPT UI alternative"
 git: "https://github.com/deta/dialogue"
 theme_color: "#F76705"
@@ -19,4 +19,4 @@ ported_from: "https://github.com/deiucanta/chatpad"
 
 ## Credits
 
-Dialogue AI is a fork of [Chatpad AI](https://github.com/deiucanta/chatpad) with modfications to make it run on Deta Space and various changes and new features like "Incognito Mode", shared chats and a reworked prompts system. It is built on top of the amazing work done by [@deiucanta](https://github.com/deiucanta) and contributors.
+Dialogue is a fork of [Chatpad AI](https://github.com/deiucanta/chatpad) with modfications to make it run on Deta Space and various changes and new features like "Incognito Mode", shared chats and a reworked prompts system. It is built on top of the amazing work done by [@deiucanta](https://github.com/deiucanta) and contributors.

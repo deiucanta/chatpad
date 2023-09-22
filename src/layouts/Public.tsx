@@ -1,7 +1,4 @@
-import {
-  AppShell,
-  useMantineColorScheme,
-} from "@mantine/core";
+import { AppShell, useMantineColorScheme } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Chat } from "../db";
 import { usePublicChatId } from "../hooks/useChatId";
@@ -10,52 +7,54 @@ import { ChatHeader } from "../components/ChatHeader";
 import { useLocalStorage } from "@mantine/hooks";
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
-  const { colorScheme } = useMantineColorScheme();
-  const chatId = usePublicChatId();
+ const { colorScheme } = useMantineColorScheme();
+ const chatId = usePublicChatId();
 
-  const [incognitoMode, setIncognitoMode] = useLocalStorage({
-    key: 'incognito-mode', defaultValue: false, getInitialValueInEffect: false
-  });
+ const [incognitoMode, setIncognitoMode] = useLocalStorage({
+  key: "incognito-mode",
+  defaultValue: false,
+  getInitialValueInEffect: false,
+ });
 
-  const [chat, setChat] = useState<Chat | null>(null);
-  useEffect(() => {
-    const dataFetch = async () => {
-      try {
-        const res = await fetch(`/api/public/chats/${chatId}`)
-        const item = await res.json()
+ const [chat, setChat] = useState<Chat | null>(null);
+ useEffect(() => {
+  const dataFetch = async () => {
+   try {
+    const res = await fetch(`/api/public/chats/${chatId}`);
+    const item = await res.json();
 
-        const fetchedChat = item as unknown as Chat
-        setChat(fetchedChat);
+    const fetchedChat = item as unknown as Chat;
+    setChat(fetchedChat);
 
-        document.title = fetchedChat.description ? `${fetchedChat.description} | Dialogue AI` : 'Dialogue AI'
-      } catch (e) {
-        console.error(e)
-      }
-    };
+    document.title = fetchedChat.description
+     ? `${fetchedChat.description} | Dialogue`
+     : "Dialogue";
+   } catch (e) {
+    console.error(e);
+   }
+  };
 
-    if (chatId) {
-      dataFetch();
-    } else {
-      setChat(null);
-    }
-  }, [chatId]);
+  if (chatId) {
+   dataFetch();
+  } else {
+   setChat(null);
+  }
+ }, [chatId]);
 
-  return (
-    <ChatContext.Provider value={{ chat: chat, setChat: setChat }}>
-      <IncognitoModeContext.Provider value={{ incognitoMode: incognitoMode, setIncognitoMode: setIncognitoMode }}>
-        <AppShell
-          className={`${colorScheme}-theme`}          
-          header={
-            chat ? (
-              <ChatHeader readOnly />
-            ) : undefined
-          }
-          layout="alt"
-          padding={0}
-        >
-          {children}
-        </AppShell>
-      </IncognitoModeContext.Provider>
-    </ChatContext.Provider>
-  );
+ return (
+  <ChatContext.Provider value={{ chat: chat, setChat: setChat }}>
+   <IncognitoModeContext.Provider
+    value={{ incognitoMode: incognitoMode, setIncognitoMode: setIncognitoMode }}
+   >
+    <AppShell
+     className={`${colorScheme}-theme`}
+     header={chat ? <ChatHeader readOnly /> : undefined}
+     layout="alt"
+     padding={0}
+    >
+     {children}
+    </AppShell>
+   </IncognitoModeContext.Provider>
+  </ChatContext.Provider>
+ );
 }

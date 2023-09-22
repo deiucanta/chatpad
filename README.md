@@ -2,7 +2,7 @@
 
 <img src="https://github.com/deta/dialogue/blob/main/public/assets/favicon.png?raw=true" title="icon" alt="icon" width="128">
 
-# Dialogue AI
+# Dialogue
 
 An open-source ChatGPT UI alternative. Fork of [Chatpad AI](https://github.com/deiucanta/chatpad)
 
@@ -33,4 +33,4 @@ An open-source ChatGPT UI alternative. Fork of [Chatpad AI](https://github.com/d
 
 ## Credits
 
-Dialogue AI is a fork of [Chatpad AI](https://github.com/deiucanta/chatpad) with modfications to make it run on Deta Space and various changes and new features like "Incognito Mode", shared chats and a reworked prompts system. It is built on top of the amazing work done by [@deiucanta](https://github.com/deiucanta) and contributors.
+Dialogue is a fork of [Chatpad AI](https://github.com/deiucanta/chatpad) with modfications to make it run on Deta Space and various changes and new features like "Incognito Mode", shared chats and a reworked prompts system. It is built on top of the amazing work done by [@deiucanta](https://github.com/deiucanta) and contributors.
