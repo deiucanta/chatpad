@@ -4,19 +4,11 @@ import { OpenAIExt } from "openai-ext";
 import { db } from "../db";
 import { config } from "./config";
 
-function getClient(
-  apiKey: string,
-  apiType: string,
-  apiAuth: string,
-  basePath: string
-) {
+function getClient(apiKey: string, apiType: string, apiAuth:string, basePath: string) {
   const configuration = new Configuration({
-    ...((apiType === "openai" ||
-      (apiType === "custom" && apiAuth === "bearer-token")) && {
-      apiKey: apiKey,
-    }),
-    ...(apiType === "custom" && { basePath: basePath }),
-  });
+    ...((apiType === 'openai' || (apiType === 'custom' && apiAuth === 'bearer-token')) && { apiKey: apiKey }),
+    ...(apiType === 'custom' && { basePath: basePath }),
+  });  
   return new OpenAIApi(configuration);
 }
 
@@ -88,15 +80,15 @@ export async function createChatCompletion(
     {
       model,
       stream: false,
-      messages,
+      messages
     },
     {
       headers: {
         "Content-Type": "application/json",
-        ...(type === "custom" && auth === "api-key" && { "api-key": apiKey }),
+        ...((type === 'custom' && auth === 'api-key') && { "api-key": apiKey }),
       },
       params: {
-        ...(type === "custom" && { "api-version": version }),
+        ...((type === 'custom') && {"api-version": version}),
       },
     }
   );

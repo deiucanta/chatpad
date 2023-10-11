@@ -20,10 +20,7 @@ import { MessageItem } from "../components/MessageItem";
 import { db } from "../db";
 import { useChatId } from "../hooks/useChatId";
 import { config } from "../utils/config";
-import {
-  createChatCompletion,
-  createStreamChatCompletion,
-} from "../utils/openai";
+import { createChatCompletion } from "../utils/openai";
 
 export function ChatRoute() {
   const chatId = useChatId();
