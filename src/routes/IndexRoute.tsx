@@ -29,12 +29,12 @@ export function IndexRoute() {
     <>
       <Center py="xl" sx={{ height: "100%" }}>
         <Container size="sm">
-          <Badge mb="lg">GPT-4 Ready</Badge>
+          <Badge mb="lg">GPT-4, Llama2, Mistral uvm. Ready</Badge>
           <Text>
-            <Logo style={{ maxWidth: 240 }} />
+            <Logo style={{ maxWidth: 10 }} />
           </Text>
           <Text mt={4} size="xl">
-            Not just another ChatGPT user-interface!
+            Weil GPT so einfach sein kann! www.einfachalex.net
           </Text>
           <SimpleGrid
             mt={50}
@@ -70,15 +70,12 @@ export function IndexRoute() {
             )}
             {config.showDownloadLink && !window.todesktop && (
               <Button
-                component="a"
-                href="https://dl.todesktop.com/230313oyppkw40a"
-                // href="https://download.chatpad.ai/"
-                size="md"
-                variant="outline"
-                leftIcon={<IconCloudDownload size={20} />}
-              >
-                Download Desktop App
-              </Button>
+              size="md"
+              variant={openAiApiKey ? "light" : "filled"}
+              leftIcon={<IconKey size={20} />}
+            >
+              {openAiApiKey ? "Change HF Key" : "Enter HF Key"}
+            </Button>
             )}
           </Group>
         </Container>
@@ -90,20 +87,20 @@ export function IndexRoute() {
 const features = [
   {
     icon: IconCurrencyDollar,
-    title: "Free and open source",
+    title: "Kostenlos und Open Source",
     description:
-      "This app is provided for free and the source code is available on GitHub.",
-  },
-  {
+    "Diese App ist kostenlos erhältlich, und der Quellcode ist auf GitHub verfügbar.",
+    },
+    {
     icon: IconLock,
-    title: "Privacy focused",
+    title: "Datenschutz im Fokus",
     description:
-      "No tracking, no cookies, no bullshit. All your data is stored locally.",
-  },
-  {
+    "Kein Tracking, keine Cookies, kein Unsinn. Alle deine Daten werden lokal gespeichert.",
+    },
+    {
     icon: IconNorthStar,
-    title: "Best experience",
+    title: "Bestmögliche Erfahrung",
     description:
-      "Crafted with love and care to provide the best experience possible.",
-  },
+    "Mit Liebe und Sorgfalt entwickelt, um die bestmögliche Erfahrung zu bieten.",
+    },
 ];

@@ -19,7 +19,7 @@ export function DeleteAllDataModal({ onOpen }: { onOpen: () => void }) {
       <Modal
         opened={opened}
         onClose={close}
-        title="Delete All Data"
+        title="Daten löschen"
         size="md"
         withinPortal
       >

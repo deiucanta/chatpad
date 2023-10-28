@@ -137,14 +137,14 @@ export function Layout() {
                     const id = nanoid();
                     db.chats.add({
                       id,
-                      description: "New Chat",
+                      description: "Neuer Chat",
                       totalTokens: 0,
                       createdAt: new Date(),
                     });
                     navigate({ to: `/chats/${id}` });
                   }}
                 >
-                  New Chat
+                  Neuer Chat
                 </Button>
               )}
               {tab === "Prompts" && <CreatePromptModal />}
@@ -225,7 +225,7 @@ export function Layout() {
               <Tooltip label="Source Code">
                 <ActionIcon
                   component="a"
-                  href="https://github.com/deiucanta/chatpad"
+                  href="https://github.com/einfachalf/chatpad"
                   target="_blank"
                   sx={{ flex: 1 }}
                   size="xl"
@@ -237,7 +237,7 @@ export function Layout() {
                 <Tooltip label="Follow on Twitter">
                   <ActionIcon
                     component="a"
-                    href="https://twitter.com/deiucanta"
+                    href="https://twitter.com/einfachalf"
                     target="_blank"
                     sx={{ flex: 1 }}
                     size="xl"
@@ -247,15 +247,15 @@ export function Layout() {
                 </Tooltip>
               )}
               {config.showFeedbackLink && (
-                <Tooltip label="Give Feedback">
+                <Tooltip label="Gebe Feedback">
                   <ActionIcon
                     component="a"
-                    href="https://feedback.chatpad.ai"
+                    href="https://einfachalex.net"
                     onClick={(event) => {
                       if (window.todesktop) {
                         event.preventDefault();
                         window.todesktop.contents.openUrlInBrowser(
-                          "https://feedback.chatpad.ai"
+                          "https://einfachalex.net"
                         );
                       }
                     }}
