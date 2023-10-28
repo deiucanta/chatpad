@@ -47,7 +47,7 @@ docker run --name chatpad -d -v `pwd`/config.json:/usr/share/nginx/html/config.j
 <!-- Railway -->
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/Ak6DUw?referralCode=9M8r62)
 
-
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/deiucanta/chatpad/tree/main)
 
 
 ## Give Feedback

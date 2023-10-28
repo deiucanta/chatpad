@@ -1,0 +1,7 @@
+spec:
+ name: chatpad
+ services:
+ - name: chatpad
+   git:
+     branch: main
+     repo_clone_url: https://github.com/deiucanta/chatpad.git
