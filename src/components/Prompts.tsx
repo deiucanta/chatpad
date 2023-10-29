@@ -106,7 +106,7 @@ export function Prompts({
                     {
                       role: "system",
                       content:
-                        "You are ChatGPT, a large language model trained by OpenAI.",
+                        "Du sprichst mit EinfachGPT, einem umfangreichen Sprachmodell, das von EinfachAlex entwickelt wurde. Ich stehe dir zur Verfügung, um deine Fragen zu beantworten und dir bei deinen Anliegen zu helfen. Wie kann ich dir heute weiterhelfen?",
                     },
                     { role: "user", content: prompt.content },
                   ]);

@@ -97,7 +97,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
           >
             <Flex gap="xs" align="end">
               <PasswordInput
-                label="OpenAI API Key"
+                label="OpenAI API Key, Replicate Huggingface"
                 placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                 sx={{ flex: 1 }}
                 value={value}
@@ -116,19 +116,19 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   href="https://platform.openai.com/account/api-keys"
                   target="_blank"
                 >
-                  Get your OpenAI API key
+                  Erhalte Deinen Api Schlüssel
                 </Anchor>
               </Text>
             </List.Item>
             <List.Item>
               <Text size="sm" color="dimmed">
-                The API Key is stored locally on your browser and never sent
-                anywhere else.
+              Der API-Schlüssel wird einfach lokal in Ihrem Browser gespeichert 
+              und niemals woanders hin gesendet.
               </Text>
             </List.Item>
           </List>
           <Select
-            label="OpenAI Type"
+            label="OpenAI Modell Type"
             value={type}
             onChange={async (value) => {
               setSubmitting(true);
@@ -161,7 +161,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               }
             }}
             withinPortal
-            data={[{ "value": "openai", "label": "OpenAI"}, { "value": "custom", "label": "Custom (e.g. Azure OpenAI)"}]}
+            data={[{ "value": "openai", "label": "OpenAI"}, { "value": "custom", "label": "Custom (e.g. Huggingface)"}]}
           />
           <Select
             label="OpenAI Model (OpenAI Only)"

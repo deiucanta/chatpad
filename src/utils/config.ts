@@ -1,6 +1,6 @@
 interface Config {
     defaultModel: AvailableModel["value"];
-    defaultType: 'openai' | 'custom';
+    defaultType: 'openai' | 'custom' | 'huggingface'; // Hinzugefügt 'huggingface' als Option
     defaultAuth: 'none' | 'bearer-token' | 'api-key';
     defaultBase: string;
     defaultVersion: string;
@@ -22,12 +22,12 @@ interface AvailableModel {
     value: string;
     label: string;
 }
-  
+
 interface WritingCharacter {
     label: string;
     value: string;
 }
-  
+
 interface WritingFormat {
     value: string;
     label: string;

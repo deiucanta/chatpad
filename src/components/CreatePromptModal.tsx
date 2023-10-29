@@ -27,7 +27,7 @@ export function CreatePromptModal({ content }: { content?: string }) {
   return (
     <>
       {content ? (
-        <Tooltip label="Save Prompt" position="left">
+        <Tooltip label="Prompt speichern" position="left">
           <ActionIcon onClick={open}>
             <IconPlaylistAdd opacity={0.5} size={20} />
           </ActionIcon>
@@ -37,7 +37,7 @@ export function CreatePromptModal({ content }: { content?: string }) {
           New Prompt
         </Button>
       )}
-      <Modal opened={opened} onClose={close} title="Create Prompt" size="lg">
+      <Modal opened={opened} onClose={close} title="Prompt erstellen" size="lg">
         <form
           onSubmit={async (event) => {
             try {
