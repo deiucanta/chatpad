@@ -3,6 +3,7 @@ import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { OpenAIExt } from "openai-ext";
 import { db } from "../db";
 import { config } from "./config";
+import { generateText } from "./huggingfaceInference";  // Importieren Sie die Huggingface-Funktion
 
 function getClient(
   apiKey: string,
@@ -83,23 +84,28 @@ export async function createChatCompletion(
   const base = settings?.openAiApiBase ?? config.defaultBase;
   const version = settings?.openAiApiVersion ?? config.defaultVersion;
 
-  const client = getClient(apiKey, type, auth, base);
-  return client.createChatCompletion(
-    {
-      model,
-      stream: false,
-      messages,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        ...(type === "custom" && auth === "api-key" && { "api-key": apiKey }),
+  if (type === "huggingface") {
+    const input = messages.map(message => message.content).join(" ");
+    return generateText(input);
+  } else {
+    const client = getClient(apiKey, type, auth, base);
+    return client.createChatCompletion(
+      {
+        model,
+        stream: false,
+        messages,
       },
-      params: {
-        ...(type === "custom" && { "api-version": version }),
-      },
-    }
-  );
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...(type === "custom" && auth === "api-key" && { "api-key": apiKey }),
+        },
+        params: {
+          ...(type === "custom" && { "api-version": version }),
+        },
+      }
+    );
+  }
 }
 
 export async function checkOpenAIKey(apiKey: string) {

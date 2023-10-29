@@ -13,6 +13,11 @@ import {
 import { ChatRoute } from "../routes/ChatRoute";
 import { IndexRoute } from "../routes/IndexRoute";
 import { Layout } from "./Layout";
+import { createRepo, uploadFile } from "@huggingface/hub";
+
+const HF_ACCESS_TOKEN = "hf_..."; // Ihr Hugging Face Zugriffstoken
+
+
 
 const history = createHashHistory();
 const location = new ReactLocation({ history });
