@@ -1,5 +1,6 @@
 {
   "name": "chatpad",
+  "version": "0.3.0",
   "private": true,
   "source": "src/index.html",
   "browserslist": "> 0.5%, last 2 versions, not dead",

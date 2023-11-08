@@ -283,7 +283,7 @@ export function Layout() {
               }}
             >
               {`${chat.description} - ${chat.totalTokens ?? 0} tokens ~ $${(
-                ((chat.totalTokens ?? 0) * 0.002) /
+                ((chat.totalTokens ?? 0) * 0.03) /
                 1000
               ).toFixed(5)}`}
             </div>
