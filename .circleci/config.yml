@@ -3,7 +3,7 @@ version: 2.1
 executors:
   buildpack:
     docker:
-      - image: cimg/node:16-alpine
+      - image: cimg/node:16.20.2
     working_directory: ~/repo
 
 jobs:
