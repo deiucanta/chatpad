@@ -18,8 +18,8 @@
     "@types/react-dom": "^18.0.11",
     "buffer": "^5.7.1",
     "parcel": "^2.8.3",
-    "path-browserify": "^1.0.1",
     "parcel-reporter-static-files-copy": "^1.5.0",
+    "path-browserify": "^1.0.1",
     "process": "^0.11.10"
   },
   "dependencies": {
