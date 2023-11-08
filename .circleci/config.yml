@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Build docker image
           command: |
-            docker build --target chatpad -t "aegirops/chatpad:latest" -t "aegirops/chatpad:${CIRCLE_TAG}" . --no-cache
+            docker build -t "aegirops/chatpad:latest" -t "aegirops/chatpad:${CIRCLE_TAG}" . --no-cache
       - run:
           name: Publish Docker Image to Docker Hub
           command: |
