@@ -47,6 +47,9 @@ docker run --name chatpad -d -v `pwd`/config.json:/usr/share/nginx/html/config.j
 <!-- Railway -->
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/Ak6DUw?referralCode=9M8r62)
 
+<!-- RepoCloud -->
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploy.png)](https://repocloud.io/details/?app_id=168)
+
 
 
 
