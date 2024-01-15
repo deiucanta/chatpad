@@ -48,12 +48,18 @@ export function ChatRoute() {
     return db.chats.get(chatId);
   }, [chatId]);
 
+  const userPrompt = useLiveQuery(async () => {
+    if (!chat?.promptId) return null;
+    return db.prompts.get(chat.promptId);
+  }, [chat]);
+
   const [writingCharacter, setWritingCharacter] = useState<string | null>(null);
   const [writingTone, setWritingTone] = useState<string | null>(null);
   const [writingStyle, setWritingStyle] = useState<string | null>(null);
   const [writingFormat, setWritingFormat] = useState<string | null>(null);
 
   const getSystemMessage = () => {
+    if (userPrompt) return userPrompt.content;
     const message: string[] = [];
     if (writingCharacter) message.push(`You are ${writingCharacter}.`);
     if (writingTone) message.push(`Respond in ${writingTone} tone.`);
@@ -251,7 +257,7 @@ export function ChatRoute() {
         })}
       >
         <Container>
-          {messages?.length === 0 && (
+          {!userPrompt && messages?.length === 0 && (
             <SimpleGrid
               mb="sm"
               spacing="xs"
