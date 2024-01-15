@@ -1,3 +1,5 @@
+# [Looking for maintainers!](https://github.com/deiucanta/chatpad/issues/106)
+
 ![Chatpad AI](./banner.png)
 
 <h1 align="center">Chatpad AI</h1>
