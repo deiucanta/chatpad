@@ -8,6 +8,7 @@ import { useChatId } from "../hooks/useChatId";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
+import {t} from "i18next";
 
 export function Chats({ search }: { search: string }) {
   const chatId = useChatId();
@@ -55,10 +56,10 @@ export function Chats({ search }: { search: string }) {
             </Menu.Target>
             <Menu.Dropdown>
               <EditChatModal chat={chat}>
-                <Menu.Item>Edit</Menu.Item>
+                <Menu.Item>{t('edit')}</Menu.Item>
               </EditChatModal>
               <DeleteChatModal chat={chat}>
-                <Menu.Item>Delete</Menu.Item>
+                <Menu.Item>{t('delete')}</Menu.Item>
               </DeleteChatModal>
             </Menu.Dropdown>
           </Menu>

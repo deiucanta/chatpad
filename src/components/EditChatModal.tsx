@@ -3,6 +3,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { Chat, db } from "../db";
+import {t} from "i18next";
 
 export function EditChatModal({
   chat,
@@ -22,7 +23,7 @@ export function EditChatModal({
   return (
     <>
       {cloneElement(children, { onClick: open })}
-      <Modal opened={opened} onClose={close} title="Edit Chat" withinPortal>
+      <Modal opened={opened} onClose={close} title={t('editChat')} withinPortal>
         <form
           onSubmit={async (event) => {
             try {
@@ -32,22 +33,22 @@ export function EditChatModal({
                 chat.description = value;
               });
               notifications.show({
-                title: "Saved",
-                message: "",
+                title: t('chatUpdated.title'),
+                message: t('chatUpdated.message'),
               });
               close();
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {
                 notifications.show({
-                  title: "Error",
+                  title: t('networkError.title'),
                   color: "red",
-                  message: "No internet connection.",
+                  message: t('networkError.message'),
                 });
               }
               const message = error.response?.data?.error?.message;
               if (message) {
                 notifications.show({
-                  title: "Error",
+                  title: t('error.title'),
                   color: "red",
                   message,
                 });
@@ -59,14 +60,14 @@ export function EditChatModal({
         >
           <Stack>
             <TextInput
-              label="Name"
+              label={t('name')}
               value={value}
               onChange={(event) => setValue(event.currentTarget.value)}
               formNoValidate
               data-autofocus
             />
             <Button type="submit" loading={submitting}>
-              Save
+              {t('save')}
             </Button>
           </Stack>
         </form>

@@ -41,6 +41,7 @@ import { LogoText } from "./Logo";
 import { Prompts } from "./Prompts";
 import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
+import {t} from "i18next";
 
 declare global {
   interface Window {
@@ -51,7 +52,8 @@ declare global {
 export function Layout() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  const [tab, setTab] = useState<"Chats" | "Prompts">("Chats");
+  // @ts-ignore
+  const [tab, setTab] = useState<"Chats" | "Prompts">(t('chats'));
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
   const router = useRouter();
@@ -126,10 +128,10 @@ export function Layout() {
               fullWidth
               value={tab}
               onChange={(value) => setTab(value as typeof tab)}
-              data={["Chats", "Prompts"]}
+              data={[t('chats'), t('prompts')]}
             />
             <Box sx={{ padding: 4 }}>
-              {tab === "Chats" && (
+              {tab === t('chats') && (
                 <Button
                   fullWidth
                   leftIcon={<IconPlus size={20} />}
@@ -137,17 +139,17 @@ export function Layout() {
                     const id = nanoid();
                     db.chats.add({
                       id,
-                      description: "New Chat",
+                      description: t('newChat'),
                       totalTokens: 0,
                       createdAt: new Date(),
                     });
                     navigate({ to: `/chats/${id}` });
                   }}
                 >
-                  New Chat
+                    {t('newChat')}
                 </Button>
               )}
-              {tab === "Prompts" && <CreatePromptModal />}
+              {tab === t('prompts') && <CreatePromptModal />}
             </Box>
           </Navbar.Section>
           <Navbar.Section
@@ -163,7 +165,7 @@ export function Layout() {
             <TextInput
               variant="unstyled"
               radius={0}
-              placeholder="Search"
+              placeholder={t('search')}
               value={search}
               onChange={(event) =>
                 setSearch(event.currentTarget.value.toLowerCase())
@@ -180,8 +182,8 @@ export function Layout() {
             />
           </Navbar.Section>
           <Navbar.Section grow component={ScrollArea}>
-            {tab === "Chats" && <Chats search={search} />}
-            {tab === "Prompts" && (
+            {tab === t('chats') && <Chats search={search} />}
+            {tab === t('prompts') && (
               <Prompts search={search} onPlay={() => setTab("Chats")} />
             )}
           </Navbar.Section>
@@ -189,7 +191,7 @@ export function Layout() {
             <Center>
               {config.allowDarkModeToggle && (
                 <Tooltip
-                  label={colorScheme === "dark" ? "Light Mode" : "Dark Mode"}
+                  label={colorScheme === "dark" ? t('lightMode') : t('darkMode')}
                 >
                   <ActionIcon
                     sx={{ flex: 1 }}
@@ -206,7 +208,7 @@ export function Layout() {
               )}
               {config.allowSettingsModal && (
                 <SettingsModal>
-                  <Tooltip label="Settings">
+                  <Tooltip label={t('settings')}>
                     <ActionIcon sx={{ flex: 1 }} size="xl">
                       <IconSettings size={20} />
                     </ActionIcon>
@@ -215,14 +217,14 @@ export function Layout() {
               )}
               {config.allowDatabaseModal && (
                 <DatabaseModal>
-                  <Tooltip label="Database">
+                  <Tooltip label={t('database')}>
                     <ActionIcon sx={{ flex: 1 }} size="xl">
                       <IconDatabase size={20} />
                     </ActionIcon>
                   </Tooltip>
                 </DatabaseModal>
               )}
-              <Tooltip label="Source Code">
+              <Tooltip label={t('sourceCode')}>
                 <ActionIcon
                   component="a"
                   href="https://github.com/deiucanta/chatpad"
@@ -234,7 +236,7 @@ export function Layout() {
                 </ActionIcon>
               </Tooltip>
               {config.showTwitterLink && (
-                <Tooltip label="Follow on Twitter">
+                <Tooltip label={t('followOnTwitter')}>
                   <ActionIcon
                     component="a"
                     href="https://twitter.com/deiucanta"
@@ -247,7 +249,7 @@ export function Layout() {
                 </Tooltip>
               )}
               {config.showFeedbackLink && (
-                <Tooltip label="Give Feedback">
+                <Tooltip label={t('giveFeedback')}>
                   <ActionIcon
                     component="a"
                     href="https://feedback.chatpad.ai"

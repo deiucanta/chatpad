@@ -20,10 +20,29 @@ import { Logo } from "../components/Logo";
 import { SettingsModal } from "../components/SettingsModal";
 import { db } from "../db";
 import { config } from "../utils/config";
+import {t} from "i18next";
 
 export function IndexRoute() {
   const settings = useLiveQuery(() => db.settings.get("general"));
   const { openAiApiKey } = settings ?? {};
+
+  const features = [
+    {
+      icon: IconCurrencyDollar,
+      title: t('freeAndOpenSource.title'),
+      description: t('freeAndOpenSource.description'),
+    },
+    {
+      icon: IconLock,
+      title: t('privacyFocused.title'),
+      description: t('privacyFocused.description'),
+    },
+    {
+      icon: IconNorthStar,
+      title: t('bestExperience.title'),
+      description: t('bestExperience.description'),
+    },
+  ];
 
   return (
     <>
@@ -34,7 +53,7 @@ export function IndexRoute() {
             <Logo style={{ maxWidth: 240 }} />
           </Text>
           <Text mt={4} size="xl">
-            Not just another ChatGPT user-interface!
+            {t('notAnotherUI')}
           </Text>
           <SimpleGrid
             mt={50}
@@ -42,8 +61,8 @@ export function IndexRoute() {
             spacing={30}
             breakpoints={[{ maxWidth: "md", cols: 1 }]}
           >
-            {features.map((feature) => (
-              <div key={feature.title}>
+            {features.map((feature, index) => (
+              <div key={index}>
                 <ThemeIcon variant="outline" size={50} radius={50}>
                   <feature.icon size={26} stroke={1.5} />
                 </ThemeIcon>
@@ -64,7 +83,7 @@ export function IndexRoute() {
                   variant={openAiApiKey ? "light" : "filled"}
                   leftIcon={<IconKey size={20} />}
                 >
-                  {openAiApiKey ? "Change OpenAI Key" : "Enter OpenAI Key"}
+                  {openAiApiKey ? t('changeOpenAIKey') : t('enterOpenAIKey')}
                 </Button>
               </SettingsModal>
             )}
@@ -77,7 +96,7 @@ export function IndexRoute() {
                 variant="outline"
                 leftIcon={<IconCloudDownload size={20} />}
               >
-                Download Desktop App
+                {t('downloadDesktopApp')}
               </Button>
             )}
           </Group>
@@ -86,24 +105,3 @@ export function IndexRoute() {
     </>
   );
 }
-
-const features = [
-  {
-    icon: IconCurrencyDollar,
-    title: "Free and open source",
-    description:
-      "This app is provided for free and the source code is available on GitHub.",
-  },
-  {
-    icon: IconLock,
-    title: "Privacy focused",
-    description:
-      "No tracking, no cookies, no bullshit. All your data is stored locally.",
-  },
-  {
-    icon: IconNorthStar,
-    title: "Best experience",
-    description:
-      "Crafted with love and care to provide the best experience possible.",
-  },
-];

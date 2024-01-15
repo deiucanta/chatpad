@@ -12,6 +12,7 @@ import { notifications } from "@mantine/notifications";
 import { IconPencil } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { db, Prompt } from "../db";
+import {t} from "i18next";
 
 export function EditPromptModal({ prompt }: { prompt: Prompt }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -26,7 +27,7 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Edit Prompt" size="lg">
+      <Modal opened={opened} onClose={close} title={t('editPrompt')} size="lg">
         <form
           onSubmit={async (event) => {
             try {
@@ -37,21 +38,21 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
                 chat.content = value;
               });
               notifications.show({
-                title: "Saved",
-                message: "Prompt updated",
+                title: t('promptUpdated.title'),
+                message: t('promptUpdated.message'),
               });
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {
                 notifications.show({
-                  title: "Error",
+                  title: t('networkError.title'),
                   color: "red",
-                  message: "No internet connection.",
+                  message: t('networkError.message'),
                 });
               }
               const message = error.response?.data?.error?.message;
               if (message) {
                 notifications.show({
-                  title: "Error",
+                  title: t('error.title'),
                   color: "red",
                   message,
                 });
@@ -63,14 +64,14 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
         >
           <Stack>
             <TextInput
-              label="Title"
+              label={t('title')}
               value={title}
               onChange={(event) => setTitle(event.currentTarget.value)}
               formNoValidate
               data-autofocus
             />
             <Textarea
-              label="Content"
+              label={t('content')}
               autosize
               minRows={5}
               maxRows={10}
@@ -78,12 +79,12 @@ export function EditPromptModal({ prompt }: { prompt: Prompt }) {
               onChange={(event) => setValue(event.currentTarget.value)}
             />
             <Button type="submit" loading={submitting}>
-              Save
+              {t('save')}
             </Button>
           </Stack>
         </form>
       </Modal>
-      <Tooltip label="Edit Prompt">
+      <Tooltip label={t('editPrompt')}>
         <ActionIcon size="lg" onClick={open}>
           <IconPencil size={20} />
         </ActionIcon>

@@ -8,6 +8,7 @@ import { db } from "../db";
 import { createChatCompletion } from "../utils/openai";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { EditPromptModal } from "./EditPromptModal";
+import {t} from "i18next";
 
 export function Prompts({
   onPlay,
@@ -80,7 +81,7 @@ export function Prompts({
             </Text>
           </Box>
           <Group spacing="none">
-            <Tooltip label="New Chat From Prompt">
+            <Tooltip label={t('newChatFromPrompt')}>
               <ActionIcon
                 size="lg"
                 onClick={async () => {
@@ -88,7 +89,7 @@ export function Prompts({
                   const id = nanoid();
                   await db.chats.add({
                     id,
-                    description: "New Chat",
+                    description: t('newChat'),
                     totalTokens: 0,
                     createdAt: new Date(),
                   });
@@ -105,8 +106,7 @@ export function Prompts({
                   const result = await createChatCompletion(apiKey, [
                     {
                       role: "system",
-                      content:
-                        "You are ChatGPT, a large language model trained by OpenAI.",
+                      content: t('youAreChatGPT'),
                     },
                     { role: "user", content: prompt.content },
                   ]);

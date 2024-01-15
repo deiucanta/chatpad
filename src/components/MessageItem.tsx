@@ -20,6 +20,7 @@ import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 import { ScrollIntoView } from "./ScrollIntoView";
+import {t} from "i18next";
 
 export function MessageItem({ message }: { message: Message }) {
   const clipboard = useClipboard({ timeout: 500 });
@@ -55,7 +56,7 @@ export function MessageItem({ message }: { message: Message }) {
                       <CopyButton value={String(props.children)}>
                         {({ copied, copy }) => (
                           <Tooltip
-                            label={copied ? "Copied" : "Copy"}
+                            label={copied ? t('copied') : t('copy')}
                             position="left"
                           >
                             <ActionIcon
@@ -74,7 +75,7 @@ export function MessageItem({ message }: { message: Message }) {
             {message.role === "assistant" && (
               <Box>
                 <Text size="sm" color="dimmed">
-                  {wordCount} words
+                  {wordCount} {t('words')}
                 </Text>
               </Box>
             )}
@@ -83,18 +84,13 @@ export function MessageItem({ message }: { message: Message }) {
             <CreatePromptModal content={message.content} />
             <CopyButton value={message.content}>
               {({ copied, copy }) => (
-                <Tooltip label={copied ? "Copied" : "Copy"} position="left">
+                <Tooltip label={copied ? t('copied') : t('copy')} position="left">
                   <ActionIcon onClick={copy}>
                     <IconCopy opacity={0.5} size={20} />
                   </ActionIcon>
                 </Tooltip>
               )}
             </CopyButton>
-            {/* <Tooltip label={`${wordCount} words`} position="left">
-              <ActionIcon>
-                <IconInfoCircle opacity={0.5} size={20} />
-              </ActionIcon>
-            </Tooltip> */}
           </Box>
         </Flex>
       </Card>

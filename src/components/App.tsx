@@ -13,6 +13,7 @@ import {
 import { ChatRoute } from "../routes/ChatRoute";
 import { IndexRoute } from "../routes/IndexRoute";
 import { Layout } from "./Layout";
+import '../i18n';
 
 const history = createHashHistory();
 const location = new ReactLocation({ history });
@@ -30,7 +31,6 @@ export function App() {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
-
   return (
     <Router
       location={location}

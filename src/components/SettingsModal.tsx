@@ -18,6 +18,7 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
+import {t} from "i18next";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -58,7 +59,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   return (
     <>
       {cloneElement(children, { onClick: open })}
-      <Modal opened={opened} onClose={close} title="Settings" size="lg">
+      <Modal opened={opened} onClose={close} title={t('settings')} size="lg">
         <Stack>
           <form
             onSubmit={async (event) => {
@@ -71,21 +72,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   console.log(apiKey);
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Key has been saved.",
+                  title: t('openAIKeySaved.title'),
+                  message: t('openAIKeySaved.message'),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t('networkError.title'),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t('networkError.message'),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t('error.title'),
                     color: "red",
                     message,
                   });
@@ -97,7 +98,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
           >
             <Flex gap="xs" align="end">
               <PasswordInput
-                label="OpenAI API Key"
+                label={t('openAIAPIKey')}
                 placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                 sx={{ flex: 1 }}
                 value={value}
@@ -105,7 +106,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 formNoValidate
               />
               <Button type="submit" loading={submitting}>
-                Save
+                {t('save')}
               </Button>
             </Flex>
           </form>
@@ -116,19 +117,18 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   href="https://platform.openai.com/account/api-keys"
                   target="_blank"
                 >
-                  Get your OpenAI API key
+                  {t('getYourOpenAIAPIkey')}
                 </Anchor>
               </Text>
             </List.Item>
             <List.Item>
               <Text size="sm" color="dimmed">
-                The API Key is stored locally on your browser and never sent
-                anywhere else.
+                {t('APIKeyStoredLocally')}
               </Text>
             </List.Item>
           </List>
           <Select
-            label="OpenAI Type"
+            label={t('openAIType')}
             value={type}
             onChange={async (value) => {
               setSubmitting(true);
@@ -137,21 +137,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   openAiApiType: value ?? 'openai',
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Type has been saved.",
+                  title: t('openAIKeySaved.title'),
+                  message: t('openAIKeySaved.message'),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t('networkError.title'),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t('networkError.message'),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t('error.title'),
                     color: "red",
                     message,
                   });
@@ -161,10 +161,10 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               }
             }}
             withinPortal
-            data={[{ "value": "openai", "label": "OpenAI"}, { "value": "custom", "label": "Custom (e.g. Azure OpenAI)"}]}
+            data={[{ "value": "openai", "label": "OpenAI"}, { "value": "custom", "label": t('openIATTypeCustom')}]}
           />
           <Select
-            label="OpenAI Model (OpenAI Only)"
+            label={t('openAIModel')}
             value={model}
             onChange={async (value) => {
               setSubmitting(true);
@@ -173,21 +173,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   openAiModel: value ?? undefined,
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Model has been saved.",
+                  title: t('openAIModelSaved.title'),
+                  message: t('openAIModelSaved.message'),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t('networkError.title'),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t('networkError.message'),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t('error.title'),
                     color: "red",
                     message,
                   });
@@ -199,12 +199,11 @@ export function SettingsModal({ children }: { children: ReactElement }) {
             withinPortal
             data={config.availableModels}
           />
-          <Alert color="orange" title="Warning">
-            The displayed cost was not updated yet to reflect the costs for each
-            model. Right now it will always show the cost for GPT-3.5 on OpenAI.
+          <Alert color="orange" title={t('warning')}>
+            {t('warningCostMessage')}
           </Alert>
           <Select
-            label="OpenAI Auth (Custom Only)"
+            label={t('openAIAuth')}
             value={auth}
             onChange={async (value) => {
               setSubmitting(true);
@@ -213,21 +212,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   openAiApiAuth: value ?? 'none',
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Auth has been saved.",
+                  title: t('openAIModelSaved.title'),
+                  message: t('openAIModelSaved.message'),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t('networkError.title'),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t('networkError.message'),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t('error.title'),
                     color: "red",
                     message,
                   });
@@ -237,7 +236,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               }
             }}
             withinPortal
-            data={[{ "value": "none", "label": "None"}, { "value": "bearer-token", "label": "Bearer Token"}, { "value": "api-key", "label": "API Key"}]}
+            data={[{ "value": "none", "label": t('none')}, { "value": "bearer-token", "label": t('bearerToken')}, { "value": "api-key", "label": t('apiKey')}]}
           />
           <form
             onSubmit={async (event) => {
@@ -249,21 +248,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   console.log(row);
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Base has been saved.",
+                  title: t('openAIBaseSaved.title'),
+                  message: t('openAIBaseSaved.message'),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t('networkError.title'),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t('networkError.message'),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t('error.title'),
                     color: "red",
                     message,
                   });
@@ -275,7 +274,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
           >
             <Flex gap="xs" align="end">
               <TextInput
-                label="OpenAI API Base (Custom Only)"
+                label={t('openAIAPIBase')}
                 placeholder="https://<resource-name>.openai.azure.com/openai/deployments/<deployment>"
                 sx={{ flex: 1 }}
                 value={base}
@@ -283,7 +282,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 formNoValidate
               />
               <Button type="submit" loading={submitting}>
-                Save
+                {t('save')}
               </Button>
             </Flex>
           </form>
@@ -297,21 +296,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   console.log(row);
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Version has been saved.",
+                  title: t('openAIVersionSaved.title'),
+                  message: t('openAIVersionSaved.message'),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t('networkError.title'),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t('networkError.message'),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t('error.title'),
                     color: "red",
                     message,
                   });
@@ -323,7 +322,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
           >
             <Flex gap="xs" align="end">
               <TextInput
-                label="OpenAI API Version (Custom Only)"
+                label={t('openAIAPIVersion')}
                 placeholder="2023-03-15-preview"
                 sx={{ flex: 1 }}
                 value={version}
@@ -331,7 +330,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 formNoValidate
               />
               <Button type="submit" loading={submitting}>
-                Save
+                {t('save')}
               </Button>
             </Flex>
           </form>
