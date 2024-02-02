@@ -8,7 +8,7 @@
     "scope": "/",
     "short_name": "Chatpad",
     "start_url": "/",
-    "theme_color": "#3ad691",
+    "theme_color": "#27B882",
     "icons": [
         {
             "src": "windows11/SmallTile.scale-100.png",
