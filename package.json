@@ -11,15 +11,17 @@
     "staticPath": "src/static"
   },
   "devDependencies": {
+    "@parcel/packager-raw-url": "^2.8.3",
     "@parcel/transformer-sass": "^2.8.3",
+    "@parcel/transformer-webmanifest": "^2.8.3",
     "@types/downloadjs": "^1.4.3",
     "@types/lodash": "^4.14.191",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "buffer": "^5.7.1",
     "parcel": "^2.8.3",
-    "path-browserify": "^1.0.1",
     "parcel-reporter-static-files-copy": "^1.5.0",
+    "path-browserify": "^1.0.1",
     "process": "^0.11.10"
   },
   "dependencies": {
