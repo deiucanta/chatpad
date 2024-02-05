@@ -4,17 +4,19 @@ import {
   Card,
   Container,
   Flex,
+  Group,
   MediaQuery,
   Select,
   SimpleGrid,
   Skeleton,
   Stack,
+  SegmentedControl,
   Textarea,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useLiveQuery } from "dexie-react-hooks";
 import { nanoid } from "nanoid";
-import { KeyboardEvent, useState, type ChangeEvent } from "react";
+import { KeyboardEvent, useState, type ChangeEvent, useEffect } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import { MessageItem } from "../components/MessageItem";
 import { db } from "../db";
@@ -65,6 +67,16 @@ export function ChatRoute() {
       );
     return message.join(" ");
   };
+
+  const settings = useLiveQuery(async () => {
+    return db.settings.where({ id: "general" }).first();
+  });
+  const [model, setModel] = useState(config.defaultModel);
+  useEffect(() => {
+    if (settings?.openAiModel) {
+      setModel(settings.openAiModel);
+    }
+  });
 
   const submit = async () => {
     if (submitting) return;
@@ -250,6 +262,52 @@ export function ChatRoute() {
               : theme.colors.gray[0],
         })}
       >
+        {messages?.length === 0 &&
+          <Group position="center" my={40}>
+            <SegmentedControl
+              value={model}
+              fullWidth
+              size="md"
+              sx={(theme) => ({
+                [`@media (min-width: ${theme.breakpoints.md})`]: {
+                  width: '30%',
+                },
+              })}
+              data={[
+                { label: 'GPT-3.5', value: 'gpt-3.5-turbo' },
+                { label: 'GPT-4', value: 'gpt-4' }
+              ]}
+              onChange={async (value: 'gpt-3.5-turbo' | 'gpt-4') => {
+                const model = value;
+                try {
+                  await db.settings.update("general", {
+                    openAiModel: model ?? undefined,
+                  });
+                  notifications.show({
+                    title: "Saved",
+                    message: "Your OpenAI Model has been saved.",
+                  });
+                } catch (error: any) {
+                  if (error.toJSON().message === "Network Error") {
+                    notifications.show({
+                      title: "Error",
+                      color: "red",
+                      message: "No internet connection.",
+                    });
+                  }
+                  const message = error.response?.data?.error?.message;
+                  if (message) {
+                    notifications.show({
+                      title: "Error",
+                      color: "red",
+                      message,
+                    });
+                  }
+                }
+              }}
+            />
+          </Group>
+        }
         <Container>
           {messages?.length === 0 && (
             <SimpleGrid
