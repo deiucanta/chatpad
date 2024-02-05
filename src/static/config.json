@@ -49,6 +49,10 @@
       {
         "value": "gpt-4-32k-0314",
         "label": "GPT-4-32K-0314 (Limited Beta, Legacy)"
+      },
+      {
+        "value": "gpt-4-1106-preview",
+        "label": "GPT-4-1106-Preview"
       }
     ],
     "writingCharacters": [
