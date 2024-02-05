@@ -1,29 +1,15 @@
+import { useLiveQuery } from 'dexie-react-hooks'
+import { cloneElement, ReactElement, useEffect, useState } from 'react'
 import {
-  Alert,
-  Anchor,
-  Button,
-  Flex,
-  List,
-  Modal,
-  PasswordInput,
-  TextInput,
-  Select,
-  Stack,
-  Text,
-  useMantineTheme,
-  Group,
-  ColorSwatch,
-  CheckIcon,
-  rem,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
-import { useLiveQuery } from "dexie-react-hooks";
-import { cloneElement, ReactElement, useEffect, useState } from "react";
-import { db } from "../db";
-import { config } from "../utils/config";
-import { checkOpenAIKey } from "../utils/openai";
-import { usePrimaryColor } from "../hooks/usePrimaryColor";
+    Alert, Anchor, Button, CheckIcon, ColorSwatch, Flex, Group, List, Modal, PasswordInput, rem,
+    Select, Stack, Text, TextInput, useMantineTheme
+} from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
+import { db } from '../db'
+import { usePrimaryColor } from '../hooks/usePrimaryColor'
+import { config } from '../utils/config'
+import { checkOpenAIKey } from '../utils/openai'
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -347,7 +333,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
           <Stack spacing="xs">
             <Text children="Theme color" />
             <Group spacing="xs">
-              {["gray", "red", "pink", "grape", "violet", "indigo", "blue", "cyan", "teal", "green", "lime", "yellow", "orange"].map((color) => (
+              {["dark", "gray", "red", "pink", "grape", "violet", "indigo", "blue", "cyan", "teal", "green", "lime", "yellow", "orange"].map((color) => (
                 <ColorSwatch
                   component="button"
                   color={theme.colors[color][6]}
