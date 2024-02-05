@@ -91,6 +91,7 @@ export function Prompts({
                     description: "New Chat",
                     totalTokens: 0,
                     createdAt: new Date(),
+                    pinned: false,
                   });
                   await db.messages.add({
                     id: nanoid(),
