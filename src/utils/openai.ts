@@ -28,6 +28,7 @@ export async function createStreamChatCompletion(
 ) {
   const settings = await db.settings.get("general");
   const model = settings?.openAiModel ?? config.defaultModel;
+  const chatCompletionsUrl = settings?.openAiApiBase ? settings?.openAiApiBase + "/chat/completions" : undefined;
 
   return OpenAIExt.streamClientChatCompletion(
     {
@@ -36,6 +37,7 @@ export async function createStreamChatCompletion(
     },
     {
       apiKey: apiKey,
+      chatCompletionsUrl: chatCompletionsUrl,
       handler: {
         onContent(content, isFinal, stream) {
           setStreamContent(messageId, content, isFinal);
