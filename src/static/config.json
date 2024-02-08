@@ -52,7 +52,11 @@
       },
       {
         "value": "gpt-4-1106-preview",
-        "label": "GPT-4-1106-Preview"
+        "label": "GPT-4-1106 TURBO"
+      },
+      {
+        "value": "gpt-4-1106-vision-preview",
+        "label": "GPT-4-1106 TURBO with vision"
       }
     ],
     "writingCharacters": [
