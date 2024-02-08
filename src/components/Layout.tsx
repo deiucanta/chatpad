@@ -140,6 +140,7 @@ export function Layout() {
                       description: "New Chat",
                       totalTokens: 0,
                       createdAt: new Date(),
+                      pinned: false,
                     });
                     navigate({ to: `/chats/${id}` });
                   }}

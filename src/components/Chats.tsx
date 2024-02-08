@@ -1,13 +1,9 @@
-import { ActionIcon, Flex, Menu } from "@mantine/core";
-import { IconDotsVertical, IconMessages } from "@tabler/icons-react";
-import { Link } from "@tanstack/react-location";
+import { Text } from "@mantine/core";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo } from "react";
 import { db } from "../db";
 import { useChatId } from "../hooks/useChatId";
-import { DeleteChatModal } from "./DeleteChatModal";
-import { EditChatModal } from "./EditChatModal";
-import { MainLink } from "./MainLink";
+import { ChatItem } from "./ChatItem";
 
 export function Chats({ search }: { search: string }) {
   const chatId = useChatId();
@@ -23,47 +19,25 @@ export function Chats({ search }: { search: string }) {
     [chats, search]
   );
 
+  const pinnedChats = useMemo(() => filteredChats.filter((chat) => chat.pinned), [filteredChats]);
+  const unpinnedChats = useMemo(() => filteredChats.filter((chat) => !chat.pinned), [filteredChats]);
+
   return (
     <>
-      {filteredChats.map((chat) => (
-        <Flex
-          key={chat.id}
-          className={chatId === chat.id ? "active" : undefined}
-          sx={(theme) => ({
-            marginTop: 1,
-            "&:hover, &.active": {
-              backgroundColor:
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[6]
-                  : theme.colors.gray[1],
-            },
-          })}
-        >
-          <Link to={`/chats/${chat.id}`} style={{ flex: 1 }}>
-            <MainLink
-              icon={<IconMessages size="1rem" />}
-              color="teal"
-              chat={chat}
-              label={chat.description}
-            />
-          </Link>
-          <Menu shadow="md" width={200} keepMounted>
-            <Menu.Target>
-              <ActionIcon sx={{ height: "auto" }}>
-                <IconDotsVertical size={20} />
-              </ActionIcon>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <EditChatModal chat={chat}>
-                <Menu.Item>Edit</Menu.Item>
-              </EditChatModal>
-              <DeleteChatModal chat={chat}>
-                <Menu.Item>Delete</Menu.Item>
-              </DeleteChatModal>
-            </Menu.Dropdown>
-          </Menu>
-        </Flex>
+      {pinnedChats.length > 0 ? (
+        <>
+          <Text p="xs" fz="xs" fw={700} color="gray" children={"Pinned"} />
+          {pinnedChats.map((chat) => (
+            <ChatItem chat={chat} isActive={chatId === chat.id} />
+          ))}
+
+          {unpinnedChats.length > 0 ? <Text p="xs" fz="xs" fw={700} color="gray" children={"Unpinned"} /> : null}
+        </>
+      ) : null}
+
+      {unpinnedChats.map((chat) => (
+        <ChatItem chat={chat} isActive={chatId === chat.id} />
       ))}
     </>
-  );
+  )
 }
