@@ -21,11 +21,9 @@ import {
   IconBrandTwitter,
   IconDatabase,
   IconMessage,
-  IconMoonStars,
   IconPlus,
   IconSearch,
   IconSettings,
-  IconSunHigh,
   IconX,
 } from "@tabler/icons-react";
 import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
@@ -188,23 +186,6 @@ export function Layout() {
           </Navbar.Section>
           <Navbar.Section sx={{ borderTop: border }} p="xs">
             <Center>
-              {config.allowDarkModeToggle && (
-                <Tooltip
-                  label={colorScheme === "dark" ? "Light Mode" : "Dark Mode"}
-                >
-                  <ActionIcon
-                    sx={{ flex: 1 }}
-                    size="xl"
-                    onClick={() => toggleColorScheme()}
-                  >
-                    {colorScheme === "dark" ? (
-                      <IconSunHigh size={20} />
-                    ) : (
-                      <IconMoonStars size={20} />
-                    )}
-                  </ActionIcon>
-                </Tooltip>
-              )}
               {config.allowSettingsModal && (
                 <SettingsModal>
                   <Tooltip label="Settings">
