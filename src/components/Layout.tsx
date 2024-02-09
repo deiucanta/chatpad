@@ -41,6 +41,7 @@ import { LogoText } from "./Logo";
 import { Prompts } from "./Prompts";
 import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
+import { usePrimaryThemeColor } from "../hooks/usePrimaryColor";
 
 declare global {
   interface Window {
@@ -66,6 +67,8 @@ export function Layout() {
   const border = `${rem(1)} solid ${
     theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
   }`;
+
+  const primaryColor = usePrimaryThemeColor();
 
   useEffect(() => {
     setOpened(false);
@@ -95,7 +98,7 @@ export function Layout() {
                 <LogoText
                   style={{
                     height: 22,
-                    color: "#27B882",
+                    color: primaryColor[6],
                     display: "block",
                   }}
                 />

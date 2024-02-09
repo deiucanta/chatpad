@@ -1,3 +1,5 @@
+import { usePrimaryThemeColor } from '../hooks/usePrimaryColor'
+
 export function LogoText(props: JSX.IntrinsicElements["svg"]) {
   return (
     <svg
@@ -15,6 +17,8 @@ export function LogoText(props: JSX.IntrinsicElements["svg"]) {
 }
 
 export function Logo(props: JSX.IntrinsicElements["svg"]) {
+  const primaryColor = usePrimaryThemeColor();
+
   return (
     <svg
       fill="none"
@@ -41,8 +45,8 @@ export function Logo(props: JSX.IntrinsicElements["svg"]) {
           y2={116.46}
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#41E094" />
-          <stop offset={1} stopColor="#27B882" />
+          <stop stopColor={primaryColor[5]} />
+          <stop offset={1} stopColor={primaryColor[6]} />
         </linearGradient>
       </defs>
     </svg>
@@ -50,6 +54,8 @@ export function Logo(props: JSX.IntrinsicElements["svg"]) {
 }
 
 export function LogoIcon(props: JSX.IntrinsicElements["svg"]) {
+  const primaryColor = usePrimaryThemeColor();
+
   return (
     <svg
       fill="none"
@@ -72,8 +78,8 @@ export function LogoIcon(props: JSX.IntrinsicElements["svg"]) {
           y2={116.46}
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#41E094" />
-          <stop offset={1} stopColor="#27B882" />
+          <stop stopColor={primaryColor[5]} />
+          <stop offset={1} stopColor={primaryColor[6]} />
         </linearGradient>
       </defs>
     </svg>

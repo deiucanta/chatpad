@@ -13,6 +13,7 @@ import {
 import { ChatRoute } from "../routes/ChatRoute";
 import { IndexRoute } from "../routes/IndexRoute";
 import { Layout } from "./Layout";
+import { usePrimaryColor } from "../hooks/usePrimaryColor";
 
 const history = createHashHistory();
 const location = new ReactLocation({ history });
@@ -25,6 +26,8 @@ export function App() {
     defaultValue: prefersDark ? "dark" : "light",
     getInitialValueInEffect: true,
   });
+
+  const [primaryColor] = usePrimaryColor();
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
@@ -49,7 +52,7 @@ export function App() {
           withCSSVariables
           theme={{
             colorScheme,
-            primaryColor: "teal",
+            primaryColor,
             globalStyles: (theme) => ({
               body: {
                 backgroundColor:

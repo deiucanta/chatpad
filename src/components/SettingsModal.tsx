@@ -1,23 +1,15 @@
+import { useLiveQuery } from 'dexie-react-hooks'
+import { cloneElement, ReactElement, useEffect, useState } from 'react'
 import {
-  Alert,
-  Anchor,
-  Button,
-  Flex,
-  List,
-  Modal,
-  PasswordInput,
-  TextInput,
-  Select,
-  Stack,
-  Text,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
-import { useLiveQuery } from "dexie-react-hooks";
-import { cloneElement, ReactElement, useEffect, useState } from "react";
-import { db } from "../db";
-import { config } from "../utils/config";
-import { checkOpenAIKey } from "../utils/openai";
+    Alert, Anchor, Button, CheckIcon, ColorSwatch, Flex, Group, List, Modal, PasswordInput, rem,
+    Select, Stack, Text, TextInput, useMantineTheme
+} from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
+import { db } from '../db'
+import { usePrimaryColor } from '../hooks/usePrimaryColor'
+import { config } from '../utils/config'
+import { checkOpenAIKey } from '../utils/openai'
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -29,6 +21,9 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [auth, setAuth] = useState(config.defaultAuth);
   const [base, setBase] = useState("");
   const [version, setVersion] = useState("");
+  const [primaryColor, setPrimaryColor] = usePrimaryColor();
+
+  const theme = useMantineTheme();
 
   const settings = useLiveQuery(async () => {
     return db.settings.where({ id: "general" }).first();
@@ -335,6 +330,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               </Button>
             </Flex>
           </form>
+          <Stack spacing="xs">
+            <Text children="Theme color" />
+            <Group spacing="xs">
+              {["dark", "gray", "red", "pink", "grape", "violet", "indigo", "blue", "cyan", "teal", "green", "lime", "yellow", "orange"].map((color) => (
+                <ColorSwatch
+                  component="button"
+                  color={theme.colors[color][6]}
+                  onClick={() => setPrimaryColor(color)}
+                  sx={{ color: "#fff", cursor: "pointer" }}
+                >
+                  {color === primaryColor && <CheckIcon width={rem(10)} />}
+                </ColorSwatch>
+              ))}
+            </Group>
+          </Stack>
         </Stack>
       </Modal>
     </>
