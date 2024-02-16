@@ -11,12 +11,16 @@
       "label": "GPT-3.5-TURBO (Default ChatGPT)"
     },
     {
+      "value": "gpt-3.5-turbo-0301",
+      "label": "GPT-3.5-TURBO-0301 (Legacy)"
+    },
+    {
       "value": "gpt-3.5-turbo-0613",
       "label": "GPT-3.5-TURBO-0613"
     },
     {
-      "value": "gpt-3.5-turbo-0301",
-      "label": "GPT-3.5-TURBO-0301 (Legacy)"
+      "value": "gpt-3.5-turbo-0125",
+      "label": "GPT-3.5-TURBO-0125"
     },
     {
       "value": "gpt-3.5-turbo-16k",
@@ -51,8 +55,16 @@
       "label": "GPT-4-32K-0314 (Limited Beta, Legacy)"
     },
     {
+      "value": "gpt-4-turbo-preview",
+      "label": "GPT-4-turbo"
+    },
+    {
       "value": "gpt-4-1106-preview",
       "label": "GPT-4-1106-Preview"
+    },
+    {
+      "value": "gpt-4-0125-preview",
+      "label": "GPT-4-0125-Preview"
     }
   ],
   "writingCharacters": [
