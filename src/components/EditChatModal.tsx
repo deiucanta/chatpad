@@ -37,14 +37,14 @@ export function EditChatModal({
               });
               close();
             } catch (error: any) {
-              if (error.toJSON().message === "Network Error") {
+              if (error.message === "Network Error") {
                 notifications.show({
                   title: "Error",
                   color: "red",
                   message: "No internet connection.",
                 });
               }
-              const message = error.response?.data?.error?.message;
+              const message = error.message;
               if (message) {
                 notifications.show({
                   title: "Error",
