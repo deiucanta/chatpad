@@ -47,7 +47,7 @@ export function DeleteChatModal({
                 message: "Chat deleted.",
               });
             } catch (error: any) {
-              if (error.toJSON().message === "Network Error") {
+              if (error.message === "Network Error") {
                 notifications.show({
                   title: "Error",
                   color: "red",

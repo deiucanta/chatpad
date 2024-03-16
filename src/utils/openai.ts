@@ -1,55 +1,52 @@
 import { encode } from "gpt-token-utils";
-import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
-import { OpenAIExt } from "openai-ext";
+import OpenAI from 'openai';
 import { db } from "../db";
 import { config } from "./config";
 
-function getClient(
-  apiKey: string,
-  apiType: string,
-  apiAuth: string,
-  basePath: string
-) {
-  const configuration = new Configuration({
-    ...((apiType === "openai" ||
-      (apiType === "custom" && apiAuth === "bearer-token")) && {
+function getClient(apiKey: string, apiType: string, apiAuth: string, basePath: string, version: string) {
+  var openai
+  if (apiType === "openai" || (apiType === "custom" && apiAuth === "bearer-token")) {
+    openai = new OpenAI({apiKey: apiKey, dangerouslyAllowBrowser: true});
+  }
+  else {
+    openai = new OpenAI({
       apiKey: apiKey,
-    }),
-    ...(apiType === "custom" && { basePath: basePath }),
-  });
-  return new OpenAIApi(configuration);
+      baseURL: basePath,
+      dangerouslyAllowBrowser: true,
+      defaultQuery: { 'api-version': version },
+      defaultHeaders: { 'api-key': apiKey }
+    });
+  }
+  return openai;
 }
 
 export async function createStreamChatCompletion(
   apiKey: string,
-  messages: ChatCompletionRequestMessage[],
+  messages: Array<{ role: string; content: string; }>,
   chatId: string,
   messageId: string
 ) {
   const settings = await db.settings.get("general");
+  const type = settings?.openAiApiType ?? config.defaultType;
+  const auth = settings?.openAiApiAuth ?? config.defaultAuth;
+  const base = settings?.openAiApiBase ?? config.defaultBase;
+  const version = settings?.openAiApiVersion ?? config.defaultVersion;
   const model = settings?.openAiModel ?? config.defaultModel;
+  const client = getClient(apiKey, type, auth, base, version);
+  const stream = await client.beta.chat.completions.stream({
+    model: 'gpt-4',
+    messages,
+    stream: true,
+  });
+  var full = "";
+  stream.on('content', (delta, snapshot) => {
+    full += delta;
+    setStreamContent(messageId, full, false);
+  });
 
-  return OpenAIExt.streamClientChatCompletion(
-    {
-      model,
-      messages,
-    },
-    {
-      apiKey: apiKey,
-      handler: {
-        onContent(content, isFinal, stream) {
-          setStreamContent(messageId, content, isFinal);
-          if (isFinal) {
-            setTotalTokens(chatId, content);
-          }
-        },
-        onDone(stream) {},
-        onError(error, stream) {
-          console.error(error);
-        },
-      },
-    }
-  );
+  const chatCompletion = await stream.finalChatCompletion();
+  setStreamContent(messageId, full, true);
+  setTotalTokens(chatId, full);
 }
 
 function setStreamContent(
@@ -72,10 +69,7 @@ function setTotalTokens(chatId: string, content: string) {
   });
 }
 
-export async function createChatCompletion(
-  apiKey: string,
-  messages: ChatCompletionRequestMessage[]
-) {
+export async function createChatCompletion(apiKey: string, messages: Array<{ role: string; content: string; }>) {
   const settings = await db.settings.get("general");
   const model = settings?.openAiModel ?? config.defaultModel;
   const type = settings?.openAiApiType ?? config.defaultType;
@@ -83,8 +77,8 @@ export async function createChatCompletion(
   const base = settings?.openAiApiBase ?? config.defaultBase;
   const version = settings?.openAiApiVersion ?? config.defaultVersion;
 
-  const client = getClient(apiKey, type, auth, base);
-  return client.createChatCompletion(
+  const client = getClient(apiKey, type, auth, base, version);
+  return client.chat.completions.create(
     {
       model,
       stream: false,
