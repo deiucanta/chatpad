@@ -53,6 +53,14 @@
       {
         "value": "gpt-4-1106-preview",
         "label": "GPT-4-1106-Preview"
+      },
+      {
+        "value": "gpt-4-turbo",
+        "label": "GPT-4 Turbo"
+      },
+      {
+        "value": "gpt-4o",
+        "label": "GPT-4 omni"
       }
     ],
     "writingCharacters": [
