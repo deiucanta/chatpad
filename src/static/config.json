@@ -5,6 +5,7 @@
     "defaultBase": "",
     "defaultVersion": "",
     "defaultKey": "",
+	"defaultTheme": "system",
     "availableModels": [
       {
         "value": "gpt-3.5-turbo",
@@ -231,7 +232,7 @@
       }
     ],
     "showDownloadLink": true,
-    "allowDarkModeToggle": true,
+    "allowThemeToggle": true,
     "allowSettingsModal": true,
     "allowDatabaseModal": true,
     "showTwitterLink": true,
