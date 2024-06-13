@@ -14,8 +14,11 @@ import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
 import { notifications } from "@mantine/notifications";
+import { usePrimaryColor } from "../hooks/usePrimaryColor";
 
 export function ChatItem({ chat, isActive }: { chat: Chat, isActive: boolean }) {
+	const [primaryColor] = usePrimaryColor();
+
 	const toggleChatPin = async (chatId: string, event: React.UIEvent) => {
 		try {
 		  event.preventDefault();
@@ -55,7 +58,7 @@ export function ChatItem({ chat, isActive }: { chat: Chat, isActive: boolean }) 
       <Link to={`/chats/${chat.id}`} style={{ flex: 1 }}>
         <MainLink
           icon={chat.pinned ? <IconPinned size="1rem" /> : <IconMessages size="1rem" />}
-          color="teal"
+          color={primaryColor}
           chat={chat}
           label={chat.description}
         />
