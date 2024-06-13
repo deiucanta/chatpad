@@ -75,14 +75,14 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   message: "Your OpenAI Key has been saved.",
                 });
               } catch (error: any) {
-                if (error.toJSON().message === "Network Error") {
+                const message = error.message;
+                if (message === "Network Error") {
                   notifications.show({
                     title: "Error",
                     color: "red",
                     message: "No internet connection.",
                   });
                 }
-                const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
                     title: "Error",
@@ -141,7 +141,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   message: "Your OpenAI Type has been saved.",
                 });
               } catch (error: any) {
-                if (error.toJSON().message === "Network Error") {
+                if (error.message === "Network Error") {
                   notifications.show({
                     title: "Error",
                     color: "red",
@@ -177,14 +177,14 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   message: "Your OpenAI Model has been saved.",
                 });
               } catch (error: any) {
-                if (error.toJSON().message === "Network Error") {
+                if (error.message === "Network Error") {
                   notifications.show({
                     title: "Error",
                     color: "red",
                     message: "No internet connection.",
                   });
                 }
-                const message = error.response?.data?.error?.message;
+                const message = error.message;
                 if (message) {
                   notifications.show({
                     title: "Error",
@@ -217,14 +217,14 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   message: "Your OpenAI Auth has been saved.",
                 });
               } catch (error: any) {
-                if (error.toJSON().message === "Network Error") {
+                if (error.message === "Network Error") {
                   notifications.show({
                     title: "Error",
                     color: "red",
                     message: "No internet connection.",
                   });
                 }
-                const message = error.response?.data?.error?.message;
+                const message = error.message;
                 if (message) {
                   notifications.show({
                     title: "Error",
@@ -253,14 +253,14 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   message: "Your OpenAI Base has been saved.",
                 });
               } catch (error: any) {
-                if (error.toJSON().message === "Network Error") {
+                if (error.message === "Network Error") {
                   notifications.show({
                     title: "Error",
                     color: "red",
                     message: "No internet connection.",
                   });
                 }
-                const message = error.response?.data?.error?.message;
+                const message = error.message;
                 if (message) {
                   notifications.show({
                     title: "Error",
@@ -301,14 +301,14 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   message: "Your OpenAI Version has been saved.",
                 });
               } catch (error: any) {
-                if (error.toJSON().message === "Network Error") {
+                if (error.message === "Network Error") {
                   notifications.show({
                     title: "Error",
                     color: "red",
                     message: "No internet connection.",
                   });
                 }
-                const message = error.response?.data?.error?.message;
+                const message = error.message;
                 if (message) {
                   notifications.show({
                     title: "Error",
