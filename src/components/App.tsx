@@ -6,9 +6,9 @@ import {
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import {
-  createHashHistory,
   ReactLocation,
   Router,
+  createHashHistory,
 } from "@tanstack/react-location";
 import { ChatRoute } from "../routes/ChatRoute";
 import { IndexRoute } from "../routes/IndexRoute";
@@ -31,8 +31,11 @@ export function App() {
 
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
+  const basepath = document.querySelector("base")?.getAttribute("href") || "/";
+
   return (
     <Router
+      basepath={basepath}
       location={location}
       routes={[
         { path: "/", element: <IndexRoute /> },
